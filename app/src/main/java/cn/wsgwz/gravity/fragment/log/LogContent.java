@@ -30,7 +30,7 @@ public class LogContent {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:MM:ss:SSS");
         ITEMS.add(simpleDateFormat.format(new Date())+"  "+str);
     };
-    public  static void addItemOnlyStr(String str){
+   /* public  static void addItemOnlyStr(String str){
         ITEMS.add(str);
     };
     public  static void addItemOnlyStrAndNotify(String str){
@@ -40,7 +40,7 @@ public class LogContent {
         }else {
             //LogUtil.printSS("adapter  == "+adapter);
         }
-    }
+    }*/
     public static void initAdapter(RecyclerView.Adapter adapter){
         LogContent.adapter = adapter;
     }

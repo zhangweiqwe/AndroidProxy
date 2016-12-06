@@ -7,7 +7,6 @@ import android.util.Log;
  */
 
 public class LogUtil {
-    public static final boolean isMe = false;
     private static final boolean NEED_PRINT = true;
     public static final boolean IS_STREAM_DEBUG = false;
     private static final String LOG_TAG = "sssssssssssss    ";

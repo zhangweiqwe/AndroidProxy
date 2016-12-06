@@ -119,11 +119,10 @@ public class ProxyService extends Service {
             startProxy();
 
 
-           // LogUtil.printSS("----ss"+5);
         } catch (Exception e) {
             Toast.makeText(this,getString(R.string.start_server_error)+e.getMessage().toString(),Toast.LENGTH_LONG).show();
             e.printStackTrace();
-
+            LogContent.addItemAndNotify(e.getMessage().toString());
         }
     }
 
@@ -133,7 +132,9 @@ public class ProxyService extends Service {
         executor = Executors.newCachedThreadPool();
         final Context context = getApplicationContext();
         try { server = new ServerSocket(PORT); }
-        catch (IOException e) {	}
+        catch (IOException e) {
+            LogContent.addItemAndNotify(e.getMessage().toString());
+        }
         socketThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -141,7 +142,9 @@ public class ProxyService extends Service {
                 while (true) {
                     try {
                         executor.execute(new RequestHandler(server.accept(),config,context)); }
-                    catch (IOException e) {	}
+                    catch (IOException e) {
+                        LogContent.addItemAndNotify(e.getMessage().toString());
+                    }
                 }
             }
         });
@@ -178,6 +181,7 @@ public class ProxyService extends Service {
                 server.close();
             } catch (IOException e) {
                 e.printStackTrace();
+                LogContent.addItemAndNotify(e.getMessage().toString());
             }
         }
         if (executor != null) {

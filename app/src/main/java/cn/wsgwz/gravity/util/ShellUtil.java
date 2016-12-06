@@ -32,6 +32,8 @@ import cn.wsgwz.gravity.service.ProxyService;
 
 public class ShellUtil {
 
+    //是否显示toast
+    private static final boolean showToast = false;
     public static void execShell(final Context context, final String shellStr,final OnExecResultListenner onExecResultListenner){
         if(context==null||shellStr==null){
             return;
@@ -53,7 +55,7 @@ public class ShellUtil {
                         if (onExecResultListenner!=null){
                             onExecResultListenner.onSuccess(sb);
                         }
-                        if(context!=null&&LogUtil.isMe){
+                        if(context!=null&&showToast){
                             Toast.makeText(context,"OK："+sb, Toast.LENGTH_SHORT).show();
                         }
 
@@ -63,7 +65,7 @@ public class ShellUtil {
                         if (onExecResultListenner!=null){
                             onExecResultListenner.onError(sb);
                         }
-                        if(context!=null&&LogUtil.isMe){
+                        if(context!=null&&showToast){
                             Toast.makeText(context,"异常："+sb, Toast.LENGTH_SHORT).show();
                         }
 
@@ -96,8 +98,10 @@ public class ShellUtil {
 
                 } catch (IOException e) {
                     e.printStackTrace();
+                    LogContent.addItemAndNotify(e.getMessage().toString());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    LogContent.addItemAndNotify(e.getMessage().toString());
                 }
                 Message msg = new Message();
                 msg.obj = sb;
@@ -122,6 +126,7 @@ public class ShellUtil {
             }catch (IOException e) {
                 e.printStackTrace();
                 b=false;
+                LogContent.addItemAndNotify(e.getMessage().toString());
             }
         return b;
 
@@ -156,15 +161,13 @@ public class ShellUtil {
                 }else {
                     menu.findItem(R.id.about_Appme).setVisible(true).setActionView(null);
                 }
-                if (LogUtil.isMe) {
-                    Toast.makeText(activity, sb.toString(), Toast.LENGTH_LONG).show();
-                }
+
                 if (state) {
                     //Toast.makeText(activity, activity.getString(R.string.exec_start_ok), Toast.LENGTH_SHORT).show();
                     LogContent.addItem("脚本信息:"+" uid:"+ShellHelper.getUid()+" proxyIp:"+ShellHelper.getProxy()+" port:"+ShellHelper.getPort()+
                             " dns:"+ShellHelper.getDns());
                     LogContent.addItem(activity.getString(R.string.exec_start_ok));
-                    LogContent.addItemAndNotify("应用后台: "+ ProxyService.BACKGROUND_HOST+" 点击进入");
+                    LogContent.addItemAndNotify("应用后台: "+ ProxyService.BACKGROUND_HOST+" (移动网络情况下)点击进入");
                 } else {
                     //Toast.makeText(activity, activity.getString(R.string.exec_stop_ok), Toast.LENGTH_SHORT).show();
                     LogContent.addItemAndNotify(activity.getString(R.string.exec_stop_ok));
@@ -181,9 +184,7 @@ public class ShellUtil {
                 }else {
                     menu.findItem(R.id.about_Appme).setVisible(true).setActionView(null);
                 }
-                if (LogUtil.isMe) {
-                    Toast.makeText(activity, sb.toString(), Toast.LENGTH_LONG).show();
-                }
+
 
                 if (state) {
                     //Toast.makeText(activity, activity.getString(R.string.exec_start_error), Toast.LENGTH_SHORT).show();
