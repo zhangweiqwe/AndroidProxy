@@ -1,0 +1,35 @@
+<LinearLayout android:layout_width="300dp"
+    android:layout_height="400dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:id="@+id/hint_TV"
+        android:textColor="#333333"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center_horizontal"
+        android:text="当前模式"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/currentConfig_TV"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="3dp"
+        android:textColor="#baef2424"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="#e6e6e6"
+        android:layout_width="match_parent"
+        android:layout_height="1px"></View>
+            <com.example.pull.refreshview.XListView
+                android:id="@+id/list_view"
+                android:divider="@null"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></com.example.pull.refreshview.XListView>
+
+</LinearLayout>

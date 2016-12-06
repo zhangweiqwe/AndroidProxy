@@ -1,0 +1,57 @@
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <cn.wsgwz.gravity.view.MyScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/other_ll_00"
+                android:background="@drawable/main_fragment_switch_bn_parent_background"
+                android:paddingLeft="12dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Switch
+                    android:id="@+id/service_Switch"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:text="服务"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/other_ll_01"
+                android:layout_below="@+id/other_ll_00"
+                android:layout_marginTop="26dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp">
+                <Button
+                    android:id="@+id/select_Bn"
+                    android:background="@drawable/grash_data_bn_selector"
+                    android:text="选择"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <Button
+                    android:id="@+id/explain_Bn"
+                    android:background="@drawable/grash_data_bn_selector"
+                    android:layout_marginLeft="12dp"
+                    android:text="other"
+                    android:textAllCaps="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
+
+        </RelativeLayout>
+    </cn.wsgwz.gravity.view.MyScrollView>
+</RelativeLayout>
+

@@ -1,0 +1,6 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/restore_shell" android:title="还原"></item>
+    <item android:id="@+id/save_shell" android:title="保存"></item>
+    <item android:id="@+id/cancel_save_shell" android:title="取消"></item>
+    <item android:id="@+id/about_uid" android:title="关于 uid"></item>
+</menu>

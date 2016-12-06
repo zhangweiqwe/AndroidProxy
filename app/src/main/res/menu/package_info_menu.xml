@@ -1,0 +1,6 @@
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/other_00" android:title="other"></item>
+    <item android:id="@+id/copy"  android:title="复制" android:showAsAction="always"
+        tools:ignore="AppCompatResource"></item>
+</menu>

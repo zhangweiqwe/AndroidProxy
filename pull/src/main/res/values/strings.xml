@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">pull</string>
+    //scrollViewRefresh
+    <string name="header_hint_refresh_normal">下拉刷新</string>
+    <string name="header_hint_refresh_ready">释放刷新</string>
+    <string name="header_hint_refresh_loading">刷新中&#8230;</string>
+    <string name="header_hint_refresh_time">时间：</string>
+    <string name="footer_hint_load_normal">加载更多</string>
+    <string name="footer_hint_load_ready">释放加载更多</string>
+</resources>

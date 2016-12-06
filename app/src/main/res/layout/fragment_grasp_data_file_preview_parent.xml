@@ -1,0 +1,21 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cn.wsgwz.gravity.fragment.GraspDataFilePreviewParentFragment">
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <cn.wsgwz.gravity.view.slidingTabLayout.SlidingTabLayout
+        android:id="@+id/slidingTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></cn.wsgwz.gravity.view.slidingTabLayout.SlidingTabLayout>
+
+    <cn.wsgwz.gravity.view.slidingTabLayout.ViewPager
+        android:id="@+id/my_viewPager"
+        android:layout_below="@+id/slidingTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></cn.wsgwz.gravity.view.slidingTabLayout.ViewPager>
+</RelativeLayout>
+</FrameLayout>

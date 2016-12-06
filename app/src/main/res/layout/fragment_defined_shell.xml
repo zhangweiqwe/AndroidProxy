@@ -1,0 +1,23 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cn.wsgwz.gravity.fragment.DefinedShellFragment">
+
+   <cn.wsgwz.gravity.view.MyScrollView
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
+           <EditText
+               android:id="@+id/edit_ET"
+               android:textSize="13sp"
+               android:background="@null"
+               android:textCursorDrawable="@drawable/edit_config_textcursor"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content" />
+       </RelativeLayout>
+   </cn.wsgwz.gravity.view.MyScrollView>
+
+</FrameLayout>

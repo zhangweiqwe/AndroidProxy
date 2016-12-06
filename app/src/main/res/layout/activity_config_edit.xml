@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_config_edit"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cn.wsgwz.gravity.activity.ConfigEditActivity">
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <cn.wsgwz.gravity.view.MyScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:layout_margin="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/edit_ET"
+                    android:gravity="top"
+                    android:textSize="14sp"
+                    android:background="@null"
+                    android:textCursorDrawable="@drawable/edit_config_textcursor"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </RelativeLayout>
+
+        </cn.wsgwz.gravity.view.MyScrollView>
+
+    </HorizontalScrollView>
+
+
+</RelativeLayout>

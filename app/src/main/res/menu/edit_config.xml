@@ -1,0 +1,6 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/save_change" android:title="保存修改"></item>
+    <item android:id="@+id/save_change_exit" android:title="保存并退出"></item>
+    <item android:id="@+id/give_up_change" android:title="放弃修改"></item>
+    <item android:id="@+id/exit" android:title="退出"></item>
+</menu>

@@ -1,0 +1,44 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    tools:context="cn.wsgwz.gravity.fragment.GraspDataFragment">
+    <cn.wsgwz.gravity.view.MyScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/other_ll_00"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/start_graspData"
+                    android:background="@drawable/grash_data_bn_selector"
+                    android:text="开始抓包"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+              <!--  <Button
+                    android:id="@+id/stop_graspData"
+                    android:background="@drawable/grash_data_bn_selector"
+                    android:layout_marginTop="20dp"
+                    android:text="停止抓包"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />-->
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/list_view"
+                android:layout_below="@+id/other_ll_00"
+                android:layout_marginTop="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></ListView>
+        </RelativeLayout>
+    </cn.wsgwz.gravity.view.MyScrollView>
+
+
+</RelativeLayout>

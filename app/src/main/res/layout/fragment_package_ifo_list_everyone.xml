@@ -1,0 +1,51 @@
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView
+        android:id="@+id/logo_IV"
+        android:src="@mipmap/wenben"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/logo_IV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/other_rl_00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/appName_TV"
+                android:layout_centerVertical="true"
+                android:text="cn.wsgwz.gravity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/uid_TV"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/appName_TV"
+                android:layout_marginLeft="10dp"
+                android:text="1000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/packageName_TV"
+            android:layout_below="@+id/other_rl_00"
+            android:layout_marginTop="20dp"
+            android:text="cn.wsgwz.gravity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+    <CheckBox
+        android:id="@+id/checkbox_CB"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>
