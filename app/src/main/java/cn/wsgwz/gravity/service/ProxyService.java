@@ -12,7 +12,10 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
+import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -135,17 +138,37 @@ public class ProxyService extends Service {
         catch (IOException e) {
             LogContent.addItemAndNotify(e.getMessage().toString());
         }
+
+        final Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what){
+                    case 1004:
+                        LogContent.addItemAndNotify((String)msg.obj);
+                        break;
+                }
+            }
+        };
         socketThread = new Thread(new Runnable() {
             @Override
             public void run() {
 
-                while (true) {
+
                     try {
-                        executor.execute(new RequestHandler(server.accept(),config,context)); }
+                        while (true) {
+                        executor.execute(new RequestHandler(server.accept(),config,context));
+                        }
+                        }
                     catch (IOException e) {
-                        LogContent.addItemAndNotify(e.getMessage().toString());
-                    }
+                        e.printStackTrace();
+                        Message msg = Message.obtain();
+                        msg.what=1004;
+                        msg.obj = e.getMessage().toString();
+                        handler.sendMessage(msg);
+
                 }
+
             }
         });
         socketThread.start();
@@ -176,6 +199,12 @@ public class ProxyService extends Service {
     public void onDestroy() {
         super.onDestroy();
 
+        if (socketThread != null && !socketThread.isInterrupted()) {
+            socketThread.interrupt();
+        }
+        if (executor != null) {
+            executor.shutdown();
+        }
         if (server != null) {
             try {
                 server.close();
@@ -184,12 +213,7 @@ public class ProxyService extends Service {
                 LogContent.addItemAndNotify(e.getMessage().toString());
             }
         }
-        if (executor != null) {
-            executor.shutdown();
-        }
-        if (socketThread != null && !socketThread.isInterrupted()) {
-            socketThread.interrupt();
-        }
+
         notificationManager.cancel(0);
         isStart = false;
 

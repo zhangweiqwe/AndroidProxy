@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,13 +50,16 @@ import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
 
 
-public class MainFragment extends Fragment implements View.OnClickListener{
+public class MainFragment extends Fragment implements View.OnClickListener,ShellUtil.IsProgressListenner{
     private Switch service_Switch;
     private Intent intentServer;
 
     private Button select_Bn,explain_Bn;
 
     private SharedPreferences sharedPreferences;
+
+    public static boolean isStartOrStopDoing;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,6 +91,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
             }
         });
 
+        ShellUtil.setIsProgressListenner(this);
 
     }
 
@@ -143,7 +148,22 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
 
 
-
-
+    @Override
+    public void doingSomeThing(final IsProgressEnum isProgressEnum) {
+        isStartOrStopDoing = true;
+        final boolean tempBool = service_Switch.isChecked();
+        service_Switch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                service_Switch.setChecked(tempBool);
+                Toast.makeText(getActivity(),"正在执行: "+(isProgressEnum==null?"":isProgressEnum.getValues()),Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    @Override
+    public void finallyThat() {
+        isStartOrStopDoing = false;
+        service_Switch.setOnClickListener(this);
+    }
 
 }

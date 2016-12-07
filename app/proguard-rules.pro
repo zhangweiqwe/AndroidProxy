@@ -16,6 +16,4 @@
 #   public *;
 #}
 
--keep class com.baidu.** {
- public protected *;
- }
+-keepattributes EnclosingMethod

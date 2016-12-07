@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -25,6 +26,7 @@ import java.io.InputStreamReader;
 
 import cn.wsgwz.gravity.MainActivity;
 import cn.wsgwz.gravity.R;
+import cn.wsgwz.gravity.fragment.IsProgressEnum;
 import cn.wsgwz.gravity.fragment.MainFragment;
 import cn.wsgwz.gravity.fragment.log.LogContent;
 import cn.wsgwz.gravity.helper.ShellHelper;
@@ -70,6 +72,10 @@ public class ShellUtil {
                         }
 
                         break;
+
+                    case 1004:
+                        LogContent.addItemAndNotify((String)msg.obj);
+                        break;
                 }
                 super.handleMessage(msg);
             }
@@ -78,6 +84,7 @@ public class ShellUtil {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                Looper.prepare();
                 StringBuffer sb =new StringBuffer();
                 String str1 = "#!/system/bin/sh\n"+shellStr+"\n";
                 Process process = null;
@@ -98,20 +105,33 @@ public class ShellUtil {
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                    LogContent.addItemAndNotify(e.getMessage().toString());
+                    Message msg = Message.obtain();
+                    msg.what=1004;
+                    msg.obj = e.getMessage().toString();
+                    handler.sendMessage(msg);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                    LogContent.addItemAndNotify(e.getMessage().toString());
+                    Message msg = Message.obtain();
+                    msg.what=1004;
+                    msg.obj = e.getMessage().toString();
+                    handler.sendMessage(msg);
                 }
-                Message msg = new Message();
-                msg.obj = sb;
-                if (process.exitValue() == 0) {
-                    msg.what =1000;
-                }else {
-                    msg.what = 1001;
-                }
-                handler.sendMessage(msg);
 
+
+                if (process.exitValue() == 0) {
+                    Message msg = new Message();
+                    msg.obj = sb;
+                    msg.what =1000;
+                    handler.sendMessage(msg);
+                }else {
+                    Message msg = new Message();
+                    msg.obj = sb;
+                    msg.what = 1001;
+                    handler.sendMessage(msg);
+                }
+
+
+                Looper.loop();
 
 
             }
@@ -132,7 +152,7 @@ public class ShellUtil {
 
     }
 
-    public static boolean isStartOrStopDoing;
+    //public static boolean isStartOrStopDoing;
     //是否是脚本更随服务
     public static void  maybeExecShell(final boolean state, final MainActivity activity){
         ShellHelper shellHelper = ShellHelper.getInstance();
@@ -142,19 +162,26 @@ public class ShellUtil {
         final Menu menu = toolbar.getMenu();
         final View actionView = LayoutInflater.from(activity).inflate(R.layout.toolbar_actionview_progress,null);
         menu.findItem(R.id.about_Appme).setVisible(true).setActionView(actionView);
-        isStartOrStopDoing=true;
 
         String str = null;
         if(state){
             str = shellHelper.getStartStr();
+            if(isProgressListenner!=null){
+                isProgressListenner.doingSomeThing(IsProgressEnum.START);
+            }
         }else {
             str = shellHelper.getStopStr();
+            if(isProgressListenner!=null){
+                isProgressListenner.doingSomeThing(IsProgressEnum.STOP);
+            }
         }
 
         ShellUtil.execShell(activity, shellHelper.getStartStr(), new OnExecResultListenner() {
             @Override
             public void onSuccess(StringBuffer sb) {
-                isStartOrStopDoing=false;
+                if(isProgressListenner!=null){
+                    isProgressListenner.finallyThat();
+                }
 
                 if(!(activity.getScreenSlidePagerAdapter().getItem(activity.getMy_viewPager().getCurrentItem()) instanceof MainFragment)){
                     menu.findItem(R.id.about_Appme).setVisible(false).setActionView(null);
@@ -178,7 +205,9 @@ public class ShellUtil {
 
             @Override
             public void onError(StringBuffer sb) {
-                isStartOrStopDoing=false;
+                if(isProgressListenner!=null){
+                    isProgressListenner.finallyThat();
+                }
                 if(!(activity.getScreenSlidePagerAdapter().getItem(activity.getMy_viewPager().getCurrentItem()) instanceof MainFragment)){
                     menu.findItem(R.id.about_Appme).setVisible(false).setActionView(null);
                 }else {
@@ -196,6 +225,15 @@ public class ShellUtil {
                 // dialog.dismiss();
             }
         });
+    }
+    //当正在执行开启或关闭
+    public static interface IsProgressListenner{
+        void doingSomeThing(IsProgressEnum isProgressEnum);
+        void finallyThat();
+    }
+    private static IsProgressListenner isProgressListenner;
+    public static void setIsProgressListenner(IsProgressListenner isProgressListenner){
+        ShellUtil.isProgressListenner = isProgressListenner;
     }
 
 }

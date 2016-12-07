@@ -331,7 +331,7 @@ n. 装饰，布置
                         break;
                     case 1:
                         //if(screenSlidePagerAdapter.getItem(position) instanceof LogFragment){
-                            if(!ShellUtil.isStartOrStopDoing){
+                            if(!MainFragment.isStartOrStopDoing){
                                 menu.findItem(R.id.about_Appme).setVisible(false);
                             }
                             menu.findItem(R.id.log_clear).setVisible(true);
@@ -340,7 +340,7 @@ n. 装饰，布置
                         break;
                     case 2:
                        // if(screenSlidePagerAdapter.getItem(position) instanceof GraspDataFragment){
-                            if(!ShellUtil.isStartOrStopDoing){
+                            if(!MainFragment.isStartOrStopDoing){
                                 menu.findItem(R.id.about_Appme).setVisible(false);
                             }
                             menu.findItem(R.id.log_clear).setVisible(false);
