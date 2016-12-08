@@ -155,6 +155,9 @@ n. 装饰，布置
         setBackground();
         overridePendingTransition(R.anim.main_start_animation, R.anim.main_exit_animation);
 
+
+        //startActivity(new Intent(this,Main2Activity.class));
+
     }
 
 

@@ -1,5 +1,6 @@
 package cn.wsgwz.gravity.util;
 
+import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -10,4 +11,6 @@ public class NativeUtils {
     static {
         System.loadLibrary("native-lib");
     }
+    public  static native final String demo();
+    public static native final StringBuffer readLine(InputStream in);
 }

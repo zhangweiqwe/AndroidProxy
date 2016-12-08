@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<script type="text/javascript">
+function showToast() {
+    var a = android.showToast("哈哈啊哈 ");
+    alert(a);
+    var v = document.getElementById("test00");
+     v.innerHTML = android.showToast("哈哈啊哈 ");
+    document.getElementsByTagName("test00").innerText = "-----";
+     }
+</script>
+
+</head>
+<body>
+<input type="button" value="调用"
+       onClick="showToast()"/>
+<p id="test00" >234324324 </p>
+
+</body>
+
+</html>
+

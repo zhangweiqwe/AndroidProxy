@@ -45,6 +45,7 @@ import cn.wsgwz.gravity.helper.ShellHelper;
 import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
+import cn.wsgwz.gravity.util.NativeUtils;
 import cn.wsgwz.gravity.util.OnExecResultListenner;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
@@ -68,7 +69,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         initView(view);
         return view;
     }
-    private void initView(View view){
+    private void initView(final View view){
         service_Switch = (Switch) view.findViewById(R.id.service_Switch);
         service_Switch.setChecked(ProxyService.isStart);
         service_Switch.setOnClickListener(this);
@@ -87,7 +88,8 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         explain_Bn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(),ViewPagerSampleActivity.class));
+               // startActivity(new Intent(getActivity(),ViewPagerSampleActivity.class));
+                Toast.makeText(view.getContext(),NativeUtils.demo()+"--",Toast.LENGTH_LONG).show();
             }
         });
 
