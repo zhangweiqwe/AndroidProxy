@@ -111,23 +111,24 @@ public class ConfigEditActivity extends Activity {
             }
         }
     }
-    private static final String templateStr = "<config version=\"2.0\"  apn_apn=\"cmwap\" apn_proxy=\"10.0.0.172\" apn_port=\"80\">\n" +
+    private static final String templateStr = "<config version=\"2.0\" dns=\"129.29.29.29\"  apn_apn=\"cmwap\" apn_proxy=\"10.0.0.172\" apn_port=\"80\">\n" +
             "\n" +
-            "    <http host=\"10.0.0.172\" port=\"80\">\n" +
-            "        <delate>host , x-online-host</delate>\n" +
-            "        <first-line>\n" +
-            "            [method][tab] [url][tab] [version]\\r\\n\n" +
-            "        </first-line>\n" +
-            "    </http>\n" +
+            "<http host=\"10.0.0.172\" port=\"80\">\n" +
+            "    <delate>host </delate>\n" +
+            "    <first-line>\n" +
+            "        [method][tab] [url][tab] [version]\\r\\n\n" +
+            "        Host: [tab][host]\\r\\n\n" +
+            "    </first-line>\n" +
+            "</http>\n" +
             "\n" +
             "\n" +
-            "    <https host=\"10.0.0.172\" port=\"80\"  switch=\"on\">\n" +
-            "        <delate>host , x-online-host</delate>\n" +
-            "        <first-line>\n" +
-            "            [method][tab] [url][tab] [version]\\r\\n\n" +
-            "            Host: [tab][host]:443\\r\\n\n" +
-            "        </first-line>\n" +
-            "    </https>\n" +
+            "<https host=\"10.0.0.172\" port=\"80\" switch=\"on\">\n" +
+            "    <delate>host </delate>\n" +
+            "    <first-line>\n" +
+            "        [method][tab] [url] [tab] [version]\\r\\n\n" +
+            "        Host: [tab][host]:443\\r\\n\n" +
+            "    </first-line>\n" +
+            "</https>\n" +
             "\n" +
             "</config>\n";
 }
