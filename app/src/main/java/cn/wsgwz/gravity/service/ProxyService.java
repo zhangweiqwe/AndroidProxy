@@ -155,15 +155,15 @@ public class ProxyService extends Service {
         String startStr =  shellHelper.getStartStr().replace(ShellHelper.dns,config.getDns());
         sharedPreferences.edit().putString("start.sh",startStr).commit();
         shellHelper.setStartStr(startStr);
-        boolean isExecShell = sharedPreferences.getBoolean(SharedPreferenceMy.SHELL_IS_FLLOW_MENU, true);
-                if(isExecShell){
-                    ShellUtil.maybeExecShell(true,MainActivity.mainActivity);
-                }else {
-                    ShellUtil.maybeExecShell(false,MainActivity.mainActivity);
-
-            }
+        fllowServer(true);
     }
 
+    private void fllowServer(boolean isStart){
+        boolean isExecShell = sharedPreferences.getBoolean(SharedPreferenceMy.SHELL_IS_FLLOW_MENU, true);
+        if(isExecShell){
+            ShellUtil.maybeExecShell(isStart,MainActivity.mainActivity);
+        }
+    }
     //启动proxy
     private void startProxy(){
         executor = Executors.newCachedThreadPool();
@@ -206,8 +206,10 @@ public class ProxyService extends Service {
             }
         });
         socketThread.start();
-        LogContent.addItemAndNotify("服务开始");
-        isStart = true;
+        if((socketThread!=null&&socketThread.isAlive())&&executor!=null){
+            LogContent.addItemAndNotify("服务开始");
+            isStart = true;
+        }
     }
 
 
@@ -250,8 +252,9 @@ public class ProxyService extends Service {
 
         notificationManager.cancel(0);
         isStart = false;
-
         LogContent.addItemAndNotify("服务结束");
+
+        fllowServer(false);
     }
 
     @Nullable
