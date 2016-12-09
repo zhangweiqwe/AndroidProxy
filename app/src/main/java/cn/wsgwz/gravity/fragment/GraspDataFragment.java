@@ -104,11 +104,17 @@ public class GraspDataFragment extends Fragment implements View.OnClickListener 
                 e.printStackTrace();
             }
         }*/
+        String str = null;
 
-        String str =
-                "mount -o remount , rw /system"+"\n"+
-                "cd /system/xbin/"+getResources().getString(R.string.app_name)+"\n"+
-                "./tcpdump -i any -p -s 0 -w "+ FileUtil.SD_APTH_PCAP+"/"+fileName;
+        if(!(Build.VERSION.SDK_INT>=23)){
+
+                   str= "mount -o remount,rw /system"+"\n"+
+                            "cd /system/xbin/"+getResources().getString(R.string.app_name)+"\n"+
+                            "./tcpdump -i any -p -s 0 -w "+ FileUtil.SD_APTH_PCAP+"/"+fileName;
+        }else {
+
+        }
+
         ShellUtil.execShell(getActivity(), str, new OnExecResultListenner() {
             @Override
             public void onSuccess(StringBuffer sb) {
@@ -132,12 +138,15 @@ public class GraspDataFragment extends Fragment implements View.OnClickListener 
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
         dialog.show();
+
+        String drectoryName = getResources().getString(R.string.app_name);
         String str =
-                "mount -o remount , rw /system"+"\n"+
-                "cd /system/xbin"+"\n"+
-                "mkdir "+getResources().getString(R.string.app_name)+"\n"+
-                "unzip  "  +FileUtil.SD_APTH_CONFIG+"/"+FileUtil.ABC_FILE_NAME  +" -o -d "+"/system/xbin/"+getResources().getString(R.string.app_name)+"\n"+
-                "chmod -R 777 /system/xbin/"+getResources().getString(R.string.app_name);
+                "mount -o remount,rw /system"+"\n"+
+                        "mkdir /system/xbin/"+drectoryName+"\n"+
+                        "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.ABC_FILE_NAME+" "+"system/xbin/"+drectoryName+"\n"+
+                        "cd /system/xbin/"+drectoryName+"\n"+
+                        "unzip  "  +FileUtil.ABC_FILE_NAME  +"\n"+
+                        "chmod -R 777  /system/xbin/"+drectoryName;
         ShellUtil.execShell(getActivity(), str, new OnExecResultListenner() {
             @Override
             public void onSuccess(StringBuffer sb) {

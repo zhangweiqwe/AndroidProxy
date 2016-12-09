@@ -164,6 +164,7 @@ n. 装饰，布置
 
         //startActivity(new Intent(this,Main2Activity.class));
 
+        //initJume();
     }
 
 
@@ -201,6 +202,7 @@ n. 装饰，布置
             UnzipFromAssets.toSdcard( this,  FileUtil.ABC_FILE_NAME, FileUtil.SD_APTH_CONFIG,  true);
             UnzipFromAssets.toSdcard( this,  FileUtil.JUME_FILE_NAME, FileUtil.SD_APTH_CONFIG,  true);
             sharedPreferences.edit().putBoolean(SharedPreferenceMy.IS_INIT_SDCARD,true).commit();
+
             initJume();
             Toast.makeText(this,getString(R.string.init_sdcard_file_ok),Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
@@ -530,13 +532,25 @@ n. 装饰，布置
     }
 
     private void initJume(){
-        String str =
-                "mount -o remount , rw /system"+"\n"+
-                "cd /system/xbin"+"\n"+
+       /* String str =
+                "mount -o remount,rw /system"+"\n"+
+                        "cd /system/xbin"+"\n"+
                         "mkdir Jume"+"\n"+
+                        "cd /system"+"\n"+
+                        "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.JUME_FILE_NAME+" "+"system/xbin/Jume"+"\n"+
                         "cd Jume"+"\n"+
-                        "unzip  "  +FileUtil.SD_APTH_CONFIG+"/"+FileUtil.JUME_FILE_NAME  +" -o -d "+"/system/xbin/Jume"+"\n"+
+                        "unzip  "  +FileUtil.JUME_FILE_NAME  +" -o -d "+"/system/xbin/Jume"+"\n"+
+                        "chmod -R 777  /system/xbin/Jume";*/
+
+        String str =
+                "mount -o remount,rw /system"+"\n"+
+                        "mkdir /system/xbin/Jume"+"\n"+
+                        "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.JUME_FILE_NAME+" "+"system/xbin/Jume"+"\n"+
+                        "cd /system/xbin/Jume"+"\n"+
+                        "unzip  "  +FileUtil.JUME_FILE_NAME  +"\n"+
                         "chmod -R 777  /system/xbin/Jume";
+
+       // String str = "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.JUME_FILE_NAME+" "+"system/xbin/Jume"+"\n";
         ShellUtil.execShell(this, str, new OnExecResultListenner() {
             @Override
             public void onSuccess(StringBuffer sb) {

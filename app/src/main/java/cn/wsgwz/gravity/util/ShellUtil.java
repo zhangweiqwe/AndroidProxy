@@ -160,7 +160,7 @@ public class ShellUtil {
 
         Toolbar toolbar = activity.getToolbar();
         final Menu menu = toolbar.getMenu();
-        final View actionView = LayoutInflater.from(activity).inflate(R.layout.toolbar_actionview_progress,null);
+        View actionView = LayoutInflater.from(activity).inflate(R.layout.toolbar_actionview_progress,null);
         menu.findItem(R.id.about_Appme).setVisible(true).setActionView(actionView);
 
         String str = null;
@@ -176,7 +176,7 @@ public class ShellUtil {
             }
         }
 
-        ShellUtil.execShell(activity, shellHelper.getStartStr(), new OnExecResultListenner() {
+        ShellUtil.execShell(activity, str, new OnExecResultListenner() {
             @Override
             public void onSuccess(StringBuffer sb) {
                 if(isProgressListenner!=null){
