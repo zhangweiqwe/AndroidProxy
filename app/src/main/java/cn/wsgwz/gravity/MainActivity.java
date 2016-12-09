@@ -66,6 +66,7 @@ import cn.wsgwz.gravity.helper.ShellHelper;
 import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
+import cn.wsgwz.gravity.util.NativeUtils;
 import cn.wsgwz.gravity.util.OnExecResultListenner;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
@@ -80,6 +81,7 @@ import static junit.framework.Assert.assertEquals;
 public class MainActivity extends AppCompatActivity implements LogFragment.OnListFragmentInteractionListenner{
     //选择背景请求值
     public static final  int REQUEST_CODE_SELECT_WALLPAPER = 4;
+    public static  MainActivity mainActivity ;
 
     private Toolbar toolbar;
     private RelativeLayout main_RL;
@@ -105,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements LogFragment.OnLis
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
+        mainActivity = this;
         if(Build.VERSION.SDK_INT >= 21) {
             Rect frame = new Rect();
             getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
@@ -155,6 +158,9 @@ n. 装饰，布置
         setBackground();
         overridePendingTransition(R.anim.main_start_animation, R.anim.main_exit_animation);
 
+        String  str = NativeUtils.getConfig("config1");
+
+       // LogUtil.printSS("Java--"+str);
 
         //startActivity(new Intent(this,Main2Activity.class));
 

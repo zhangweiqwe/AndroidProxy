@@ -39,6 +39,7 @@ public class ConfigXml {
 
 
         Config config = null;
+        String dns = null;
         String version = null;
         String apn_apn = null;
         String apn_proxy = null;
@@ -62,6 +63,7 @@ public class ConfigXml {
 
 
         version = root.attribute("version").getValue();
+        dns = root.attribute("dns").getValue();
         apn_apn = root.attribute("apn_apn").getValue();
         apn_proxy = root.attribute("apn_proxy").getValue();
         apn_port = root.attribute("apn_port").getValue();
@@ -139,6 +141,7 @@ public class ConfigXml {
 
         config = new Config(version,apn_apn,apn_proxy,apn_port, httpHost,   httpPort,   httpFirstLine,   httpNeedDelateHeaders,connectSupport,
                 connectHost,   connectPort,   connectFirstLine,   connectNeedDelateHeaders );
+        config.setDns(dns);
         return config;
     }
 
@@ -161,4 +164,6 @@ public class ConfigXml {
 
         return byteArrayInputStream;
     }
+
+
 }

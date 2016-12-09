@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import org.dom4j.DocumentException;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -34,6 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -42,6 +44,7 @@ import java.util.logging.SocketHandler;
 import cn.wsgwz.gravity.MainActivity;
 import cn.wsgwz.gravity.R;
 import cn.wsgwz.gravity.config.Config;
+import cn.wsgwz.gravity.config.EnumMyConfig;
 import cn.wsgwz.gravity.config.xml.ConfigXml;
 import cn.wsgwz.gravity.core.RequestHandler;
 import cn.wsgwz.gravity.fragment.log.LogContent;
@@ -104,21 +107,39 @@ public class ProxyService extends Service {
                     FileInputStream fileInputStream = new FileInputStream(file);
                     config = ConfigXml.read(fileInputStream);
                 }else {
-                    Toast.makeText(this,getResources().getText(R.string.config_not_fund),Toast.LENGTH_SHORT).show();
+                    List<EnumMyConfig> listEnum = EnumMyConfig.getMeConfig();
+                    boolean b = false;
+                    if(listEnum!=null){
+                        for(int i=0;i<listEnum.size();i++){
+                            String pathName = file.getAbsolutePath();
+                            if(pathName.contains("/")){
+                                pathName = pathName.replace("/","");
+                            }
+                            if(listEnum.get(i).getName().equals(pathName)){
+                                String values = listEnum.get(i).getValues();
+                                config = ConfigXml.read(new ByteArrayInputStream(values.getBytes("utf-8")));
+                                b = true;
+                            };
+                        }
+
+                    }
+
+                    if(!b){
+                        Toast.makeText(this, getResources().getText(R.string.config_not_fund), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                 }
             }else {
                 InputStream in = getAssets().open("text.xml");
                 config = ConfigXml.read(in);
             }
-            //LogUtil.printSS("----ss"+3);
-            LogContent.addItem("建议接入点:"+" apn:"+config.getApn_apn()+" 代理:"+config.getApn_proxy()+" 端口:"+config.getApn_port());
 
-            //LogUtil.printSS("----ss"+4);
-            //Config.DNS  = config.getDns();
-
+            LogContent.addItemAndNotify("建议接入点:"+" apn:"+config.getApn_apn()+" 代理:"+config.getApn_proxy()+" 端口:"+config.getApn_port());
           //  setApn(config.getApn_apn(),config.getApn_proxy(),config.getApn_port());
 
-            LogContent.addItemAndNotify("服务开始");
+
+            exec();
             startProxy();
 
 
@@ -129,6 +150,19 @@ public class ProxyService extends Service {
         }
     }
 
+    private void exec(){
+        SharedPreferences sharedPreferences = this.getSharedPreferences("main",Context.MODE_PRIVATE);
+        String startStr =  shellHelper.getStartStr().replace(ShellHelper.dns,config.getDns());
+        sharedPreferences.edit().putString("start.sh",startStr).commit();
+        shellHelper.setStartStr(startStr);
+        boolean isExecShell = sharedPreferences.getBoolean(SharedPreferenceMy.SHELL_IS_FLLOW_MENU, true);
+                if(isExecShell){
+                    ShellUtil.maybeExecShell(true,MainActivity.mainActivity);
+                }else {
+                    ShellUtil.maybeExecShell(false,MainActivity.mainActivity);
+
+            }
+    }
 
     //启动proxy
     private void startProxy(){
@@ -172,7 +206,7 @@ public class ProxyService extends Service {
             }
         });
         socketThread.start();
-        LogContent.addItemAndNotify("线程池已启动");
+        LogContent.addItemAndNotify("服务开始");
         isStart = true;
     }
 

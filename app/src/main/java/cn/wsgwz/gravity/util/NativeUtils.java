@@ -11,6 +11,8 @@ public class NativeUtils {
     static {
         System.loadLibrary("native-lib");
     }
-    public  static native final String demo();
-    public static native final StringBuffer readLine(InputStream in);
+
+    public static native final String getConfig(String typeStr);
+
+
 }

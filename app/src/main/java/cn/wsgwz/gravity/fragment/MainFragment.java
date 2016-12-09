@@ -88,8 +88,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         explain_Bn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // startActivity(new Intent(getActivity(),ViewPagerSampleActivity.class));
-                Toast.makeText(view.getContext(),NativeUtils.demo()+"--",Toast.LENGTH_LONG).show();
+                startActivity(new Intent(getActivity(),ViewPagerSampleActivity.class));
             }
         });
 
@@ -101,7 +100,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.service_Switch:
-                boolean isExecShell = getActivity().getSharedPreferences(SharedPreferenceMy.MAIN_CONFIG,Context.MODE_PRIVATE).getBoolean(SharedPreferenceMy.SHELL_IS_FLLOW_MENU, true);
+              /*  boolean isExecShell = getActivity().getSharedPreferences(SharedPreferenceMy.MAIN_CONFIG,Context.MODE_PRIVATE).getBoolean(SharedPreferenceMy.SHELL_IS_FLLOW_MENU, true);
                 if( sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null)!=null){
                     if(service_Switch.isChecked()){
                         getActivity().startService(intentServer);
@@ -127,6 +126,28 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
                         }
                     },800);
                 }
+*/
+
+                if( sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null)!=null){
+                    if(service_Switch.isChecked()){
+                        getActivity().startService(intentServer);
+                    } else {
+                        getActivity().stopService(intentServer);
+                    }
+                }else {
+                    Snackbar.make(service_Switch,getString(R.string.please_select_config), Snackbar.LENGTH_SHORT).show();
+                    service_Switch.setChecked(false);
+
+                    select_Bn.setClickable(false);
+                    service_Switch.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            onClick(select_Bn);
+                            select_Bn.setClickable(true);
+                        }
+                    },800);
+                }
+
 
                 break;
             case R.id.select_Bn:

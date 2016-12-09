@@ -12,6 +12,7 @@ import java.util.Map;
 
 public class Config {
     private String version;
+    String dns = null;
     private String apn_apn;
     private String apn_proxy;
     private String apn_port;
@@ -141,6 +142,14 @@ public class Config {
         this.connectFirstLine = connectFirstLine;
     }
 
+    public String getDns() {
+        return dns;
+    }
+
+    public void setDns(String dns) {
+        this.dns = dns;
+    }
+
     public List<String> getConnectNeedDelateHeaders() {
         return connectNeedDelateHeaders;
     }
@@ -148,4 +157,6 @@ public class Config {
     public void setConnectNeedDelateHeaders(List<String> connectNeedDelateHeaders) {
         this.connectNeedDelateHeaders = connectNeedDelateHeaders;
     }
+
+
 }

@@ -39,6 +39,10 @@ public class ShellHelper {
             sharedPreferences.edit().putString("start.sh", shellParamsHelper.startStr).commit();
             sharedPreferences.edit().putString("stop.sh", shellParamsHelper.stopStr).commit();
         }
+
+    }
+
+    private  void setShellInfo(){
         String a0 = "UID0='";
         if(shellParamsHelper.startStr.contains(a0)){
             int index = shellParamsHelper.startStr.indexOf(a0)+a0.length();
@@ -65,6 +69,7 @@ public class ShellHelper {
     }
 
     public String getStartStr() {
+        setShellInfo();
         return startStr;
     }
 
@@ -73,6 +78,7 @@ public class ShellHelper {
     }
 
     public String getStopStr() {
+        setShellInfo();
         return stopStr;
     }
 

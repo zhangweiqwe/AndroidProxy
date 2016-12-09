@@ -27,6 +27,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +35,7 @@ import cn.wsgwz.gravity.MainActivity;
 import cn.wsgwz.gravity.R;
 import cn.wsgwz.gravity.activity.ConfigEditActivity;
 import cn.wsgwz.gravity.adapter.ConfigSelectAdapter;
+import cn.wsgwz.gravity.config.EnumMyConfig;
 import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
@@ -188,7 +190,17 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                     });
                     Collections.addAll(fileList,files);
                 }
-                addAssetsConfigs();
+
+
+                List<EnumMyConfig> listEnum = EnumMyConfig.getMeConfig();
+                if(listEnum!=null){
+                    for(int i=0;i<listEnum.size();i++){
+                        Collections.addAll(fileList,new File(listEnum.get(i).getName()));
+                    }
+                }
+
+                
+                //addAssetsConfigs();
                 handler.sendEmptyMessage(1000);
 
             }
