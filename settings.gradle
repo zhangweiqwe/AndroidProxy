@@ -1,1 +1,1 @@
-include ':app', ':pull', ':explain'
+include ':app', ':pull', ':explain', ':photospreview'

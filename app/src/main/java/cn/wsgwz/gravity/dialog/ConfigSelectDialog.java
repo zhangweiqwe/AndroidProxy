@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,11 +38,13 @@ import cn.wsgwz.gravity.R;
 import cn.wsgwz.gravity.activity.ConfigEditActivity;
 import cn.wsgwz.gravity.adapter.ConfigSelectAdapter;
 import cn.wsgwz.gravity.config.EnumMyConfig;
+import cn.wsgwz.gravity.fragment.MainFragment;
 import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
+import cn.wsgwz.gravity.view.slidingTabLayout.ScreenSlidePagerAdapter;
 
 /**
  * Created by Jeremy Wang on 2016/11/7.
@@ -127,17 +131,40 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
         builder.setPositiveButton("确定", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                getContext().stopService(intentServer);
-                getContext().startService(intentServer);
                 sharedPreferences.edit().putString(SharedPreferenceMy.CURRENT_CONFIG_PATH,fileList.get(position1).getAbsolutePath()).commit();
                 currentConfig_TV.setText(file.getAbsolutePath());
-                //Snackbar.make(view, getContext().getString(R.string.restart_server_ok), Snackbar.LENGTH_SHORT).show();
                 dialog.dismiss();
+                Snackbar.make(view, getContext().getString(R.string.restart_server_ok), Snackbar.LENGTH_SHORT).show();
+                ConfigSelectDialog.this.getWindow().getDecorView().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ConfigSelectDialog.this.dismiss();
+                    }
+                },200);
+                if(context!=null){
+                    if(context instanceof MainActivity){
+                        MainActivity mainActivity = (MainActivity)context;
+                        cn.wsgwz.gravity.view.slidingTabLayout.ViewPager viewPager =  mainActivity.getMy_viewPager();
+                        ScreenSlidePagerAdapter screenSlidePagerAdapter = mainActivity.getScreenSlidePagerAdapter();
+                        android.app.Fragment fragment =  screenSlidePagerAdapter.getItem(viewPager.getCurrentItem());
+                        if(fragment instanceof MainFragment){
+                           /* MainFragment mainFragment = (MainFragment)fragment;
+                            mainFragment.callClickServiceSwitch();*/
+                            if(onServerStateChangeListenner!=null){
+                                onServerStateChangeListenner.onChange(true);
+                            }
+                        }
+
+                    }
+                }
+            /*    getContext().stopService(intentServer);
+                getContext().startService(intentServer);
+                //Snackbar.make(view, getContext().getString(R.string.restart_server_ok), Snackbar.LENGTH_SHORT).show();
                 ConfigSelectDialog.this.dismiss();
                 ShellUtil.maybeExecShell(true,(MainActivity) context);
                 if(onServerStateChangeListenner!=null){
                     onServerStateChangeListenner.onChange(true);
-                }
+                }*/
             }
         });
 

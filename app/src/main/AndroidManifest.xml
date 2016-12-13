@@ -68,11 +68,10 @@
             android:name="cbb9601a"
             android:value="e866cfb0" />
 
-        <activity
-            android:name="com.baidu.mobads.AppActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".demo.Main2Activity"></activity>
+
+        <activity android:name=".demo.Main2Activity" />
+        <activity android:name=".demo.Main3Activity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"></activity>
     </application>
 
 </manifest>

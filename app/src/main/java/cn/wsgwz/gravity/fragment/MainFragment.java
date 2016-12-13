@@ -26,7 +26,6 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.example.explain.zoomimageview.sample.ViewPagerSampleActivity;
 import com.example.pull.refreshview.XListView;
 import com.example.pull.refreshview.XScrollView;
 
@@ -49,6 +48,7 @@ import cn.wsgwz.gravity.util.NativeUtils;
 import cn.wsgwz.gravity.util.OnExecResultListenner;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
+import cn.wsgwz.photospreview.PhotosPreviewActivity;
 
 
 public class MainFragment extends Fragment implements View.OnClickListener,ShellUtil.IsProgressListenner{
@@ -88,7 +88,22 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         explain_Bn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(),ViewPagerSampleActivity.class));
+              /*  ArrayList<String> list = new ArrayList<>();
+                list.add("http://img.pconline.com.cn/images/upload/upc/tx/photoblog/1112/01/c5/9807116_9807116_1322714493296.jpg");
+                list.add("http://cyjctrip.qiniudn.com/1384128078/EAD72B4A-734B-4ABD-B3F1-92AA4BA2E993.jpg");
+                list.add("http://images.ccoo.cn/bbs/2011105/201110522020246.jpg");
+                list.add("http://img4.imgtn.bdimg.com/it/u=3593187573,4089980531&fm=21&gp=0.jpg");
+                list.add("http://s11.sinaimg.cn/mw690/d83fda66tx6DCfGOUEqda&690");
+                list.add("http://img5.imgtn.bdimg.com/it/u=2429826194,3609010411&fm=23&gp=0.jpg");
+                list.add("http://img.taopic.com/uploads/allimg/130410/240403-130410063T440.jpg");
+                list.add("http://img1.imgtn.bdimg.com/it/u=2340246007,1647475638&fm=23&gp=0.jpg");
+                list.add("http://s6.sinaimg.cn/mw690/001KtX7agy6E1Z6vrIN4d&690");*/
+                Intent intent = new Intent(getActivity(), PhotosPreviewActivity.class);
+              /*  Bundle bundle = new Bundle();
+                bundle.putSerializable(PhotosPreviewActivity.BUNDLE_KEY_LIST,list);
+                bundle.putInt(PhotosPreviewActivity.BUNDLE_KEY_CURRENT_NUMBER,0);
+                intent.putExtras(bundle);*/
+                startActivity(intent);
             }
         });
 
@@ -100,34 +115,6 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.service_Switch:
-              /*  boolean isExecShell = getActivity().getSharedPreferences(SharedPreferenceMy.MAIN_CONFIG,Context.MODE_PRIVATE).getBoolean(SharedPreferenceMy.SHELL_IS_FLLOW_MENU, true);
-                if( sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null)!=null){
-                    if(service_Switch.isChecked()){
-                        getActivity().startService(intentServer);
-                        if(isExecShell){
-                            ShellUtil.maybeExecShell(true,(MainActivity) getActivity());
-                        }
-                    } else {
-                        getActivity().stopService(intentServer);
-                        if(isExecShell){
-                            ShellUtil.maybeExecShell(false,(MainActivity) getActivity());
-                        }
-                    }
-                }else {
-                    Snackbar.make(service_Switch,getString(R.string.please_select_config), Snackbar.LENGTH_SHORT).show();
-                    service_Switch.setChecked(false);
-
-                    select_Bn.setClickable(false);
-                    service_Switch.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            onClick(select_Bn);
-                            select_Bn.setClickable(true);
-                        }
-                    },800);
-                }
-*/
-
                 if( sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null)!=null){
                     if(service_Switch.isChecked()){
                         getActivity().startService(intentServer);
@@ -157,7 +144,15 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
                     configSelectDialog.setOnServerStateChangeListenner(new ConfigSelectDialog.OnServerStateChangeListenner() {
                         @Override
                         public void onChange(boolean isStart) {
-                            service_Switch.setChecked(isStart);
+                            service_Switch.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                //    onClick(service_Switch);
+                                    service_Switch.setChecked(true);
+                                    onClick(service_Switch);
+                                }
+                            },300);
+
                         }
                     });
                     configSelectDialog.show();
@@ -189,4 +184,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         service_Switch.setOnClickListener(this);
     }
 
+    public Switch getService_Switch() {
+        return service_Switch;
+    }
 }
