@@ -26,7 +26,7 @@ public class LogContent {
         ITEMS.add(simpleDateFormat.format(new Date())+"  ..."+"");
     }*/
     public static RecyclerView.Adapter adapter;
-    public  static void addItem(String str){
+    public synchronized static void addItem(String str){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:MM:ss:SSS");
         ITEMS.add(simpleDateFormat.format(new Date())+"  "+str);
     };
@@ -44,7 +44,7 @@ public class LogContent {
     public static void initAdapter(RecyclerView.Adapter adapter){
         LogContent.adapter = adapter;
     }
-    public  static void addItemAndNotify(String str){
+    public synchronized   static void addItemAndNotify(String str){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:MM:ss:SSS");
         ITEMS.add(simpleDateFormat.format(new Date())+"  "+str);
         if(adapter!=null){

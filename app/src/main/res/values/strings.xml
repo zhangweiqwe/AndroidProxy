@@ -68,6 +68,11 @@
     <string name="already_save_change">已保存更改</string>
 
 
+
+    //logFragment
+    <string name="not_allow_current_is_wifi">当前为wifi无法打开，请关闭wifi使用移动网络</string>
+    
+    
     //百度百通
     <!-- <string name="app_name">百通SDK</string>-->
     <string name="action_settings">Settings</string>

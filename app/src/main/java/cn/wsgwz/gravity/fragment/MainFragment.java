@@ -13,7 +13,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -48,10 +50,15 @@ import cn.wsgwz.gravity.util.NativeUtils;
 import cn.wsgwz.gravity.util.OnExecResultListenner;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
+import cn.wsgwz.gravity.view.MyScrollView;
 import cn.wsgwz.photospreview.PhotosPreviewActivity;
 
 
-public class MainFragment extends Fragment implements View.OnClickListener,ShellUtil.IsProgressListenner{
+public class MainFragment extends Fragment implements View.OnClickListener,ShellUtil.IsProgressListenner,GestureDetector.OnGestureListener{
+
+    private GestureDetector detector;
+    private MyScrollView myScrollView;
+
     private Switch service_Switch;
     private Intent intentServer;
 
@@ -70,6 +77,16 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         return view;
     }
     private void initView(final View view){
+
+        detector = new GestureDetector(getActivity(),this);
+        myScrollView = (MyScrollView) view.findViewById(R.id.myScrollView);
+        /*myScrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return detector.onTouchEvent(motionEvent);
+            }
+        });*/
+
         service_Switch = (Switch) view.findViewById(R.id.service_Switch);
         service_Switch.setChecked(ProxyService.isStart);
         service_Switch.setOnClickListener(this);
@@ -88,22 +105,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         explain_Bn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              /*  ArrayList<String> list = new ArrayList<>();
-                list.add("http://img.pconline.com.cn/images/upload/upc/tx/photoblog/1112/01/c5/9807116_9807116_1322714493296.jpg");
-                list.add("http://cyjctrip.qiniudn.com/1384128078/EAD72B4A-734B-4ABD-B3F1-92AA4BA2E993.jpg");
-                list.add("http://images.ccoo.cn/bbs/2011105/201110522020246.jpg");
-                list.add("http://img4.imgtn.bdimg.com/it/u=3593187573,4089980531&fm=21&gp=0.jpg");
-                list.add("http://s11.sinaimg.cn/mw690/d83fda66tx6DCfGOUEqda&690");
-                list.add("http://img5.imgtn.bdimg.com/it/u=2429826194,3609010411&fm=23&gp=0.jpg");
-                list.add("http://img.taopic.com/uploads/allimg/130410/240403-130410063T440.jpg");
-                list.add("http://img1.imgtn.bdimg.com/it/u=2340246007,1647475638&fm=23&gp=0.jpg");
-                list.add("http://s6.sinaimg.cn/mw690/001KtX7agy6E1Z6vrIN4d&690");*/
-                Intent intent = new Intent(getActivity(), PhotosPreviewActivity.class);
-              /*  Bundle bundle = new Bundle();
-                bundle.putSerializable(PhotosPreviewActivity.BUNDLE_KEY_LIST,list);
-                bundle.putInt(PhotosPreviewActivity.BUNDLE_KEY_CURRENT_NUMBER,0);
-                intent.putExtras(bundle);*/
-                startActivity(intent);
+                startActivity(new Intent(getActivity(), PhotosPreviewActivity.class));
             }
         });
 
@@ -140,19 +142,13 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
             case R.id.select_Bn:
                 boolean isInitSdcard = sharedPreferences.getBoolean(SharedPreferenceMy.IS_INIT_SDCARD,false);
                 if(isInitSdcard){
-                    ConfigSelectDialog configSelectDialog = new ConfigSelectDialog(getActivity());
+                    final ConfigSelectDialog configSelectDialog = new ConfigSelectDialog(getActivity());
                     configSelectDialog.setOnServerStateChangeListenner(new ConfigSelectDialog.OnServerStateChangeListenner() {
                         @Override
                         public void onChange(boolean isStart) {
-                            service_Switch.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                //    onClick(service_Switch);
-                                    service_Switch.setChecked(true);
-                                    onClick(service_Switch);
-                                }
-                            },300);
-
+                            getActivity().stopService(intentServer);
+                            service_Switch.setChecked(true);
+                            onClick(service_Switch);
                         }
                     });
                     configSelectDialog.show();
@@ -187,4 +183,43 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
     public Switch getService_Switch() {
         return service_Switch;
     }
+
+
+    @Override
+    public boolean onDown(MotionEvent motionEvent) {
+        //在按下动作时被调用
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent motionEvent) {
+        //在按住时被调用
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        //在抬起时被调用
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        //在滚动时调用
+      //  LogUtil.printSS("  "+motionEvent.getX()+"--"+motionEvent.getY()+"           "+motionEvent1.getX()+"--"+motionEvent1.getY()+"     "+v+"  "+v1);
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent motionEvent) {
+        //在长按时被调用
+    }
+
+    @Override
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        //在抛掷动作时被调用
+        //velocityX表示横向的移动
+        return false;
+    }
+
+
 }

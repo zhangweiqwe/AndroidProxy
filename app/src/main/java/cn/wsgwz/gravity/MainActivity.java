@@ -5,16 +5,20 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.gesture.GestureOverlayView;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,15 +31,18 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -82,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements LogFragment.OnLis
     //选择背景请求值
     public static final  int REQUEST_CODE_SELECT_WALLPAPER = 4;
     public static  MainActivity mainActivity ;
+
 
     private Toolbar toolbar;
     private RelativeLayout main_RL;
@@ -158,7 +166,6 @@ n. 装饰，布置
         setBackground();
         overridePendingTransition(R.anim.main_start_animation, R.anim.main_exit_animation);
 
-        String  str = NativeUtils.getConfig("config1");
 
        // LogUtil.printSS("Java--"+str);
 
@@ -617,6 +624,15 @@ n. 装饰，布置
     @Override
     public void onListFRagmentInteraction(String str) {
         if(str.contains(ProxyService.BACKGROUND_HOST)){
+            //TelephonyManager telephonyManager = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
+            ConnectivityManager connectivityManager = (ConnectivityManager)this.getSystemService(CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            switch (networkInfo.getType()){
+                case ConnectivityManager.TYPE_WIFI:
+                    //Toast.makeText(this,getString(R.string.not_allow_current_is_wifi),Toast.LENGTH_SHORT).show();
+                    LogContent.addItemAndNotify(getString(R.string.not_allow_current_is_wifi));
+                    return;
+            }
             startBackgroundUseBrowsable();
         }
     }
@@ -645,6 +661,7 @@ n. 装饰，布置
     public ViewPager getMy_viewPager() {
         return my_viewPager;
     }
+
 
 
 }

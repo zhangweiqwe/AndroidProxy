@@ -48,6 +48,13 @@ public class ConfigEditActivity extends Activity {
         }else {
             edit_ET.setText(templateStr);
             bufferStr = templateStr;
+            try {
+                FileUtil.saveStr(file,edit_ET.getText().toString());
+                bufferStr = edit_ET.getText().toString();
+                //Snackbar.make(edit_ET,getString(R.string.already_save_change),Snackbar.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }
