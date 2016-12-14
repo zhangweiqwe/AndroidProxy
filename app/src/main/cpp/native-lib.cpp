@@ -1,5 +1,6 @@
 #include <jni.h>
 #include <iostream>
+
 #include <android/log.h>
 
 #define  LOG_TAG "sssssssssssssssNative"
@@ -83,6 +84,16 @@ char config2[] = "\n"
         "\n"
         "</config>";
 
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_cn_wsgwz_gravity_util_NativeUtils_serverToClient(JNIEnv *env, jclass type,
+                                                      jobject remoteSocket, jobject clientSocket) {
+    char logStr[] = "ndk----serverToClient";
+    __android_log_print(ANDROID_LOG_INFO, LOG_TAG, "%s", logStr);
+    // TODO
+
+}
 
 extern "C"
 JNIEXPORT jstring JNICALL

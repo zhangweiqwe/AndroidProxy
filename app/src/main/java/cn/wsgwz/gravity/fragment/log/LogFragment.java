@@ -18,12 +18,17 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import cn.wsgwz.gravity.R;
 import cn.wsgwz.gravity.util.LogUtil;
+import cn.wsgwz.gravity.util.NetworkUtil;
+import cn.wsgwz.gravity.util.OnExecResultListenner;
+import cn.wsgwz.gravity.util.ShellUtil;
 import cn.wsgwz.gravity.view.MyRecyclerView;
 import cn.wsgwz.gravity.view.slidingTabLayout.ViewPager;
 
@@ -43,16 +48,15 @@ public class LogFragment extends Fragment {
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             logAdapter = new LogAdapter(LogContent.ITEMS,mListenner);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
+            //Decoration n. 装饰，装潢；装饰品；奖章
             recyclerView.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
             recyclerView.setAdapter(logAdapter);
             LogContent.initAdapter(logAdapter);
-
-
-
-
         }
+
         return view;
     }
+
 
     @Override
     public void onAttach(Activity activity) {

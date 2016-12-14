@@ -22,6 +22,8 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -55,9 +57,16 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 
 import cn.wsgwz.gravity.activity.ConfigEditActivity;
@@ -74,6 +83,7 @@ import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
 import cn.wsgwz.gravity.util.NativeUtils;
+import cn.wsgwz.gravity.util.NetworkUtil;
 import cn.wsgwz.gravity.util.OnExecResultListenner;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
@@ -182,8 +192,73 @@ n. 装饰，布置
         return super.onPrepareOptionsMenu(menu);
     }
 
+    private void demoSocket(){
+     /*   NetworkUtil networkUtil = new NetworkUtil(this);
+            networkUtil.scan();
+            if(true){
+                Toast.makeText(MainActivity.this,"客户端",Toast.LENGTH_LONG).show();
+                return;
+        }*/
+        Toast.makeText(MainActivity.this,"服务器",Toast.LENGTH_LONG).show();
+        final Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what){
+                    case 1000:
+                        Toast.makeText(MainActivity.this,"收到消息"+msg.obj,Toast.LENGTH_LONG).show();
+                        break;
+                }
+            }
+        };
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+
+                ServerSocket serverSocket = new ServerSocket(60880);
+                while(true){
+                    final Socket socket = serverSocket.accept();
+                    socket.setKeepAlive(true);
+                    InputStream in = socket.getInputStream();
+                    final OutputStream out = socket.getOutputStream();
+                    BufferedReader br = new BufferedReader(new InputStreamReader(in,"utf-8"));
+                    String line=br.readLine();
+                    while(line!=null){
+                        LogUtil.printSS("--"+line+"-");
+                        Thread thread =new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                PrintWriter pw = new PrintWriter(out);
+                                    pw.write("Hello World\n");
+                                    pw.flush();
+
+                                // Message.obtain(handler, 222, res).sendToTarget();//发送服务器返回消息
+                            }
+                        });
+                        thread.start();
+                        thread.join();
+
+                        Message msg = Message.obtain();
+                        msg.obj = line;
+                        msg.what = 1000;
+                        handler.sendMessage(msg);
+                        line = br.readLine();
+                    }
+                }
+                }catch (IOException e){
+                    LogUtil.printSS("IOException "+e.getMessage().toString());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
     @Override
     protected void onStart() {
+        //demoSocket();
+
         super.onStart();
         boolean isInitSdcard = sharedPreferences.getBoolean(SharedPreferenceMy.IS_INIT_SDCARD,false);
         if(!isInitSdcard){

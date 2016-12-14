@@ -37,7 +37,7 @@ public class FileUtil {
     public static final String SD_APTH_PCAP = Environment.getExternalStorageDirectory()+"/"+"gravity"+"/pcap";*/
     public static final String SD_APTH_QQ = Environment.getExternalStorageDirectory()+"/"+"Tencent"+"/QQfile_recv";
     public static final String SD_APTH_CONFIG = Environment.getExternalStorageDirectory()+"/"+"Gravity"+"/config";
-    public static final String VERSION_NUMBER = "2.31";
+    public static final String VERSION_NUMBER = "2.33";
     public static final String CONFIG_END_NAME = ".xml";
     public static final String ASSETS_CONFIG_PATH = "config/";
 

@@ -38,29 +38,12 @@ public class ClientToServerThread extends Thread {
             if(paramsHelper==null){
                 return;
             }
-
-           // LogUtil.printSS("          ------>"+paramsHelper.toString()+"<-------");
             byte[] bytes = paramsHelper.toString().getBytes("iso-8859-1");
             remoteOutputStream.write(bytes);
             remoteOutputStream.flush();
-            if(paramsHelper.getRequestType().startsWith("POST")) {
-                int contentLength = Integer.parseInt(paramsHelper.getLinkedHashMap().get(ParamsHelper.getKeyIgnoreLowerCase("Content-Length",paramsHelper.getLinkedHashMap())));
-                for (int i = 0; i < contentLength; i++)
-                {
-                    remoteOutputStream.write(clientInputStream.read());
-                    remoteOutputStream.flush();
-                }
-
-                if(contentLength==0){
-
-                }else {
-                    byte[] bytes1 = "\r\n".getBytes("iso-8859-1");
-                    remoteOutputStream.write(bytes1);
-                    remoteOutputStream.flush();
-                }
-
+            if(paramsHelper.getRequestType().startsWith("POST")){
+                RequestHandler.doPost(paramsHelper,remoteOutputStream,clientInputStream);
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }finally {

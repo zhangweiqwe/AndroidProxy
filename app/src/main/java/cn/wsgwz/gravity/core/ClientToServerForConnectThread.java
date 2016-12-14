@@ -40,6 +40,21 @@ public class ClientToServerForConnectThread extends Thread {
         } catch (Exception e) {
             e.printStackTrace();
         } finally{
+            if(osOut!=null){
+                try {
+                    osOut.close();
+                } catch (IOException e) {
+                    //e.printStackTrace();
+                }
+            }
+            if(isIn!=null){
+                try {
+                    isIn.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
         }
 
 

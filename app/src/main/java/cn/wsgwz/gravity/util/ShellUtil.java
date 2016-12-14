@@ -47,6 +47,8 @@ public class ShellUtil {
             }
             return;
         }
+
+
         final Handler handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
@@ -85,6 +87,7 @@ public class ShellUtil {
             @Override
             public void run() {
                 Looper.prepare();
+
                 StringBuffer sb =new StringBuffer();
                 String str1 = "#!/system/bin/sh\n"+shellStr+"\n";
                 Process process = null;
@@ -100,7 +103,9 @@ public class ShellUtil {
                     localDataOutputStream.flush();
                     process.waitFor();
                     if (process.exitValue() != 0) {
-
+                        //LogUtil.printSS("---!=0");
+                    }else {
+                        //LogUtil.printSS("---=0");
                     }
 
                 } catch (IOException e) {

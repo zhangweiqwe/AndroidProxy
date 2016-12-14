@@ -1,6 +1,7 @@
 package cn.wsgwz.gravity.util;
 
 import java.io.InputStream;
+import java.net.Socket;
 import java.util.Map;
 
 /**
@@ -14,5 +15,5 @@ public class NativeUtils {
 
     public static native final String getConfig(String typeStr);
 
-
+    public static native final void serverToClient(Socket remoteSocket,Socket clientSocket);
 }
