@@ -32,7 +32,7 @@ public class BackgroundHtml {
         StringBuffer sb = new StringBuffer();
         String flag = "<br />";
         String appendStr = "欢迎使用"+flag+
-                "Gravitation2.31 后台(地址:11.22.33.44)"+flag+flag;
+                "Gravity 后台(地址:11.22.33.44)"+flag+flag;
         sb.append(appendStr);
         try {
             br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(requestStr.getBytes())));
