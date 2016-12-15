@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.net.InetAddress;
@@ -37,14 +38,15 @@ public class LogFragment extends Fragment {
     private LogAdapter logAdapter;
     private OnListFragmentInteractionListenner mListenner;
 
+
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_log, container, false);
-        if(view instanceof MyRecyclerView){
+       // if(view instanceof MyRecyclerView){
             final Context context = view.getContext();
-            recyclerView = (MyRecyclerView) view;
+            recyclerView = (MyRecyclerView) view.findViewById(R.id.recyclerView);
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             logAdapter = new LogAdapter(LogContent.ITEMS,mListenner);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -52,8 +54,8 @@ public class LogFragment extends Fragment {
             recyclerView.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
             recyclerView.setAdapter(logAdapter);
             LogContent.initAdapter(logAdapter);
-        }
-
+       // }
+        //LogUtil.printSS("  LogFragment ");
         return view;
     }
 

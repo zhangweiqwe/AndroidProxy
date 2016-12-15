@@ -67,6 +67,7 @@ public class GraspDataFragment extends Fragment implements View.OnClickListener 
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_grasp_data,container,false);
         initView(view);
+        //LogUtil.printSS("  GraspDataFragment ");
         return view;
     }
     private void stopCapture(){

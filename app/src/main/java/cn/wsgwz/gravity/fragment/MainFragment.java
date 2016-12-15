@@ -46,6 +46,7 @@ import cn.wsgwz.gravity.helper.ShellHelper;
 import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
+import cn.wsgwz.gravity.util.MyScrollView2;
 import cn.wsgwz.gravity.util.NativeUtils;
 import cn.wsgwz.gravity.util.OnExecResultListenner;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
@@ -57,7 +58,7 @@ import cn.wsgwz.photospreview.PhotosPreviewActivity;
 public class MainFragment extends Fragment implements View.OnClickListener,ShellUtil.IsProgressListenner,GestureDetector.OnGestureListener{
 
     private GestureDetector detector;
-    private MyScrollView myScrollView;
+    private MyScrollView2 myScrollView;
 
     private Switch service_Switch;
     private Intent intentServer;
@@ -74,12 +75,13 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
                              Bundle savedInstanceState) {
         View view  = inflater.inflate(R.layout.fragment_main,container,false);
         initView(view);
+        //LogUtil.printSS("  MainFragment ");
         return view;
     }
     private void initView(final View view){
 
         detector = new GestureDetector(getActivity(),this);
-        myScrollView = (MyScrollView) view.findViewById(R.id.myScrollView);
+        myScrollView = (MyScrollView2) view.findViewById(R.id.myScrollView);
         /*myScrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {

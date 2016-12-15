@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     tools:context="cn.wsgwz.gravity.fragment.GraspDataFragment">
-    <cn.wsgwz.gravity.view.MyScrollView
+    <cn.wsgwz.gravity.util.MyScrollView2
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <RelativeLayout
@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"></ListView>
         </RelativeLayout>
-    </cn.wsgwz.gravity.view.MyScrollView>
+    </cn.wsgwz.gravity.util.MyScrollView2>
 
 
 </RelativeLayout>

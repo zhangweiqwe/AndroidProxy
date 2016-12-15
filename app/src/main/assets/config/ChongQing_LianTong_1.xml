@@ -1,36 +1,3 @@
-<!--
-
-<config version="2.0"  apn_apn="cmwap" apn_proxy="10.0.0.172" apn_port="80">
-
-    <http host="10.0.0.172" port="80">
-        <delate>host , x-online-host</delate>
-        <first-line>
-            [method][tab] [url][tab] [version]\r\n
-            \n[method] [tab]http://wap.10086.cn[uri] [tab]  [version]\r\n
-            Host:[host]\r\n
-        </first-line>
-    </http>
-
-
-    <https host="10.0.0.172" port="80"  switch="on">
-        <delate>host , x-online-host</delate>
-        <first-line>
-            [method][tab] /[tab] [version]\r\n
-            Host: [tab][host]:443\r\n
-            Accept:[tab] */*, [tab]application/vnd.wap.mms-message, [tab]application/vnd.wap.sic\r\n
-            Content-Type:[tab] application/vnd.wap.mms-message\r\n
-        </first-line>
-    </https>
-
-</config>
-
-
-
-
--->
-
-
-
 <config version="2.0" dns="129.29.29.29"  apn_apn="cmwap" apn_proxy="10.0.0.172" apn_port="80">
 
     <http host="10.0.0.172" port="80">
@@ -56,7 +23,6 @@
     </https>
 
 </config>
-
 
 
 
