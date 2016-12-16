@@ -118,7 +118,6 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         super.onResume();
         service_Switch.setChecked(ProxyService.isStart);
         LogUtil.printSS("  onResume"+ProxyService.isStart);
-
     }
 
     private void initView(final View view){
