@@ -14,6 +14,8 @@ public class SharedPreferenceMy {
     public static final String MAIN_CONFIG = "config";
 
 
+
+
     public static final String SHELL_IS_FLLOW_MENU = "SHELL_IS_FLLOW_MENU";
 
 
@@ -22,6 +24,7 @@ public class SharedPreferenceMy {
 
     //当前壁纸 路径
      public static final String WALLPAPER_PATH = "WALLPAPER_PATH";
+
 
 
 }

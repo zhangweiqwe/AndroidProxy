@@ -27,12 +27,13 @@ android {
             path "CMakeLists.txt"
         }
     }
-   /* sourceSets {
+    /* sourceSets {
         main {
             assets.srcDirs = ['src/main/assets', 'src/main/assets/']
             jniLibs.srcDirs = ['libs']
         }
     }*/
+    sourceSets { main { jni.srcDirs = ['src/main/jni', 'src/main/jni/'] } }
 }
 
 dependencies {

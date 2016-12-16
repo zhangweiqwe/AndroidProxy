@@ -4,13 +4,16 @@ package cn.wsgwz.gravity.fragment;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
@@ -61,14 +64,22 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
     private MyScrollView2 myScrollView;
 
     private Switch service_Switch;
-    private Intent intentServer;
+
 
     private Button select_Bn,explain_Bn;
 
     private SharedPreferences sharedPreferences;
 
     public static boolean isStartOrStopDoing;
+    private Intent intentServer;
 
+    private void fllowServer(boolean isStart){
+        boolean isExecShell = sharedPreferences.getBoolean(SharedPreferenceMy.SHELL_IS_FLLOW_MENU, true);
+        if(isExecShell){
+            ShellUtil.maybeExecShell(isStart,(MainActivity) getActivity());
+            LogUtil.printSS(ShellHelper.dns);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,9 +87,43 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         View view  = inflater.inflate(R.layout.fragment_main,container,false);
         initView(view);
         //LogUtil.printSS("  MainFragment ");
+/*
+        String str = "am broadcast -a cn.wsgwz.gravity.Restart";
+        ShellUtil.execShell(getActivity(), str, null);*/
+      /*  ServiceConnection serviceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+                ProxyService.MyBinder myBinder = (ProxyService.MyBinder)iBinder;
+                myBinder.doWhile();
+                LogUtil.printSS("onServiceConnected");
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName componentName) {
+                LogUtil.printSS("onServiceDisconnected");
+            }
+        };
+        getActivity().bindService(intentServer,serviceConnection,Context.BIND_AUTO_CREATE);*/
         return view;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        service_Switch.setChecked(ProxyService.isStart);
+        LogUtil.printSS("  onResume"+ProxyService.isStart);
+
+    }
+
     private void initView(final View view){
+        sharedPreferences = getActivity().getSharedPreferences(SharedPreferenceMy.MAIN_CONFIG, Context.MODE_PRIVATE);
+
 
         detector = new GestureDetector(getActivity(),this);
         myScrollView = (MyScrollView2) view.findViewById(R.id.myScrollView);
@@ -88,9 +133,11 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
                 return detector.onTouchEvent(motionEvent);
             }
         });*/
+        intentServer = new Intent(getActivity(), ProxyService.class);
 
         service_Switch = (Switch) view.findViewById(R.id.service_Switch);
-        service_Switch.setChecked(ProxyService.isStart);
+        /*boolean isStart = sharedPreferences.getBoolean(SharedPreferenceMy.SERVICE_IS_START,false);
+        service_Switch.setChecked(isStart);*/
         service_Switch.setOnClickListener(this);
 
 
@@ -98,9 +145,10 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         explain_Bn = (Button) view.findViewById(R.id.explain_Bn);
         select_Bn.setOnClickListener(this);
 
-        intentServer = new Intent(getActivity().getApplication(), ProxyService.class);
 
-        sharedPreferences = getActivity().getSharedPreferences(SharedPreferenceMy.MAIN_CONFIG, Context.MODE_PRIVATE);
+
+
+
 
 
 
@@ -120,10 +168,30 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         switch (v.getId()){
             case R.id.service_Switch:
                 if( sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null)!=null){
+                    LogUtil.printSS("service_Switch  click");
+                   /* if(isOnStart){
+                        isOnStart=false;
+                        return;
+                    }*/
                     if(service_Switch.isChecked()){
                         getActivity().startService(intentServer);
+                        fllowServer(true);
+                       /* String str = "am startservice -n cn.wsgwz.gravity/cn.wsgwz.gravity.service.ProxyService";
+                        ShellUtil.execShell(getActivity(), str, new OnExecResultListenner() {
+                            @Override
+                            public void onSuccess(StringBuffer sb) {
+                                fllowServer(true);
+                            }
+
+                            @Override
+                            public void onError(StringBuffer sb) {
+
+                            }
+                        });*/
+
                     } else {
                         getActivity().stopService(intentServer);
+                        fllowServer(false);
                     }
                 }else {
                     Snackbar.make(service_Switch,getString(R.string.please_select_config), Snackbar.LENGTH_SHORT).show();
@@ -149,6 +217,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
                         @Override
                         public void onChange(boolean isStart) {
                             getActivity().stopService(intentServer);
+                            fllowServer(false);
                             service_Switch.setChecked(true);
                             onClick(service_Switch);
                         }
@@ -222,6 +291,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         //velocityX表示横向的移动
         return false;
     }
+
 
 
 }

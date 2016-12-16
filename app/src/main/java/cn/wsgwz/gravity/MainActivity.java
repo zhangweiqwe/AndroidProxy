@@ -4,10 +4,12 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -23,6 +25,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -78,6 +81,7 @@ import cn.wsgwz.gravity.fragment.MainFragment;
 import cn.wsgwz.gravity.fragment.log.LogContent;
 import cn.wsgwz.gravity.fragment.log.LogFragment;
 import cn.wsgwz.gravity.helper.ApnDbHelper;
+import cn.wsgwz.gravity.helper.Other2;
 import cn.wsgwz.gravity.helper.ShellHelper;
 import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.FileUtil;
@@ -95,13 +99,13 @@ import cn.wsgwz.gravity.view.slidingTabLayout.ViewPager;
 import static junit.framework.Assert.assertEquals;
 
 
-public class MainActivity extends AppCompatActivity implements LogFragment.OnListFragmentInteractionListenner{
+public class MainActivity extends AppCompatActivity implements LogFragment.OnListFragmentInteractionListenner,ServiceConnection{
     //选择背景请求值
     public static final  int REQUEST_CODE_SELECT_WALLPAPER = 4;
-    public static  MainActivity mainActivity ;
 
 
-    private Toolbar toolbar;
+
+    private  Toolbar toolbar;
     private RelativeLayout main_RL;
     private RelativeLayout activity_main;
     private SlidingTabLayout slidingTabLayout;
@@ -119,13 +123,19 @@ public class MainActivity extends AppCompatActivity implements LogFragment.OnLis
 
     };
 
+    private ProxyService proxyService;
+   // private Intent intentServer;
+
 
     //界面绘制完成
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
-        mainActivity = this;
+
+                //Other2.onCreate2();
+        //NativeUtils.fork();
+
         if(Build.VERSION.SDK_INT >= 21) {
             Rect frame = new Rect();
             getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
@@ -150,11 +160,27 @@ vt. 特写；以…为特色；由…主演
     overlay [əʊvə'leɪ]
 vt. 在表面上铺一薄层，镀
 n. 覆盖图；覆盖物
+1.重制商务圈；
+2.图片浏览增加手势操作；
 
 decor
  英 ['deɪkɔː; 'de-]   美 [de'kɔr]   全球发音 跟读 口语练习
 n. 装饰，布置
      */
+
+    @Override
+    public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+        LogUtil.printSS(iBinder.toString()+"<---   <");
+        LogUtil.printSS("onServiceConnected");
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName componentName) {
+        LogUtil.printSS("onServiceDisconnected");
+
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,9 +198,12 @@ n. 装饰，布置
             window.setNavigationBarColor(Color.TRANSPARENT);
         }
         setContentView(R.layout.activity_main);
+//        intentServer = new Intent(this, ProxyService.class);
+        //bindService(intentServer,this,BIND_AUTO_CREATE);
         initView();
         setBackground();
         overridePendingTransition(R.anim.main_start_animation, R.anim.main_exit_animation);
+
 
 
        // LogUtil.printSS("Java--"+str);
@@ -182,6 +211,12 @@ n. 装饰，布置
         //startActivity(new Intent(this,Main2Activity.class));
 
         //initJume();
+
+
+
+
+
+
     }
 
 
@@ -736,6 +771,9 @@ n. 装饰，布置
 
     public ViewPager getMy_viewPager() {
         return my_viewPager;
+    }
+    public ProxyService getProxyService() {
+        return proxyService;
     }
 
 

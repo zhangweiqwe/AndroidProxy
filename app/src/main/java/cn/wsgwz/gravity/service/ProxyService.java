@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -78,13 +79,14 @@ public class ProxyService extends Service {
 
     private   ApnDbHelper apnDbHelper = null;;
 
-    private Config config;
 
-    private ShellHelper shellHelper = ShellHelper.getInstance();
+
+
 
     @Override
     public void onCreate() {
         super.onCreate();
+        LogUtil.printSS("Sss onCreate");
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         LogContent.addItem(Build.BRAND+"  "+Build.MODEL+" "+Build.VERSION.RELEASE+"  "+"  API:"+Build.VERSION.SDK_INT);
         LogContent.addItem("当前版本: "+getResources().getString(R.string.app_name)+FileUtil.VERSION_NUMBER);
@@ -92,55 +94,17 @@ public class ProxyService extends Service {
 
         //LogUtil.printSS("----ss"+1);
         showNotification();
-       // LogUtil.printSS("----ss"+2);
+        // LogUtil.printSS("----ss"+2);
         sharedPreferences = getSharedPreferences(SharedPreferenceMy.MAIN_CONFIG,MODE_PRIVATE);
         try {
-            if(!LogUtil.IS_STREAM_DEBUG){
-                String currentConfigPath = sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null);
-                if(currentConfigPath==null){
-                    return;
-                }
-                File file = new File(currentConfigPath);
-                if(file.getPath().startsWith("/"+FileUtil.ASSETS_CONFIG_PATH)){
-                    config = ConfigXml.read(getAssets().open( file.getAbsolutePath().replaceFirst("/","")));
-                }else if(file.exists()){
-                    FileInputStream fileInputStream = new FileInputStream(file);
-                    config = ConfigXml.read(fileInputStream);
-                }else {
-                    List<EnumMyConfig> listEnum = EnumMyConfig.getMeConfig();
-                    boolean b = false;
-                    if(listEnum!=null){
-                        for(int i=0;i<listEnum.size();i++){
-                            String pathName = file.getAbsolutePath();
-                            if(pathName.contains("/")){
-                                pathName = pathName.replace("/","");
-                            }
-                            if(listEnum.get(i).getName().equals(pathName)){
-                                String values = listEnum.get(i).getValues();
-                                config = ConfigXml.read(new ByteArrayInputStream(values.getBytes("utf-8")));
-                                b = true;
-                            };
-                        }
 
-                    }
-
-                    if(!b){
-                        Toast.makeText(this, getResources().getText(R.string.config_not_fund), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                }
-            }else {
-                InputStream in = getAssets().open("text.xml");
-                config = ConfigXml.read(in);
-            }
-
+            Config config  = getConfig(this);
             LogContent.addItemAndNotify("建议接入点:"+" apn:"+config.getApn_apn()+" 代理:"+config.getApn_proxy()+" 端口:"+config.getApn_port());
-          //  setApn(config.getApn_apn(),config.getApn_proxy(),config.getApn_port());
+            //  setApn(config.getApn_apn(),config.getApn_proxy(),config.getApn_port());
+            configInitShell(this,config);
 
 
-            exec();
-            startProxy();
+            startProxy(config);
 
 
         } catch (Exception e) {
@@ -148,24 +112,67 @@ public class ProxyService extends Service {
             e.printStackTrace();
             LogContent.addItemAndNotify(e.getMessage().toString());
         }
+
+
     }
 
-    private void exec(){
-        SharedPreferences sharedPreferences = this.getSharedPreferences("main",Context.MODE_PRIVATE);
+    public static Config getConfig(Context context) throws IOException, DocumentException {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SharedPreferenceMy.MAIN_CONFIG,Context.MODE_PRIVATE);
+        Config config = null;
+        if(!false){
+            String currentConfigPath = sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null);
+            if(currentConfigPath==null){
+                return null;
+            }
+            File file = new File(currentConfigPath);
+            if(file.getPath().startsWith("/"+FileUtil.ASSETS_CONFIG_PATH)){
+                config = ConfigXml.read(context.getAssets().open( file.getAbsolutePath().replaceFirst("/","")));
+            }else if(file.exists()){
+                FileInputStream fileInputStream = new FileInputStream(file);
+                config = ConfigXml.read(fileInputStream);
+            }else {
+                List<EnumMyConfig> listEnum = EnumMyConfig.getMeConfig();
+                boolean b = false;
+                if(listEnum!=null){
+                    for(int i=0;i<listEnum.size();i++){
+                        String pathName = file.getAbsolutePath();
+                        if(pathName.contains("/")){
+                            pathName = pathName.replace("/","");
+                        }
+                        if(listEnum.get(i).getName().equals(pathName)){
+                            String values = listEnum.get(i).getValues();
+                            config = ConfigXml.read(new ByteArrayInputStream(values.getBytes("utf-8")));
+                            b = true;
+                        };
+                    }
+
+                }
+
+                if(!b){
+                    Toast.makeText(context, context.getResources().getText(R.string.config_not_fund), Toast.LENGTH_SHORT).show();
+                    return null;
+                }
+
+            }
+        }else {
+            InputStream in = context.getAssets().open("text.xml");
+            config = ConfigXml.read(in);
+        }
+        return  config;
+    }
+
+    public static void configInitShell(Context context,Config config){
+        ShellHelper shellHelper = ShellHelper.getInstance();
+        SharedPreferences sharedPreferences = context.getSharedPreferences("main",Context.MODE_PRIVATE);
         String startStr =  shellHelper.getStartStr().replace(ShellHelper.dns,config.getDns());
         sharedPreferences.edit().putString("start.sh",startStr).commit();
         shellHelper.setStartStr(startStr);
-        fllowServer(true);
+
     }
 
-    private void fllowServer(boolean isStart){
-        boolean isExecShell = sharedPreferences.getBoolean(SharedPreferenceMy.SHELL_IS_FLLOW_MENU, true);
-        if(isExecShell){
-            ShellUtil.maybeExecShell(isStart,MainActivity.mainActivity);
-        }
-    }
+
     //启动proxy
-    private void startProxy(){
+    private void startProxy(final Config config){
         executor = Executors.newCachedThreadPool();
         final Context context = getApplicationContext();
         try { server = new ServerSocket(PORT); }
@@ -189,17 +196,17 @@ public class ProxyService extends Service {
             public void run() {
 
 
-                    try {
-                        while (true) {
+                try {
+                    while (true) {
                         executor.execute(new RequestHandler(server.accept(),config,context));
-                        }
-                        }
-                    catch (IOException e) {
-                        e.printStackTrace();
-                        Message msg = Message.obtain();
-                        msg.what=1004;
-                        msg.obj = e.getMessage().toString();
-                        handler.sendMessage(msg);
+                    }
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                    Message msg = Message.obtain();
+                    msg.what=1004;
+                    msg.obj = e.getMessage().toString();
+                    handler.sendMessage(msg);
 
                 }
 
@@ -231,10 +238,12 @@ public class ProxyService extends Service {
 
 
 
+
     @Override
     public void onDestroy() {
         super.onDestroy();
 
+        LogUtil.printSS("Sss onDestroy");
         if (socketThread != null && !socketThread.isInterrupted()) {
             socketThread.interrupt();
         }
@@ -254,15 +263,22 @@ public class ProxyService extends Service {
         isStart = false;
         LogContent.addItemAndNotify("服务结束");
 
-        fllowServer(false);
+        //fllowServer(false);
+       /* String str = "am startservice -n cn.wsgwz.gravity/cn.wsgwz.gravity.service.ProxyService";
+        ShellUtil.execShell(this, str, null);*/
+        //am startservice -n cn.wsgwz.gravity/cn.wsgwz.gravity.service.ProxyService
+
     }
+
+
+
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
-    private void setApn(final String apn, final String proxy, final String port){
+    private void setApn(final String apn, final String proxy, final String port, final Config config){
 
         String shellStr = "cd "+ApnDbHelper.DB_PATH_REALSE+"\n"+
                 "mount -o remount rw /."+"\n"+
@@ -274,7 +290,7 @@ public class ProxyService extends Service {
                     apnDbHelper = new ApnDbHelper(ProxyService.this);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    startProxy();
+                    startProxy(config);
                     Toast.makeText(ProxyService.this,getString(R.string.auto_setting_apn_error)+"\n"+e.getMessage().toString()+"\n"+
                             "("+apn+"--"+proxy+"--"+port+")",Toast.LENGTH_SHORT).show();
                 }
@@ -286,14 +302,14 @@ public class ProxyService extends Service {
                     @Override
                     public void succeed(String value)  {
                         apnDbHelper.update(ProxyService.this,value,apn,proxy,port);
-                        startProxy();
+                        startProxy(config);
                     }
 
                     @Override
                     public void error() {
                         Toast.makeText(ProxyService.this,getString(R.string.auto_setting_apn_error)+"\n"+sb.toString()+"\n"+
                                 "("+apn+"--"+proxy+"--"+port+")",Toast.LENGTH_SHORT).show();
-                        startProxy();
+                        startProxy(config);
                     }
                 });
             }
@@ -302,8 +318,9 @@ public class ProxyService extends Service {
             public void onError(StringBuffer sb) {
                 Toast.makeText(ProxyService.this,getString(R.string.auto_setting_apn_error)+"\n"+sb.toString()+"\n"+
                         "("+apn+"--"+proxy+"--"+port+")",Toast.LENGTH_SHORT).show();
-                startProxy();
+                startProxy(config);
             }
         });
     }
+
 }

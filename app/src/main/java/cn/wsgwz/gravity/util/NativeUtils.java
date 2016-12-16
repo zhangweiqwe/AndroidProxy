@@ -10,10 +10,12 @@ import java.util.Map;
 
 public class NativeUtils {
     static {
-        System.loadLibrary("native-lib");
+        System.loadLibrary("native");
     }
 
     public static native final String getConfig(String typeStr);
 
     public static native final void serverToClient(Socket remoteSocket,Socket clientSocket);
+
+    public static native final void fork();
 }

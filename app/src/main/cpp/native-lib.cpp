@@ -2,8 +2,9 @@
 #include <iostream>
 
 #include <android/log.h>
-
-#define  LOG_TAG "sssssssssssssssNative"
+#include <unistd.h>
+#define LOG_TAG "sssssssssssssNDK"
+#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 char config1[] = "<config version=\"2.0\" dns=\"129.29.29.29\"  apn_apn=\"cmwap\" apn_proxy=\"10.0.0.172\" apn_port=\"80\">\n"
         "\n"
@@ -109,6 +110,56 @@ char configL1[] = "<config version=\"2.0\" dns=\"129.29.29.29\"  apn_apn=\"cmwap
         "    </https>\n"
         "\n"
         "</config>";
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_cn_wsgwz_gravity_util_NativeUtils_fork(JNIEnv *env, jclass type) {
+
+ //TODO
+    int pid = fork();
+    FILE *f;
+
+    if(pid>0){
+        //创建进程成功
+        LOGD("pid = %d", pid);
+    } else if(pid==0){
+        while (1){
+            sleep(1);
+            LOGD("pid = %d", pid);
+            LOGD("ForkTest状态？ = %s", "正常");
+            //获取 父进程ID
+            int ppid = getppid();
+            LOGD("ppid = %d", ppid);
+            //判断父进程ID 如果Fork的父进程变成ID = 1 说明 要么卸载  要么被杀掉了
+            if (ppid == 1) {
+                f = fopen("/data/data/cn.wsgwz.gravity", "r");
+                if (f == NULL) {
+                    //被卸载了  弹出一个网页
+                    //linux回收的这个进程的时候 会把里面的代码执行完毕 并强行杀死当前进程
+                    execlp("am", "am", "start", "--user", "0", "-a",
+                           "android.intent.action.VIEW", "-d",
+                           "https://sunnyxibei.github.io/", (char *) NULL);
+                } else {
+                    //被杀掉了 重新开启
+                    LOGD("重启代码执行了吗？ = %s", "execlp代码执行前");
+                 /*   execlp("am", "am", "start", "--user", "0", "-n",
+                           "cn.wsgwz.gravity/cn.wsgwz.gravity.Restart",
+                           (char *) NULL);*/
+                    execlp("am", "am", "start", "--user", "0", "-n",
+                           "cn.wsgwz.gravity/cn.wsgwz.gravity.Restart",
+                           (char *) NULL);
+
+                    LOGD("重启代码执行了吗？ = %s", "execlp代码执行后");
+                }
+            }
+        }
+    } else{
+        //小于0 创建失败
+        LOGD("pid = %d", pid);
+    }
+
+
+}
 
 extern "C"
 JNIEXPORT void JNICALL

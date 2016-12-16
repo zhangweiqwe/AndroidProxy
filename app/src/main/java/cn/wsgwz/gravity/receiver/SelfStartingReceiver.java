@@ -18,6 +18,7 @@ import java.util.Enumeration;
 
 import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.LogUtil;
+import cn.wsgwz.gravity.util.ShellUtil;
 
 /**
  * Created by Administrator on 2016/10/29.
@@ -30,6 +31,9 @@ public class SelfStartingReceiver extends BroadcastReceiver {
     public static final Uri APN_LIST_URI = Uri.parse("content://telephony/carriers");
     @Override
     public void onReceive(Context context, Intent intent) {
+      /*  String str = "am startservice -n cn.wsgwz.gravity/cn.wsgwz.gravity.service.ProxyService";
+        ShellUtil.execShell(context, str, null);*/
+        //LogUtil.printSS("ssssssssssssss");
           /*  connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         try {
             NetworkInfo mobileInfo  = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);

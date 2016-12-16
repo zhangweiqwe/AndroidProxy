@@ -17,6 +17,8 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
+import org.dom4j.DocumentException;
+
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -160,10 +162,20 @@ public class ShellUtil {
     //public static boolean isStartOrStopDoing;
     //是否是脚本更随服务
     public static void  maybeExecShell(final boolean state, final MainActivity activity){
+
+        try {
+            ProxyService.configInitShell(activity,ProxyService.getConfig(activity));;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
         ShellHelper shellHelper = ShellHelper.getInstance();
 
 
         Toolbar toolbar = activity.getToolbar();
+
+
         final Menu menu = toolbar.getMenu();
         View actionView = LayoutInflater.from(activity).inflate(R.layout.toolbar_actionview_progress,null);
         menu.findItem(R.id.about_Appme).setVisible(true).setActionView(actionView);
