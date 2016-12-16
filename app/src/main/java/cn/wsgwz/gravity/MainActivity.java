@@ -170,13 +170,13 @@ n. 装饰，布置
 
     @Override
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-        LogUtil.printSS(iBinder.toString()+"<---   <");
-        LogUtil.printSS("onServiceConnected");
+       // LogUtil.printSS(iBinder.toString()+"<---   <");
+       // LogUtil.printSS("onServiceConnected");
     }
 
     @Override
     public void onServiceDisconnected(ComponentName componentName) {
-        LogUtil.printSS("onServiceDisconnected");
+      //  LogUtil.printSS("onServiceDisconnected");
 
     }
 
@@ -261,7 +261,7 @@ n. 装饰，布置
                     BufferedReader br = new BufferedReader(new InputStreamReader(in,"utf-8"));
                     String line=br.readLine();
                     while(line!=null){
-                        LogUtil.printSS("--"+line+"-");
+                        //LogUtil.printSS("--"+line+"-");
                         Thread thread =new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -283,7 +283,7 @@ n. 装饰，布置
                     }
                 }
                 }catch (IOException e){
-                    LogUtil.printSS("IOException "+e.getMessage().toString());
+                   // LogUtil.printSS("IOException "+e.getMessage().toString());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

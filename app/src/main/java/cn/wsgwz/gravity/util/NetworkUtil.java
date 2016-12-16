@@ -62,7 +62,7 @@ public class NetworkUtil {
         locAddress = getLocAddrIndex();//获取本地ip前缀
 
         if(locAddress==null||locAddress.equals("")){
-            LogUtil.printSS("扫描失败，请检查wifi网络");
+            //LogUtil.printSS("扫描失败，请检查wifi网络");
             return ;
         }
 
@@ -90,7 +90,7 @@ public class NetworkUtil {
                             //如果验证通过...
                             if (msg != null){
                                 if (msg.contains("OK")){
-                                    LogUtil.printSS("服务器IP：" + msg.substring(8,msg.length()));
+                                    //LogUtil.printSS("服务器IP：" + msg.substring(8,msg.length()));
                                     Message.obtain(handler, 333, msg.substring(2,msg.length())).sendToTarget();//返回扫描完毕消息
                                 }
                             }
@@ -132,13 +132,13 @@ public class NetworkUtil {
                    //从服务器获取返回消息
                    BufferedReader br = null;
                    try {
-                       LogUtil.printSS("-----1+"+ip);
+                       //LogUtil.printSS("-----1+"+ip);
                        br = new BufferedReader(new InputStreamReader(socket.getInputStream(),"utf-8"));
                        String  res = br.readLine();
-                       LogUtil.printSS("server 返回信息：" + res);
+                       //LogUtil.printSS("server 返回信息：" + res);
                    } catch (IOException e) {
                        e.printStackTrace();
-                       LogUtil.printSS("-----2"+e.getMessage().toString());
+                       //LogUtil.printSS("-----2"+e.getMessage().toString());
                    }
                   // Message.obtain(handler, 222, res).sendToTarget();//发送服务器返回消息
                }

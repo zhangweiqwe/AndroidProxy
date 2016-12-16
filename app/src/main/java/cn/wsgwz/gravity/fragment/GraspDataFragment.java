@@ -169,7 +169,7 @@ public class GraspDataFragment extends Fragment implements View.OnClickListener 
         boolean isInitSdcard =  sharedPreferences.getBoolean(SharedPreferenceMy.IS_INIT_SDCARD,false);
         boolean isInitSystem = sharedPreferences.getBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,false);
 
-        LogUtil.printSS("       -----isInitSdcard"+isInitSdcard+"            isInitSystem"+isInitSystem);
+        //LogUtil.printSS("       -----isInitSdcard"+isInitSdcard+"            isInitSystem"+isInitSystem);
         switch (v.getId()){
             case R.id.start_graspData:
                 if(isInitSdcard){

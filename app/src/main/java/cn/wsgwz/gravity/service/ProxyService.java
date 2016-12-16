@@ -87,7 +87,7 @@ public class ProxyService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        LogUtil.printSS("Sss onCreate");
+        //LogUtil.printSS("Sss onCreate");
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         LogContent.addItem(Build.BRAND+"  "+Build.MODEL+" "+Build.VERSION.RELEASE+"  "+"  API:"+Build.VERSION.SDK_INT);
         LogContent.addItem("当前版本: "+getResources().getString(R.string.app_name)+FileUtil.VERSION_NUMBER);
@@ -322,4 +322,8 @@ public class ProxyService extends Service {
         });
     }
 
+    @Override
+    public boolean onUnbind(Intent intent) {
+        return super.onUnbind(intent);
+    }
 }

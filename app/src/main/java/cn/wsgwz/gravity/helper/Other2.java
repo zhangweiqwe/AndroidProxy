@@ -43,7 +43,7 @@ public class Other2 {
             byte[] buffer = new byte[inputStream.available()];
             inputStream.read(buffer);
             String s = new String(buffer);
-            LogUtil.printSS("CMD Result:\n" + s);
+            //LogUtil.printSS("CMD Result:\n" + s);
         } catch(Exception e) {
             return false;
         }

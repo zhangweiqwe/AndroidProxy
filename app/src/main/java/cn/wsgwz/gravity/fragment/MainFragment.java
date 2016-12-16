@@ -77,7 +77,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         boolean isExecShell = sharedPreferences.getBoolean(SharedPreferenceMy.SHELL_IS_FLLOW_MENU, true);
         if(isExecShell){
             ShellUtil.maybeExecShell(isStart,(MainActivity) getActivity());
-            LogUtil.printSS(ShellHelper.dns);
+            //LogUtil.printSS(ShellHelper.dns);
         }
     }
 
@@ -130,6 +130,8 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         service_Switch = (Switch) view.findViewById(R.id.service_Switch);
         /*boolean isStart = sharedPreferences.getBoolean(SharedPreferenceMy.SERVICE_IS_START,false);
         service_Switch.setChecked(isStart);*/
+        boolean serviceIsStart =  sharedPreferences.getBoolean(SharedPreferenceMy.SERVICE_IS_START,false);
+        service_Switch.setChecked(serviceIsStart);
         service_Switch.setOnClickListener(this);
 
 
@@ -160,7 +162,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         switch (v.getId()){
             case R.id.service_Switch:
                 if( sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null)!=null){
-                    LogUtil.printSS("service_Switch  click");
+                    //LogUtil.printSS("service_Switch  click");
                    /* if(isOnStart){
                         isOnStart=false;
                         return;
