@@ -115,7 +115,6 @@ public class GraspDataFragment extends Fragment implements View.OnClickListener 
         }else {
 
         }
-
         ShellUtil.execShell(getActivity(), str, new OnExecResultListenner() {
             @Override
             public void onSuccess(StringBuffer sb) {
@@ -169,6 +168,8 @@ public class GraspDataFragment extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
         boolean isInitSdcard =  sharedPreferences.getBoolean(SharedPreferenceMy.IS_INIT_SDCARD,false);
         boolean isInitSystem = sharedPreferences.getBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,false);
+
+        LogUtil.printSS("       -----isInitSdcard"+isInitSdcard+"            isInitSystem"+isInitSystem);
         switch (v.getId()){
             case R.id.start_graspData:
                 if(isInitSdcard){
@@ -193,17 +194,7 @@ public class GraspDataFragment extends Fragment implements View.OnClickListener 
                     Toast.makeText(getActivity(),getString(R.string.init_sdcard_hint),Toast.LENGTH_SHORT).show();
                 }
                 break;
-           /* case R.id.stop_graspData:
-                if(isInitSdcard){
-                    if(isInitSystem){
-                        stopCapture();
-                    }else {
-                        initSystemFile();
-                    }
-                }else {
-                    Toast.makeText(getActivity(),getString(R.string.init_sdcard_hint),Toast.LENGTH_SHORT).show();
-                }
-                break;*/
+
         }
     }
 

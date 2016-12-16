@@ -88,7 +88,7 @@ public class ShellUtil {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Looper.prepare();
+
 
                 StringBuffer sb =new StringBuffer();
                 String str1 = "#!/system/bin/sh\n"+shellStr+"\n";
@@ -138,7 +138,7 @@ public class ShellUtil {
                 }
 
 
-                Looper.loop();
+
 
 
             }

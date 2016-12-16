@@ -434,7 +434,7 @@ n. 装饰，布置
         my_viewPager.setOffscreenPageLimit(screenSlidePagerAdapter.getCount());
         slidingTabLayout.setViewPager(my_viewPager);
 
-        my_viewPager.setOffscreenPageLimit(1);
+        //my_viewPager.setOffscreenPageLimit(1);
 
 
 

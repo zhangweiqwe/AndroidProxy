@@ -25,6 +25,9 @@ public class SharedPreferenceMy {
     //当前壁纸 路径
      public static final String WALLPAPER_PATH = "WALLPAPER_PATH";
 
+    //是否已经启动服务
+    public static final String SERVICE_IS_START = "SERVICE_IS_START";
+
 
 
 }

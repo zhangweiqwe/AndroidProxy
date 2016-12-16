@@ -49,6 +49,7 @@ import cn.wsgwz.gravity.config.EnumMyConfig;
 import cn.wsgwz.gravity.config.xml.ConfigXml;
 import cn.wsgwz.gravity.core.RequestHandler;
 import cn.wsgwz.gravity.fragment.log.LogContent;
+import cn.wsgwz.gravity.fragment.log.LogFragment;
 import cn.wsgwz.gravity.helper.ApnDbHelper;
 import cn.wsgwz.gravity.helper.ShellHelper;
 import cn.wsgwz.gravity.util.FileUtil;
@@ -67,7 +68,7 @@ public class ProxyService extends Service {
     public static final String BACKGROUND_HOST = "11.22.33.44";
     public static final int PORT = 12888;
     private SharedPreferences sharedPreferences;
-    public static boolean isStart;
+
 
     protected ServerSocket server;
     protected ExecutorService executor;
@@ -121,6 +122,7 @@ public class ProxyService extends Service {
         Config config = null;
         if(!false){
             String currentConfigPath = sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null);
+            LogContent.addItemAndNotify(currentConfigPath);
             if(currentConfigPath==null){
                 return null;
             }
@@ -215,7 +217,6 @@ public class ProxyService extends Service {
         socketThread.start();
         if((socketThread!=null&&socketThread.isAlive())&&executor!=null){
             LogContent.addItemAndNotify("服务开始");
-            isStart = true;
         }
     }
 
@@ -243,7 +244,6 @@ public class ProxyService extends Service {
     public void onDestroy() {
         super.onDestroy();
 
-        LogUtil.printSS("Sss onDestroy");
         if (socketThread != null && !socketThread.isInterrupted()) {
             socketThread.interrupt();
         }
@@ -260,11 +260,10 @@ public class ProxyService extends Service {
         }
 
         notificationManager.cancel(0);
-        isStart = false;
         LogContent.addItemAndNotify("服务结束");
 
         //fllowServer(false);
-       /* String str = "am startservice -n cn.wsgwz.gravity/cn.wsgwz.gravity.service.ProxyService";
+        /*String str = "am startservice -n cn.wsgwz.gravity/cn.wsgwz.gravity.service.ProxyService";
         ShellUtil.execShell(this, str, null);*/
         //am startservice -n cn.wsgwz.gravity/cn.wsgwz.gravity.service.ProxyService
 

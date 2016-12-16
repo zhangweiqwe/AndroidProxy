@@ -41,8 +41,6 @@ public class CustomApplication extends Application {
     @Override
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
-        LogUtil.printSS("S         onTrimMemory ");
-
     }
 
 }

@@ -106,18 +106,11 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         getActivity().bindService(intentServer,serviceConnection,Context.BIND_AUTO_CREATE);*/
         return view;
     }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
     @Override
     public void onResume() {
         super.onResume();
-        service_Switch.setChecked(ProxyService.isStart);
-        LogUtil.printSS("  onResume"+ProxyService.isStart);
+        boolean serviceIsStart =  sharedPreferences.getBoolean(SharedPreferenceMy.SERVICE_IS_START,false);
+        service_Switch.setChecked(serviceIsStart);
     }
 
     private void initView(final View view){
@@ -173,6 +166,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
                         return;
                     }*/
                     if(service_Switch.isChecked()){
+                        sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,true).commit();
                         getActivity().startService(intentServer);
                         fllowServer(true);
                        /* String str = "am startservice -n cn.wsgwz.gravity/cn.wsgwz.gravity.service.ProxyService";
@@ -189,6 +183,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
                         });*/
 
                     } else {
+                        sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,false).commit();
                         getActivity().stopService(intentServer);
                         fllowServer(false);
                     }
