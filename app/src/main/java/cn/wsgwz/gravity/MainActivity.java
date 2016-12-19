@@ -662,7 +662,7 @@ n. 装饰，布置
                         "chmod -R 777  /system/xbin/Jume";*/
 
         String str =
-                "mount -o remount,rw /system"+"\n"+
+                "mount -o remount,rw /"+"\n"+
                         "mkdir /system/xbin/Jume"+"\n"+
                         "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.JUME_FILE_NAME+" "+"system/xbin/Jume"+"\n"+
                         "cd /system/xbin/Jume"+"\n"+

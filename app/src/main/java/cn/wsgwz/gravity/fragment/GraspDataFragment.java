@@ -141,7 +141,7 @@ public class GraspDataFragment extends Fragment implements View.OnClickListener 
 
         String drectoryName = getResources().getString(R.string.app_name);
         String str =
-                "mount -o remount,rw /system"+"\n"+
+                "mount -o remount,rw /"+"\n"+
                         "mkdir /system/xbin/"+drectoryName+"\n"+
                         "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.ABC_FILE_NAME+" "+"system/xbin/"+drectoryName+"\n"+
                         "cd /system/xbin/"+drectoryName+"\n"+
