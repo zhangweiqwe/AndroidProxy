@@ -216,6 +216,7 @@ public class MyScrollView2 extends ScrollView {
             isPaused = false;
         }
 
+
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
             /**
@@ -234,7 +235,10 @@ public class MyScrollView2 extends ScrollView {
                     });
                     isPaused = true;
                 }
-                //每隔动画播放的时间，我们都会将播放时间往回调整，以便重新播放的时候接着使用这个时间,同时也为了让整个动画不结束
+
+
+
+              /*  //每隔动画播放的时间，我们都会将播放时间往回调整，以便重新播放的时候接着使用这个时间,同时也为了让整个动画不结束
                 new CountDownTimer(ValueAnimator.getFrameDelay(), ValueAnimator.getFrameDelay()) {
 
                     @Override
@@ -245,12 +249,15 @@ public class MyScrollView2 extends ScrollView {
                     public void onFinish() {
                         animator.setCurrentPlayTime(mCurrentPlayTime);
                     }
-                }.start();
+                }.start();*/
             } else {
                 //将时间拦截器恢复成线性的，如果您有自己的，也可以在这里进行恢复
                 animation.setInterpolator(new MyInterpolator());
             }
         }
+
+
+
 
     }
 
