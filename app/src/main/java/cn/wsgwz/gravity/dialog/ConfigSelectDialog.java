@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.ViewUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +44,7 @@ import cn.wsgwz.gravity.fragment.MainFragment;
 import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
+import cn.wsgwz.gravity.util.MyViewUtil;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
 import cn.wsgwz.gravity.view.slidingTabLayout.ScreenSlidePagerAdapter;
@@ -74,6 +77,7 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
     private SharedPreferences sharedPreferences;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +86,7 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
         setContentView(R.layout.dialog_config_select);
         initView();
     }
+
     private void initView(){
         intentServer = new Intent(getContext(), ProxyService.class);
         sharedPreferences  = getContext().getSharedPreferences(SharedPreferenceMy.MAIN_CONFIG,Context.MODE_PRIVATE);
@@ -291,5 +296,6 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
         intent.putExtras(bundle);
         getContext().startActivity(intent);
     }
+
 
 }

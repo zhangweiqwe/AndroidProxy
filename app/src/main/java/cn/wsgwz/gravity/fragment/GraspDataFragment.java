@@ -145,7 +145,7 @@ public class GraspDataFragment extends Fragment implements View.OnClickListener 
                         "mkdir /system/xbin/"+drectoryName+"\n"+
                         "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.ABC_FILE_NAME+" "+"system/xbin/"+drectoryName+"\n"+
                         "cd /system/xbin/"+drectoryName+"\n"+
-                        "unzip  "  +FileUtil.ABC_FILE_NAME  +"\n"+
+                        "unzip -o "  +FileUtil.ABC_FILE_NAME  +"\n"+
                         "chmod -R 777  /system/xbin/"+drectoryName;
         ShellUtil.execShell(getActivity(), str, new OnExecResultListenner() {
             @Override

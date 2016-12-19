@@ -13,7 +13,7 @@ import android.view.View;
 
 public  class MyViewUtil {
     //将view转换成bitmap
-    public Bitmap getViewBitmap(View v){
+    public static Bitmap getViewBitmap(View v){
         v.setDrawingCacheEnabled(true);
         v.measure(0,0);
         // v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());

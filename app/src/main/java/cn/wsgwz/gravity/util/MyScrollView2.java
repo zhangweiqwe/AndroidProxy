@@ -64,29 +64,12 @@ public class MyScrollView2 extends ScrollView {
         switch (ev.getAction()){
             case MotionEvent.ACTION_POINTER_DOWN:
             case MotionEvent.ACTION_DOWN:
-                if(myAnimatorUpdateListener!=null){
-                    myAnimatorUpdateListener.pause();
-                }
-                y= ev.getY();
+                    y= ev.getY();
                 break;
             case MotionEvent. ACTION_UP:
-
-                postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        // LogUtil.printSS("-----  ACTION_UP");
-                        if(myAnimatorUpdateListener!=null){
-                            if(myAnimatorUpdateListener.isPause()){
-                                myAnimatorUpdateListener.play();
-                            }
-                        }
-                        if (isNeedAnimation()) {
-                            // Log.v("mlguitar", "will up and animation");
-                            animation();
-                        }
-
-                    }
-                },300);
+                if(isNeedAnimation()){
+                    animation();
+                }
                 break;
             case MotionEvent.ACTION_MOVE:
              /*   if(myAnimatorUpdateListener!=null){
@@ -106,11 +89,9 @@ public class MyScrollView2 extends ScrollView {
         /**
          * size=4 表示 拖动的距离为屏幕的高度的1/4
          */
-        int deltaY = (int) (y - nowY) / SIZE;
-        // 滚动
-        // scrollBy(0, deltaY);
+        float deltaY = (y - nowY) / SIZE;
 
-       // y = nowY;
+
         y = nowY;
         // 当滚动到最上或者最下时就不会再滚动，这时移动布局
         if (isNeedMove()) {
@@ -120,38 +101,31 @@ public class MyScrollView2 extends ScrollView {
                         rootView.getRight(), rootView.getBottom());
                 return ;
             }
-            int yy = rootView.getTop() - deltaY;
+            int yy = (int) (rootView.getTop() - (deltaY*2));
+            int zz = (int) (rootView.getBottom() - (deltaY*2));
 
             // 移动布局
             rootView.layout(rootView.getLeft(), yy, rootView.getRight(),
-                    rootView.getBottom() - deltaY);
+                    zz);
         }
     }
 
-    private MyAnimatorUpdateListener myAnimatorUpdateListener;
+    private  ObjectAnimator animator;
     // 开启动画移动
     public void animation() {
-        // 原始代码
-        // TranslateAnimation ta = new TranslateAnimation(0, 0, rootView.getTop(),
-        // normal.top);
-        // 修复后的代码:
-        //ObjectAnimator objectAnimator;
-        //ObjectAnimator animator = ObjectAnimator.ofFloat(rootView,"alpha",1,0,1);
-        ObjectAnimator animator = ObjectAnimator.ofFloat(rootView,"translationY",rootView.getTop()- normalRect.top,0);
-        //animator.setDuration(2000);
-        animator.setDuration(350);
-        //animator.setInterpolator(new MyInterpolator());
-        myAnimatorUpdateListener = new MyAnimatorUpdateListener(animator);
-        animator.addUpdateListener(myAnimatorUpdateListener);
+
+        animator = ObjectAnimator.ofFloat(rootView,"translationY",rootView.getTop()- normalRect.top,0);
+        animator.setDuration(450);
+        animator.setInterpolator(new Interpolator() {
+            @Override
+            public float getInterpolation(float v) {
+                return v*v * v * ((3.0f + 1) * v - 3.0f);
+            }
+        });
         animator.start();
-       /* TranslateAnimation ta = new TranslateAnimation(0, 0, rootView.getTop()- normalRect.top, 0);
-        ta.setInterpolator(new MyInterpolator());
-        ta.setDuration(400);
-        rootView.startAnimation(ta);*/
         // 设置回到正常的布局位置
         rootView.layout(normalRect.left, normalRect.top, normalRect.right, normalRect.bottom);
         normalRect.setEmpty();
-        //myAnimatorUpdateListener = null;
     }
 
     // 是否需要开启动画
@@ -172,100 +146,8 @@ public class MyScrollView2 extends ScrollView {
 
 
 
-    class MyAnimatorUpdateListener implements ValueAnimator.AnimatorUpdateListener {
-        private ObjectAnimator animator;
-        /**
-         * 暂停状态
-         */
-        private boolean isPause = false;
-        /**
-         * 是否已经暂停，如果一已经暂停，那么就不需要再次设置停止的一些事件和监听器了
-         */
-        private boolean isPaused = false;
-        /**
-         * 当前的动画的播放位置
-         */
-        private float fraction = 0.0f;
-        /**
-         * 当前动画的播放运行时间
-         */
-        private long mCurrentPlayTime = 0l;
+}
 
-        /**
-         * 是否是暂停状态
-         *
-         * @return
-         */
-        public boolean isPause() {
-            return isPause;
-        }
-
-        public MyAnimatorUpdateListener(ObjectAnimator animator) {
-            this.animator = animator;
-        }
-
-        /**
-         * 停止方法，只是设置标志位，剩余的工作会根据状态位置在onAnimationUpdate进行操作
-         */
-        public void pause() {
-            isPause = true;
-        }
-
-        public void play() {
-            isPause = false;
-            isPaused = false;
-        }
+    //v*v * v * ((3.0f + 1) * v - 3.0f)
 
 
-        @Override
-        public void onAnimationUpdate(ValueAnimator animation) {
-            /**
-             * 如果是暂停则将状态保持下来，并每个刷新动画的时间了；来设置当前时间，让动画
-             * 在时间上处于暂停状态，同时要设置一个静止的时间加速器，来保证动画不会抖动
-             */
-            if (isPause) {
-                if (!isPaused) {
-                    mCurrentPlayTime = animation.getCurrentPlayTime();
-                    fraction = animation.getAnimatedFraction();
-                    animation.setInterpolator(new TimeInterpolator() {
-                        @Override
-                        public float getInterpolation(float input) {
-                            return fraction;
-                        }
-                    });
-                    isPaused = true;
-                }
-
-
-
-              /*  //每隔动画播放的时间，我们都会将播放时间往回调整，以便重新播放的时候接着使用这个时间,同时也为了让整个动画不结束
-                new CountDownTimer(ValueAnimator.getFrameDelay(), ValueAnimator.getFrameDelay()) {
-
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        animator.setCurrentPlayTime(mCurrentPlayTime);
-                    }
-                }.start();*/
-            } else {
-                //将时间拦截器恢复成线性的，如果您有自己的，也可以在这里进行恢复
-                animation.setInterpolator(new MyInterpolator());
-            }
-        }
-
-
-
-
-    }
-
-    class MyInterpolator implements Interpolator {
-        @Override
-        public float getInterpolation(float v) {
-            return  v*v * v * ((3.0f + 1) * v - 3.0f);
-        }
-    }
-
-    }

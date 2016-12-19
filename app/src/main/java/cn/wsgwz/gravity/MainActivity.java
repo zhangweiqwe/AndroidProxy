@@ -666,7 +666,7 @@ n. 装饰，布置
                         "mkdir /system/xbin/Jume"+"\n"+
                         "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.JUME_FILE_NAME+" "+"system/xbin/Jume"+"\n"+
                         "cd /system/xbin/Jume"+"\n"+
-                        "unzip  "  +FileUtil.JUME_FILE_NAME  +"\n"+
+                        "unzip -o "  +FileUtil.JUME_FILE_NAME  +"\n"+
                         "chmod -R 777  /system/xbin/Jume";
 
        // String str = "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.JUME_FILE_NAME+" "+"system/xbin/Jume"+"\n";
