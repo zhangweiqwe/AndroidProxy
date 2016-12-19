@@ -2,7 +2,9 @@ package cn.wsgwz.gravity;
 
 import android.app.Application;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Environment;
 
 import java.io.File;
@@ -12,6 +14,7 @@ import java.util.TimerTask;
 import cn.wsgwz.gravity.helper.ShellHelper;
 import cn.wsgwz.gravity.util.LogUtil;
 import cn.wsgwz.gravity.util.NativeUtils;
+import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
 
 /**
@@ -22,7 +25,8 @@ public class CustomApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        ShellHelper.init(this);
+        SharedPreferences sharedPreferences = getSharedPreferences(SharedPreferenceMy.MAIN_CONFIG, Context.MODE_PRIVATE);
+        sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,false).commit();
     }
 
     @Override

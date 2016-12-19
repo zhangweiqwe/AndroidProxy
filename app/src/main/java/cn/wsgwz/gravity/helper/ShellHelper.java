@@ -4,7 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
+import org.dom4j.DocumentException;
+
+import java.io.IOException;
+
 import cn.wsgwz.gravity.config.Config;
+import cn.wsgwz.gravity.fragment.log.LogContent;
 import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.LogUtil;
 
@@ -14,19 +19,26 @@ import cn.wsgwz.gravity.util.LogUtil;
  */
 
 public class ShellHelper {
+    public static final String DEFAULT_DNS = "129.29.29.29";
     private  static final ShellHelper shellParamsHelper  = new ShellHelper();
+
+    private  Context context;
     private String startStr,stopStr;
+    private String dns;
+    private String proxy;
+    private String port;
+    private String uid;
+
+
     public static  final ShellHelper getInstance(){
         return shellParamsHelper;
     }
 
-    public static final String DNS = "129.29.29.29";
 
-    public static  String dns;
-    public static String proxy;
-    public static String port;
-    public static String uid;
-    public static void init(Context context){
+
+
+    public void init(Context context){
+        ShellHelper.this.context = context;
         SharedPreferences sharedPreferences = context.getSharedPreferences("main",Context.MODE_PRIVATE);
         if(sharedPreferences.getBoolean("hasShell",false)){
             shellParamsHelper.startStr=sharedPreferences.getString("start.sh",null);
@@ -46,25 +58,25 @@ public class ShellHelper {
         String a0 = "UID0='";
         if(shellParamsHelper.startStr.contains(a0)){
             int index = shellParamsHelper.startStr.indexOf(a0)+a0.length();
-            ShellHelper.uid = shellParamsHelper.startStr.substring(index,shellParamsHelper.startStr.indexOf("'",index));
+            ShellHelper.this.setUid(shellParamsHelper.startStr.substring(index,shellParamsHelper.startStr.indexOf("'",index)));
         }
 
         String a1 = "DIP='";
         if(shellParamsHelper.startStr.contains(a1)){
             int index = shellParamsHelper.startStr.indexOf(a1)+a1.length();
-            ShellHelper.proxy = shellParamsHelper.startStr.substring(index,shellParamsHelper.startStr.indexOf("'",index));
+            ShellHelper.this.setProxy(shellParamsHelper.startStr.substring(index,shellParamsHelper.startStr.indexOf("'",index)));
         }
 
         String a2 = "PORT='";
         if(shellParamsHelper.startStr.contains(a2)){
             int index = shellParamsHelper.startStr.indexOf(a2)+a2.length();
-            ShellHelper.port = shellParamsHelper.startStr.substring(index,shellParamsHelper.startStr.indexOf("'",index));
+            ShellHelper.this.setPort(shellParamsHelper.startStr.substring(index,shellParamsHelper.startStr.indexOf("'",index))) ;
         }
 
         String a3 = "PDNP='";
         if(shellParamsHelper.startStr.contains(a3)){
             int index = shellParamsHelper.startStr.indexOf(a3)+a3.length();
-            ShellHelper.dns = shellParamsHelper.startStr.substring(index,shellParamsHelper.startStr.indexOf("'",index));
+            ShellHelper.this.setDns(shellParamsHelper.startStr.substring(index,shellParamsHelper.startStr.indexOf("'",index)));
         }
     }
 
@@ -201,7 +213,7 @@ public class ShellHelper {
                 "MDDK='54321'\n" +
                 "\n" +
                 "#设置pdnsd的DNS代理IP(多个IP可用','隔开)\n" +
-                "PDNP='"+DNS+"'\n" +
+                "PDNP='"+DEFAULT_DNS+"'\n" +
                 "\n" +
                 "#设置dnsp模块在线解释DNS时所使用的地址\n" +
                 "DNSP='http://dns1.sturgeon.mopaas.com/nslookup.php'\n" +
@@ -599,35 +611,35 @@ public class ShellHelper {
         return str3;
     }
 
-    public static String getDns() {
+    public String getDns() {
         return dns;
     }
 
-    public static void setDns(String dns) {
-        ShellHelper.dns = dns;
+    public void setDns(String dns) {
+        this.dns = dns;
     }
 
-    public static String getProxy() {
+    public String getProxy() {
         return proxy;
     }
 
-    public static void setProxy(String proxy) {
-        ShellHelper.proxy = proxy;
+    public void setProxy(String proxy) {
+        this.proxy = proxy;
     }
 
-    public static String getPort() {
+    public String getPort() {
         return port;
     }
 
-    public static void setPort(String port) {
-        ShellHelper.port = port;
+    public void setPort(String port) {
+        this.port = port;
     }
 
-    public static String getUid() {
+    public String getUid() {
         return uid;
     }
 
-    public static void setUid(String uid) {
-        ShellHelper.uid = uid;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }

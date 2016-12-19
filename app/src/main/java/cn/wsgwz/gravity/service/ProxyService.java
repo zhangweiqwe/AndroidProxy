@@ -51,7 +51,6 @@ import cn.wsgwz.gravity.core.RequestHandler;
 import cn.wsgwz.gravity.fragment.log.LogContent;
 import cn.wsgwz.gravity.fragment.log.LogFragment;
 import cn.wsgwz.gravity.helper.ApnDbHelper;
-import cn.wsgwz.gravity.helper.ShellHelper;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
 import cn.wsgwz.gravity.util.OnExecResultListenner;
@@ -102,7 +101,7 @@ public class ProxyService extends Service {
             Config config  = getConfig(this);
             LogContent.addItemAndNotify("建议接入点:"+" apn:"+config.getApn_apn()+" 代理:"+config.getApn_proxy()+" 端口:"+config.getApn_port());
             //  setApn(config.getApn_apn(),config.getApn_proxy(),config.getApn_port());
-            configInitShell(this,config);
+            //configInitShell(this,config);
 
 
             startProxy(config);
@@ -117,12 +116,11 @@ public class ProxyService extends Service {
 
     }
 
-    public static Config getConfig(Context context) throws IOException, DocumentException {
+    private  final Config getConfig(Context context) throws IOException, DocumentException {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SharedPreferenceMy.MAIN_CONFIG,Context.MODE_PRIVATE);
         Config config = null;
-        if(!false){
+        if(true){
             String currentConfigPath = sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null);
-            LogContent.addItemAndNotify(currentConfigPath);
             if(currentConfigPath==null){
                 return null;
             }
@@ -163,14 +161,13 @@ public class ProxyService extends Service {
         return  config;
     }
 
-    public static void configInitShell(Context context,Config config){
+    /*public static void configInitShell(Context context,Config config){
         ShellHelper shellHelper = ShellHelper.getInstance();
         SharedPreferences sharedPreferences = context.getSharedPreferences("main",Context.MODE_PRIVATE);
         String startStr =  shellHelper.getStartStr().replace(ShellHelper.dns,config.getDns());
         sharedPreferences.edit().putString("start.sh",startStr).commit();
         shellHelper.setStartStr(startStr);
-
-    }
+    }*/
 
 
     //启动proxy

@@ -185,6 +185,7 @@ n. 装饰，布置
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        shellHelper.init(getApplicationContext());
         if (Build.VERSION.SDK_INT >= 21) {
             Window window = getWindow();
             window.requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);

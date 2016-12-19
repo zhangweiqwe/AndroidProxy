@@ -104,7 +104,7 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
             return;
         }
       final int   position1 = position - 1;
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("重启生效");
         builder.setMessage("是否重启？");
         final File file = fileList.get(position1);
@@ -133,8 +133,6 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
             public void onClick(DialogInterface dialog, int which) {
                 sharedPreferences.edit().putString(SharedPreferenceMy.CURRENT_CONFIG_PATH,fileList.get(position1).getAbsolutePath()).commit();
                 currentConfig_TV.setText(file.getAbsolutePath());
-                dialog.dismiss();
-                Snackbar.make(view, getContext().getString(R.string.restart_server_ok), Snackbar.LENGTH_SHORT).show();
                 ConfigSelectDialog.this.getWindow().getDecorView().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -148,8 +146,6 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                         ScreenSlidePagerAdapter screenSlidePagerAdapter = mainActivity.getScreenSlidePagerAdapter();
                         android.app.Fragment fragment =  screenSlidePagerAdapter.getItem(viewPager.getCurrentItem());
                         if(fragment instanceof MainFragment){
-                           /* MainFragment mainFragment = (MainFragment)fragment;
-                            mainFragment.callClickServiceSwitch();*/
                             if(onServerStateChangeListenner!=null){
                                 onServerStateChangeListenner.onChange(true);
                             }
@@ -157,6 +153,8 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
 
                     }
                 }
+                dialog.dismiss();
+                //Snackbar.make(view, getContext().getString(R.string.restart_server_ok), Snackbar.LENGTH_SHORT).show();
             /*    getContext().stopService(intentServer);
                 getContext().startService(intentServer);
                 //Snackbar.make(view, getContext().getString(R.string.restart_server_ok), Snackbar.LENGTH_SHORT).show();
@@ -167,6 +165,7 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                 }*/
             }
         });
+
 
         builder.show();
     }

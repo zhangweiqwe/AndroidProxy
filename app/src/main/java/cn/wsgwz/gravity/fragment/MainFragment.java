@@ -25,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -44,6 +45,7 @@ import java.util.List;
 import cn.wsgwz.gravity.MainActivity;
 import cn.wsgwz.gravity.R;
 import cn.wsgwz.gravity.activity.ConfigEditActivity;
+import cn.wsgwz.gravity.config.Config;
 import cn.wsgwz.gravity.dialog.ConfigSelectDialog;
 import cn.wsgwz.gravity.helper.ShellHelper;
 import cn.wsgwz.gravity.service.ProxyService;
@@ -73,11 +75,12 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
     public static boolean isStartOrStopDoing;
     private Intent intentServer;
 
+
     private void fllowServer(boolean isStart){
+
         boolean isExecShell = sharedPreferences.getBoolean(SharedPreferenceMy.SHELL_IS_FLLOW_MENU, true);
         if(isExecShell){
             ShellUtil.maybeExecShell(isStart,(MainActivity) getActivity());
-            //LogUtil.printSS(ShellHelper.dns);
         }
     }
 
@@ -86,29 +89,14 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
                              Bundle savedInstanceState) {
         View view  = inflater.inflate(R.layout.fragment_main,container,false);
         initView(view);
-        //LogUtil.printSS("  MainFragment ");
-/*
-        String str = "am broadcast -a cn.wsgwz.gravity.Restart";
-        ShellUtil.execShell(getActivity(), str, null);*/
-      /*  ServiceConnection serviceConnection = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-                ProxyService.MyBinder myBinder = (ProxyService.MyBinder)iBinder;
-                myBinder.doWhile();
-                LogUtil.printSS("onServiceConnected");
-            }
 
-            @Override
-            public void onServiceDisconnected(ComponentName componentName) {
-                LogUtil.printSS("onServiceDisconnected");
-            }
-        };
-        getActivity().bindService(intentServer,serviceConnection,Context.BIND_AUTO_CREATE);*/
         return view;
     }
     @Override
     public void onResume() {
         super.onResume();
+
+
         boolean serviceIsStart =  sharedPreferences.getBoolean(SharedPreferenceMy.SERVICE_IS_START,false);
         service_Switch.setChecked(serviceIsStart);
     }
@@ -132,7 +120,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         service_Switch.setChecked(isStart);*/
         boolean serviceIsStart =  sharedPreferences.getBoolean(SharedPreferenceMy.SERVICE_IS_START,false);
         service_Switch.setChecked(serviceIsStart);
-        service_Switch.setOnClickListener(this);
+        service_Switch.setOnCheckedChangeListener(onCheckedChangeListener);
 
 
         select_Bn = (Button) view.findViewById(R.id.select_Bn);
@@ -157,54 +145,40 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
 
     }
 
+
+    private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            if( sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null)!=null){
+                if(b){
+                    sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,true).commit();
+                    getActivity().startService(intentServer);
+                    fllowServer(true);
+                } else {
+                    sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,false).commit();
+                    getActivity().stopService(intentServer);
+                    fllowServer(false);
+                }
+            }else {
+                Snackbar.make(service_Switch,getString(R.string.please_select_config), Snackbar.LENGTH_SHORT).show();
+                if(b){
+                    service_Switch.setChecked(false);
+                }
+                select_Bn.setClickable(false);
+                service_Switch.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        onClick(select_Bn);
+                        select_Bn.setClickable(true);
+                    }
+                },800);
+            }
+
+        }
+    };
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.service_Switch:
-                if( sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null)!=null){
-                    //LogUtil.printSS("service_Switch  click");
-                   /* if(isOnStart){
-                        isOnStart=false;
-                        return;
-                    }*/
-                    if(service_Switch.isChecked()){
-                        sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,true).commit();
-                        getActivity().startService(intentServer);
-                        fllowServer(true);
-                       /* String str = "am startservice -n cn.wsgwz.gravity/cn.wsgwz.gravity.service.ProxyService";
-                        ShellUtil.execShell(getActivity(), str, new OnExecResultListenner() {
-                            @Override
-                            public void onSuccess(StringBuffer sb) {
-                                fllowServer(true);
-                            }
-
-                            @Override
-                            public void onError(StringBuffer sb) {
-
-                            }
-                        });*/
-
-                    } else {
-                        sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,false).commit();
-                        getActivity().stopService(intentServer);
-                        fllowServer(false);
-                    }
-                }else {
-                    Snackbar.make(service_Switch,getString(R.string.please_select_config), Snackbar.LENGTH_SHORT).show();
-                    service_Switch.setChecked(false);
-
-                    select_Bn.setClickable(false);
-                    service_Switch.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            onClick(select_Bn);
-                            select_Bn.setClickable(true);
-                        }
-                    },800);
-                }
-
-
-                break;
             case R.id.select_Bn:
                 boolean isInitSdcard = sharedPreferences.getBoolean(SharedPreferenceMy.IS_INIT_SDCARD,false);
                 if(isInitSdcard){
@@ -212,10 +186,14 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
                     configSelectDialog.setOnServerStateChangeListenner(new ConfigSelectDialog.OnServerStateChangeListenner() {
                         @Override
                         public void onChange(boolean isStart) {
-                            getActivity().stopService(intentServer);
-                            fllowServer(false);
+                            service_Switch.setOnCheckedChangeListener(null);
+                                getActivity().stopService(intentServer);
+                                sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,true).commit();
+                                getActivity().startService(intentServer);
                             service_Switch.setChecked(true);
-                            onClick(service_Switch);
+                                fllowServer(true);
+                            service_Switch.setOnCheckedChangeListener(onCheckedChangeListener);
+
                         }
                     });
                     configSelectDialog.show();
@@ -228,28 +206,18 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
     }
 
 
-
     @Override
     public void doingSomeThing(final IsProgressEnum isProgressEnum) {
         isStartOrStopDoing = true;
-        final boolean tempBool = service_Switch.isChecked();
-        service_Switch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                service_Switch.setChecked(tempBool);
-                Toast.makeText(getActivity(),"正在执行: "+(isProgressEnum==null?"":isProgressEnum.getValues()),Toast.LENGTH_SHORT).show();
-            }
-        });
+        service_Switch.setEnabled(false);
     }
     @Override
     public void finallyThat() {
         isStartOrStopDoing = false;
-        service_Switch.setOnClickListener(this);
+        service_Switch.setEnabled(true);
     }
 
-    public Switch getService_Switch() {
-        return service_Switch;
-    }
+
 
 
     @Override

@@ -5,12 +5,14 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,14 +22,21 @@ import android.widget.Toast;
 import org.dom4j.DocumentException;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import cn.wsgwz.gravity.MainActivity;
 import cn.wsgwz.gravity.R;
+import cn.wsgwz.gravity.config.Config;
+import cn.wsgwz.gravity.config.EnumMyConfig;
+import cn.wsgwz.gravity.config.xml.ConfigXml;
 import cn.wsgwz.gravity.fragment.IsProgressEnum;
 import cn.wsgwz.gravity.fragment.MainFragment;
 import cn.wsgwz.gravity.fragment.log.LogContent;
@@ -158,31 +167,29 @@ public class ShellUtil {
         return b;
 
     }
-
+    private static void configInitShell(ShellHelper shellHelper,Config config,Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("main",Context.MODE_PRIVATE);
+        String startStr =  shellHelper.getStartStr().replace(shellHelper.getDns(),config.getDns());
+        sharedPreferences.edit().putString("start.sh",startStr).commit();
+        shellHelper.setStartStr(startStr);
+    }
     //public static boolean isStartOrStopDoing;
     //是否是脚本更随服务
     public static void  maybeExecShell(final boolean state, final MainActivity activity){
 
-        try {
-            ProxyService.configInitShell(activity,ProxyService.getConfig(activity));;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        }
-        ShellHelper shellHelper = ShellHelper.getInstance();
 
-
-        Toolbar toolbar = activity.getToolbar();
-
-
-        final Menu menu = toolbar.getMenu();
-        View actionView = LayoutInflater.from(activity).inflate(R.layout.toolbar_actionview_progress,null);
-        menu.findItem(R.id.about_Appme).setVisible(true).setActionView(actionView);
-
+        final ShellHelper shellHelper = ShellHelper.getInstance();
         String str = null;
         if(state){
+            try {
+                configInitShell(shellHelper,getConfig(activity),activity);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (DocumentException e) {
+                e.printStackTrace();
+            }
             str = shellHelper.getStartStr();
+            LogContent.addItem("脚本信息:"+" uid:"+shellHelper.getUid()+" proxyIp:"+shellHelper.getProxy()+" port:"+shellHelper.getPort()+ " dns:"+shellHelper.getDns());
             if(isProgressListenner!=null){
                 isProgressListenner.doingSomeThing(IsProgressEnum.START);
             }
@@ -192,6 +199,15 @@ public class ShellUtil {
                 isProgressListenner.doingSomeThing(IsProgressEnum.STOP);
             }
         }
+
+        Toolbar toolbar = activity.getToolbar();
+
+
+        final Menu menu = toolbar.getMenu();
+        View actionView = LayoutInflater.from(activity).inflate(R.layout.toolbar_actionview_progress,null);
+        menu.findItem(R.id.about_Appme).setVisible(true).setActionView(actionView);
+
+
 
         ShellUtil.execShell(activity, str, new OnExecResultListenner() {
             @Override
@@ -208,8 +224,7 @@ public class ShellUtil {
 
                 if (state) {
                     //Toast.makeText(activity, activity.getString(R.string.exec_start_ok), Toast.LENGTH_SHORT).show();
-                    LogContent.addItem("脚本信息:"+" uid:"+ShellHelper.getUid()+" proxyIp:"+ShellHelper.getProxy()+" port:"+ShellHelper.getPort()+
-                            " dns:"+ShellHelper.getDns());
+
                     LogContent.addItem(activity.getString(R.string.exec_start_ok));
                     LogContent.addItemAndNotify("应用后台: "+ ProxyService.BACKGROUND_HOST+" (移动网络情况下)点击进入");
                 } else {
@@ -251,6 +266,52 @@ public class ShellUtil {
     private static IsProgressListenner isProgressListenner;
     public static void setIsProgressListenner(IsProgressListenner isProgressListenner){
         ShellUtil.isProgressListenner = isProgressListenner;
+    }
+
+    private static final Config getConfig(Context context) throws IOException, DocumentException {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SharedPreferenceMy.MAIN_CONFIG,Context.MODE_PRIVATE);
+        Config config = null;
+        if(true){
+            String currentConfigPath = sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null);
+            LogContent.addItemAndNotify(currentConfigPath);
+            if(currentConfigPath==null){
+                return null;
+            }
+            File file = new File(currentConfigPath);
+            if(file.getPath().startsWith("/"+FileUtil.ASSETS_CONFIG_PATH)){
+                config = ConfigXml.read(context.getAssets().open( file.getAbsolutePath().replaceFirst("/","")));
+            }else if(file.exists()){
+                FileInputStream fileInputStream = new FileInputStream(file);
+                config = ConfigXml.read(fileInputStream);
+            }else {
+                List<EnumMyConfig> listEnum = EnumMyConfig.getMeConfig();
+                boolean b = false;
+                if(listEnum!=null){
+                    for(int i=0;i<listEnum.size();i++){
+                        String pathName = file.getAbsolutePath();
+                        if(pathName.contains("/")){
+                            pathName = pathName.replace("/","");
+                        }
+                        if(listEnum.get(i).getName().equals(pathName)){
+                            String values = listEnum.get(i).getValues();
+                            config = ConfigXml.read(new ByteArrayInputStream(values.getBytes("utf-8")));
+                            b = true;
+                        };
+                    }
+
+                }
+
+                if(!b){
+                    Toast.makeText(context, context.getResources().getText(R.string.config_not_fund), Toast.LENGTH_SHORT).show();
+                    return null;
+                }
+
+            }
+        }else {
+            InputStream in = context.getAssets().open("text.xml");
+            config = ConfigXml.read(in);
+        }
+        return  config;
     }
 
 }
