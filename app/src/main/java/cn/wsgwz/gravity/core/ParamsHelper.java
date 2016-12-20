@@ -100,17 +100,16 @@ public class ParamsHelper {
         if(paramsHelper.url==null){
             return;
         }
-        String key = getKeyIgnoreLowerCase("Host",paramsHelper.getHashMap());
-        String value = null;
-        if(key!=null){
-            value = paramsHelper.hashMap.get(key);
-        }
-        //如果http请请求体没找到host,尝试从url找
+        String value = paramsHelper.hashMap.get("Host");
+        //如果http请请求体没找到host,尝试从url找，和尝试小写host
         if(value==null){
-            value = getHost(paramsHelper.url);
+            value = paramsHelper.hashMap.get("host");
+            if(value==null){
+                value = getHost(paramsHelper.url);
+            }
         }
-        paramsHelper.setHost(value);
-        if(key!=null)
+        paramsHelper.host = value;
+        if(value!=null)
         {
                 if(paramsHelper.url.contains(value)){
                     paramsHelper.uri = paramsHelper.url.substring(paramsHelper.url.indexOf(value)+value.length(),paramsHelper.url.length());
@@ -120,7 +119,7 @@ public class ParamsHelper {
         }
     }
 
-    public static final String  getKeyIgnoreLowerCase(String keyIgnoreLowerCase,Map<String, String> linkedHashMap){
+   /* public static final String  getKeyIgnoreLowerCase(String keyIgnoreLowerCase,Map<String, String> linkedHashMap){
         if(keyIgnoreLowerCase==null||linkedHashMap==null){
             return  null;
         }
@@ -129,12 +128,10 @@ public class ParamsHelper {
                 return key;
             }
         }
-
         return null;
-    }
+    }*/
     public String toString(){
         StringBuffer sb = Matching.match(ParamsHelper.this, config);
-        //LogUtil.printSS("          ------>"+sb.toString()+"<-------");
         return sb.toString();
     }
 
@@ -154,64 +151,25 @@ public class ParamsHelper {
     public String getFirstline() {
         return firstline;
     }
-
-    public void setFirstline(String firstline) {
-        this.firstline = firstline;
-    }
-
     public String getRequestType() {
         return requestType;
     }
-
-    public void setRequestType(String requestType) {
-        this.requestType = requestType;
-    }
-
     public String getUrl() {
         return url;
     }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
     public String getUri() {
         return uri;
     }
-
-    public void setUri(String uri) {
-        this.uri = uri;
-    }
-
     public String getHttpVersion() {
         return httpVersion;
     }
-
-    public void setHttpVersion(String httpVersion) {
-        this.httpVersion = httpVersion;
-    }
-
     public Map<String, String> getHashMap() {
         return hashMap;
     }
-
-    public void setHashMap(Map<String, String> hashMap) {
-        this.hashMap = hashMap;
-    }
-
     public Config getConfig() {
         return config;
     }
-
-    public void setConfig(Config config) {
-        this.config = config;
-    }
-
     public String getHost() {
         return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
     }
 }

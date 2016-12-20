@@ -49,7 +49,7 @@ public class Matching {
         List<String> delateHeaders = config.getHttpNeedDelateHeaders();
         if(delateHeaders!=null){
             for(int i=0;i<delateHeaders.size();i++){
-                linkedHashMap.remove(ParamsHelper.getKeyIgnoreLowerCase(delateHeaders.get(i),linkedHashMap));
+                linkedHashMap.remove(delateHeaders.get(i));
             }
         }
         sb.append(httpFirstLine);
@@ -69,7 +69,7 @@ public class Matching {
         List<String> delateHeaders = config.getConnectNeedDelateHeaders();
         if(delateHeaders!=null){
             for(int i=0;i<delateHeaders.size();i++){
-                linkedHashMap.remove(ParamsHelper.getKeyIgnoreLowerCase(delateHeaders.get(i),linkedHashMap));
+                linkedHashMap.remove(delateHeaders.get(i));
             }
         }
         sb.append(connectFirstLine);

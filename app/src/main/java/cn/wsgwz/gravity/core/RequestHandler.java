@@ -42,15 +42,13 @@ public class RequestHandler implements Runnable{
 
     private Config config;
     private boolean httpsSpport;;
-    private Context context;
 
 
 
-    public RequestHandler(Socket clientSocket, Config config, Context context){
+    public RequestHandler(Socket clientSocket, Config config){
         this.clientSocket = clientSocket;
         this.config = config;
         httpsSpport=config.isConnectSupport();
-        this.context = context;
     }
 
     private ServerToClientThread serverToClientThread =null;
@@ -78,9 +76,12 @@ public class RequestHandler implements Runnable{
         serverToClientThread.join();
     }
     public static final void doPost(ParamsHelper paramsHelper,OutputStream remoteOutputStream,InputStream clientInputStream)throws IOException{
-        String contentLenStr = paramsHelper.getHashMap().get(ParamsHelper.getKeyIgnoreLowerCase("Content-Length",paramsHelper.getHashMap()));
+        String contentLenStr = paramsHelper.getHashMap().get("Content-Length");
         if(contentLenStr==null){
-            return;
+            contentLenStr = paramsHelper.getHashMap().get("content-length");
+            if(contentLenStr==null){
+                return;
+            }
         }
         int contentLength = Integer.parseInt(contentLenStr);
         if(contentLength!=0){

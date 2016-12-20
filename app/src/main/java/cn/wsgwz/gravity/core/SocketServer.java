@@ -33,7 +33,7 @@ public class SocketServer extends Thread{
     public void run() {
         try {
             while (true) {
-                executorService.execute(new RequestHandler(serverSocket.accept(),config,context));
+                executorService.execute(new RequestHandler(serverSocket.accept(),config));
             }
         }
         catch (IOException e) {
