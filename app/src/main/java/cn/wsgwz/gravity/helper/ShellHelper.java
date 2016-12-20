@@ -9,6 +9,7 @@ import org.dom4j.DocumentException;
 import java.io.IOException;
 
 import cn.wsgwz.gravity.config.Config;
+import cn.wsgwz.gravity.core.SocketServer;
 import cn.wsgwz.gravity.fragment.log.LogContent;
 import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.LogUtil;
@@ -122,7 +123,7 @@ public class ShellHelper {
                 "\n" +
                 "#全局/直连转发IP设置\n" +
                 "DIP='127.0.0.1'\n" +
-                "PORT='"+ProxyService.PORT+"'\n" +
+                "PORT='"+ SocketServer.PORT+"'\n" +
                 "\n" +
                 "#-----------定义本机设置-----------#\n" +
                 "#半代理应用，多个uid用空格间隔\n" +
@@ -233,8 +234,8 @@ public class ShellHelper {
                 "#-------------------------------------------#";
         String str ="iptables -t nat -F\n" +
                 "iptables -t nat -A POSTROUTING -j MASQUERADE\n" +
-                "iptables -t nat -I OUTPUT -p tcp --dport 80 -j DNAT --to-destination 127.0.0.1:"+ ProxyService.PORT+"\n" +
-                "iptables -t nat -I OUTPUT -p tcp --dport 8080 -j DNAT --to-destination 127.0.0.1:"+ProxyService.PORT+"\n" +
+                "iptables -t nat -I OUTPUT -p tcp --dport 80 -j DNAT --to-destination 127.0.0.1:"+ SocketServer.PORT+"\n" +
+                "iptables -t nat -I OUTPUT -p tcp --dport 8080 -j DNAT --to-destination 127.0.0.1:"+SocketServer.PORT+"\n" +
                 "iptables -t nat -I OUTPUT -m owner --uid-owner "+uid+" -p tcp -j ACCEPT\n" +
                 "echo 启动脚本已执行！"
                 ;
@@ -247,7 +248,7 @@ public class ShellHelper {
                 "\n" +
                 "#全局/直连代理IP设置\n" +
                 "IP=\"127.0.0.1\"\n" +
-                "PORT=\""+ProxyService.PORT+"\"\n" +
+                "PORT=\""+SocketServer.PORT+"\"\n" +
                 "\n" +
                 "#是否支持HTTPS/是否用直连\n" +
                 "MHTTPS=\"off\"\n" +

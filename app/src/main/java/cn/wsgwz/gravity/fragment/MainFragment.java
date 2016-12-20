@@ -12,10 +12,12 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -47,6 +49,7 @@ import cn.wsgwz.gravity.R;
 import cn.wsgwz.gravity.activity.ConfigEditActivity;
 import cn.wsgwz.gravity.config.Config;
 import cn.wsgwz.gravity.dialog.ConfigSelectDialog;
+import cn.wsgwz.gravity.fragment.log.LogContent;
 import cn.wsgwz.gravity.helper.ShellHelper;
 import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.FileUtil;
@@ -74,7 +77,6 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
 
     public static boolean isStartOrStopDoing;
     private Intent intentServer;
-
 
     private void fllowServer(boolean isStart){
 
@@ -152,6 +154,8 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
             if( sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null)!=null){
                 if(b){
                     sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,true).commit();
+                    LogContent.addItem(Build.BRAND+"  "+Build.MODEL+" "+Build.VERSION.RELEASE+"  "+"  API:"+Build.VERSION.SDK_INT);
+                    LogContent.addItemAndNotify("当前版本: "+getResources().getString(R.string.app_name)+FileUtil.VERSION_NUMBER);
                     getActivity().startService(intentServer);
                     fllowServer(true);
                 } else {

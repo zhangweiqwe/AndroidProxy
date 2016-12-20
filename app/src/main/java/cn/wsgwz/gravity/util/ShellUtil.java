@@ -40,6 +40,8 @@ import cn.wsgwz.gravity.config.xml.ConfigXml;
 import cn.wsgwz.gravity.fragment.IsProgressEnum;
 import cn.wsgwz.gravity.fragment.MainFragment;
 import cn.wsgwz.gravity.fragment.log.LogContent;
+import cn.wsgwz.gravity.helper.ApnDbHelper;
+import cn.wsgwz.gravity.helper.DemoGetInstance;
 import cn.wsgwz.gravity.helper.ShellHelper;
 import cn.wsgwz.gravity.service.ProxyService;
 
@@ -182,7 +184,7 @@ public class ShellUtil {
         String str = null;
         if(state){
             try {
-                configInitShell(shellHelper,getConfig(activity),activity);
+                configInitShell(shellHelper,getConfig(activity,false),activity);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (DocumentException e) {
@@ -226,7 +228,7 @@ public class ShellUtil {
                     //Toast.makeText(activity, activity.getString(R.string.exec_start_ok), Toast.LENGTH_SHORT).show();
 
                     LogContent.addItem(activity.getString(R.string.exec_start_ok));
-                    LogContent.addItemAndNotify("应用后台: "+ ProxyService.BACKGROUND_HOST+" (移动网络情况下)点击进入");
+                    LogContent.addItemAndNotify("应用后台: "+ "11.22.33.44"+" (移动网络情况下)点击进入");
                 } else {
                     //Toast.makeText(activity, activity.getString(R.string.exec_stop_ok), Toast.LENGTH_SHORT).show();
                     LogContent.addItemAndNotify(activity.getString(R.string.exec_stop_ok));
@@ -268,12 +270,15 @@ public class ShellUtil {
         ShellUtil.isProgressListenner = isProgressListenner;
     }
 
-    private static final Config getConfig(Context context) throws IOException, DocumentException {
+    public static final Config getConfig(Context context,boolean isRemote) throws IOException, DocumentException {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SharedPreferenceMy.MAIN_CONFIG,Context.MODE_PRIVATE);
         Config config = null;
         if(true){
             String currentConfigPath = sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null);
-            LogContent.addItemAndNotify(currentConfigPath);
+            if(!isRemote){
+                LogContent.addItemAndNotify(currentConfigPath);
+                LogContent.addItemAndNotify("建议接入点:"+" apn:"+config.getApn_apn()+" 代理:"+config.getApn_proxy()+" 端口:"+config.getApn_port());
+            }
             if(currentConfigPath==null){
                 return null;
             }

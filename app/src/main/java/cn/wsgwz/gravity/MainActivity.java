@@ -205,19 +205,6 @@ n. 装饰，布置
         setBackground();
         overridePendingTransition(R.anim.main_start_animation, R.anim.main_exit_animation);
 
-
-
-       // LogUtil.printSS("Java--"+str);
-
-        //startActivity(new Intent(this,Main2Activity.class));
-
-        //initJume();
-
-
-
-
-
-
     }
 
 
@@ -228,69 +215,7 @@ n. 装饰，布置
         return super.onPrepareOptionsMenu(menu);
     }
 
-    private void demoSocket(){
-     /*   NetworkUtil networkUtil = new NetworkUtil(this);
-            networkUtil.scan();
-            if(true){
-                Toast.makeText(MainActivity.this,"客户端",Toast.LENGTH_LONG).show();
-                return;
-        }*/
-        Toast.makeText(MainActivity.this,"服务器",Toast.LENGTH_LONG).show();
-        final Handler handler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                switch (msg.what){
-                    case 1000:
-                        Toast.makeText(MainActivity.this,"收到消息"+msg.obj,Toast.LENGTH_LONG).show();
-                        break;
-                }
-            }
-        };
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
 
-
-                ServerSocket serverSocket = new ServerSocket(60880);
-                while(true){
-                    final Socket socket = serverSocket.accept();
-                    socket.setKeepAlive(true);
-                    InputStream in = socket.getInputStream();
-                    final OutputStream out = socket.getOutputStream();
-                    BufferedReader br = new BufferedReader(new InputStreamReader(in,"utf-8"));
-                    String line=br.readLine();
-                    while(line!=null){
-                        //LogUtil.printSS("--"+line+"-");
-                        Thread thread =new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                PrintWriter pw = new PrintWriter(out);
-                                    pw.write("Hello World\n");
-                                    pw.flush();
-
-                                // Message.obtain(handler, 222, res).sendToTarget();//发送服务器返回消息
-                            }
-                        });
-                        thread.start();
-                        thread.join();
-
-                        Message msg = Message.obtain();
-                        msg.obj = line;
-                        msg.what = 1000;
-                        handler.sendMessage(msg);
-                        line = br.readLine();
-                    }
-                }
-                }catch (IOException e){
-                   // LogUtil.printSS("IOException "+e.getMessage().toString());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
     @Override
     protected void onStart() {
         //demoSocket();
@@ -416,7 +341,6 @@ n. 装饰，布置
                         break;
 
                 }
-               // overridePendingTransition(R.anim.dialog_pay_start_animation_set,R.anim.dialog_pay_exit_animation_set);
                 return false;
             }
         });
@@ -434,10 +358,6 @@ n. 装饰，布置
         my_viewPager.setAdapter(screenSlidePagerAdapter);
         my_viewPager.setOffscreenPageLimit(screenSlidePagerAdapter.getCount());
         slidingTabLayout.setViewPager(my_viewPager);
-
-        //my_viewPager.setOffscreenPageLimit(1);
-
-
 
         slidingTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -460,7 +380,6 @@ n. 装饰，布置
                       //  }
                         break;
                     case 1:
-                        //if(screenSlidePagerAdapter.getItem(position) instanceof LogFragment){
                             if(!MainFragment.isStartOrStopDoing){
                                 menu.findItem(R.id.about_Appme).setVisible(false);
                             }
@@ -492,14 +411,9 @@ n. 装饰，布置
             e.printStackTrace();
         }
 
-        Spannable spannable = new SpannableString("Gravitation"+" uid:"+uid);
-        spannable.setSpan(new AbsoluteSizeSpan(23,true), 0, "Gravitation".length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannable.setSpan(new AbsoluteSizeSpan(16,true), "Gravitation".length(), spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-       // getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#22000000")));
-
-
-
+        Spannable spannable = new SpannableString(getString(R.string.app_name)+" uid:"+uid);
+        spannable.setSpan(new AbsoluteSizeSpan(23,true), 0, getString(R.string.app_name).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(new AbsoluteSizeSpan(16,true), getString(R.string.app_name).length(), spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
     }
 
@@ -528,11 +442,6 @@ n. 装饰，布置
             return fragment;
         }
         return null;
-    }
-
-
-    public void say(String str){
-        Toast.makeText(this,str,Toast.LENGTH_SHORT).show();
     }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -581,7 +490,6 @@ n. 装饰，布置
             }
         });
         Dialog dialog = builder.create();
-        dialog.getWindow().setWindowAnimations(R.style.payDialogStyleAnimation);
         dialog.show();
     }
 
@@ -613,7 +521,6 @@ n. 装饰，布置
 
         if(resultCode==RESULT_OK&&requestCode==REQUEST_CODE_SELECT_WALLPAPER){
             Uri uri = data.getData();
-            //LogUtil.printSS(uri.toString());
             sharedPreferences.edit().putString(SharedPreferenceMy.WALLPAPER_PATH,uri.toString()).commit();
             ContentResolver contentResolver = this.getContentResolver();
             try {
@@ -621,7 +528,6 @@ n. 装饰，布置
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            // can post image
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -645,22 +551,9 @@ n. 装饰，布置
             }
         }
 
-       /* if (activity_main.getBackground()==null){
-            // activity_main.setBackgroundBa(R.mipmap.bg);
-        }*/
     }
 
     private void initJume(){
-       /* String str =
-                "mount -o remount,rw /system"+"\n"+
-                        "cd /system/xbin"+"\n"+
-                        "mkdir Jume"+"\n"+
-                        "cd /system"+"\n"+
-                        "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.JUME_FILE_NAME+" "+"system/xbin/Jume"+"\n"+
-                        "cd Jume"+"\n"+
-                        "unzip  "  +FileUtil.JUME_FILE_NAME  +" -o -d "+"/system/xbin/Jume"+"\n"+
-                        "chmod -R 777  /system/xbin/Jume";*/
-
         String str =
                 "mount -o remount,rw /"+"\n"+
                         "mkdir /system/xbin/Jume"+"\n"+
@@ -668,19 +561,7 @@ n. 装饰，布置
                         "cd /system/xbin/Jume"+"\n"+
                         "unzip -o "  +FileUtil.JUME_FILE_NAME  +"\n"+
                         "chmod -R 777  /system/xbin/Jume";
-
-       // String str = "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.JUME_FILE_NAME+" "+"system/xbin/Jume"+"\n";
-        ShellUtil.execShell(this, str, new OnExecResultListenner() {
-            @Override
-            public void onSuccess(StringBuffer sb) {
-                //LogUtil.printSS("ssssssss  OK"+sb.toString());
-            }
-
-            @Override
-            public void onError(StringBuffer sb) {
-                //LogUtil.printSS("ssssssss  error"+sb.toString());
-            }
-        });
+        ShellUtil.execShell(this, str, null);
     }
 
     //创建新配置文件
@@ -719,8 +600,6 @@ n. 装饰，布置
         });
         Dialog dialog = builder.create();
         dialog.getWindow().setWindowAnimations(R.style.payDialogStyleAnimation);
-        //dialog.getWindow().setAllowEnterTransitionOverlap(true);
-        //dialog.getWindow().setAllowReturnTransitionOverlap(true);
         dialog.show();
     }
     private void startEditConfig(File file){
@@ -735,46 +614,36 @@ n. 装饰，布置
     //logfragmnet监听交互
     @Override
     public void onListFRagmentInteraction(String str) {
-        if(str.contains(ProxyService.BACKGROUND_HOST)){
+
+        final String backgroundHost = "11.22.33.44";
+        if(str.contains(backgroundHost)){
             //TelephonyManager telephonyManager = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
             ConnectivityManager connectivityManager = (ConnectivityManager)this.getSystemService(CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-            switch (networkInfo.getType()){
-                case ConnectivityManager.TYPE_WIFI:
-                    //Toast.makeText(this,getString(R.string.not_allow_current_is_wifi),Toast.LENGTH_SHORT).show();
-                    LogContent.addItemAndNotify(getString(R.string.not_allow_current_is_wifi));
-                    return;
+
+            if(networkInfo.getType()==ConnectivityManager.TYPE_WIFI){
+                LogContent.addItemAndNotify(getString(R.string.not_allow_current_is_wifi));
+                return;
+            }else {
+                Intent intent = new Intent();
+                intent.setAction("android.intent.action.VIEW");
+                Uri content_url = Uri.parse("http://"+backgroundHost);
+                intent.setData(content_url);
+                try{
+                    startActivity(intent);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
-            startBackgroundUseBrowsable();
         }
     }
 
-    //打开后台
-    private void startBackgroundUseBrowsable(){
-        Intent intent = new Intent();
-        intent.setAction("android.intent.action.VIEW");
-        Uri content_url = Uri.parse("http://"+ProxyService.BACKGROUND_HOST);
-        intent.setData(content_url);
-        try{
-            startActivity(intent);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     public ScreenSlidePagerAdapter getScreenSlidePagerAdapter() {
         return screenSlidePagerAdapter;
     }
-
     public ViewPager getMy_viewPager() {
         return my_viewPager;
-    }
-    public ProxyService getProxyService() {
-        return proxyService;
     }
 
 
