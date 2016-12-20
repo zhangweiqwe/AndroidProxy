@@ -16,6 +16,7 @@ public class Matching {
         StringBuffer sb=null;
         switch (paramsHelper.getRequestType()){
             case "GET":
+            case "POST":
                 switch (config.getVersion()){
                     case "2.0":
                         sb = matchHttp_2_0(paramsHelper,config);
@@ -29,13 +30,6 @@ public class Matching {
                         break;
                 }
                 break;
-            case "POST":
-                switch (config.getVersion()){
-                    case "2.0":
-                        sb = matchHttp_2_0(paramsHelper,config);
-                        break;
-                }
-                break;
         }
         return sb;
     }
@@ -43,18 +37,16 @@ public class Matching {
     public static final StringBuffer matchHttp_2_0(ParamsHelper paramsHelper,Config config){
         String httpFirstLine = ModuleEnum.match(config.getHttpFirstLine(),paramsHelper);
         StringBuffer sb = new StringBuffer();
-
-
-        Map<String,String>  linkedHashMap = paramsHelper.getHashMap();
+        Map<String,String>  hashMap = paramsHelper.getHashMap();
         List<String> delateHeaders = config.getHttpNeedDelateHeaders();
         if(delateHeaders!=null){
             for(int i=0;i<delateHeaders.size();i++){
-                linkedHashMap.remove(delateHeaders.get(i));
+                hashMap.remove(delateHeaders.get(i));
             }
         }
         sb.append(httpFirstLine);
-        for(String key:linkedHashMap.keySet()){
-            sb.append(key+": "+linkedHashMap.get(key)+"\r\n");
+        for(String key:hashMap.keySet()){
+            sb.append(key+": "+hashMap.get(key)+"\r\n");
         }
         sb.append("\r\n");
         return sb;
@@ -65,16 +57,16 @@ public class Matching {
         StringBuffer sb = new StringBuffer();
 
 
-        Map<String,String>  linkedHashMap = paramsHelper.getHashMap();
+        Map<String,String>  hashMap = paramsHelper.getHashMap();
         List<String> delateHeaders = config.getConnectNeedDelateHeaders();
         if(delateHeaders!=null){
             for(int i=0;i<delateHeaders.size();i++){
-                linkedHashMap.remove(delateHeaders.get(i));
+                hashMap.remove(delateHeaders.get(i));
             }
         }
         sb.append(connectFirstLine);
-        for(String key:linkedHashMap.keySet()){
-            sb.append(key+": "+linkedHashMap.get(key)+"\r\n");
+        for(String key:hashMap.keySet()){
+            sb.append(key+": "+hashMap.get(key)+"\r\n");
         }
         sb.append("\r\n");
         return sb;

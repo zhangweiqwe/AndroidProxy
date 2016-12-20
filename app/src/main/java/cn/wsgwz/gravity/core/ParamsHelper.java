@@ -118,20 +118,10 @@ public class ParamsHelper {
                 }
         }
     }
-
-   /* public static final String  getKeyIgnoreLowerCase(String keyIgnoreLowerCase,Map<String, String> linkedHashMap){
-        if(keyIgnoreLowerCase==null||linkedHashMap==null){
-            return  null;
-        }
-        for(String key:linkedHashMap.keySet()){
-            if(key.compareToIgnoreCase(keyIgnoreLowerCase)==0){
-                return key;
-            }
-        }
-        return null;
-    }*/
+    @Override
     public String toString(){
         StringBuffer sb = Matching.match(ParamsHelper.this, config);
+        ///LogUtil.printSS("--------->"+sb.toString()+"<-------");
         return sb.toString();
     }
 
