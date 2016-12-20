@@ -38,7 +38,7 @@ public class ClientToServerThread extends Thread {
             if(paramsHelper==null){
                 return;
             }
-            byte[] bytes = paramsHelper.toString().getBytes("iso-8859-1");
+            byte[] bytes = paramsHelper.toString().getBytes();
             remoteOutputStream.write(bytes);
             remoteOutputStream.flush();
             if(paramsHelper.getRequestType().startsWith("POST")){

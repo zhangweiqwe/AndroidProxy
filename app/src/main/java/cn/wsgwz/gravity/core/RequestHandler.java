@@ -64,7 +64,7 @@ public class RequestHandler implements Runnable{
         remoteSocket = new Socket(config.getHttpHost(),config.getHttpPort());
         remoteInputStream = remoteSocket.getInputStream();
         remoteOutputStream = remoteSocket.getOutputStream();
-        byte[] bytes = paramsHelper.toString().getBytes("iso-8859-1");
+        byte[] bytes = paramsHelper.toString().getBytes();
         remoteOutputStream.write(bytes);
         remoteOutputStream.flush();
     }
@@ -88,7 +88,7 @@ public class RequestHandler implements Runnable{
             {
                 remoteOutputStream.write(clientInputStream.read());
             }
-            byte[] bytes = "\r\n".getBytes("iso-8859-1");
+            byte[] bytes = "\r\n".getBytes();
             remoteOutputStream.write(bytes);
             remoteOutputStream.flush();
         }

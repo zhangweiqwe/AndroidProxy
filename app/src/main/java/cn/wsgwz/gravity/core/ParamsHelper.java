@@ -43,7 +43,6 @@ public class ParamsHelper {
             paramsHelper.requestType = tokenizer.nextToken();
             paramsHelper.url = tokenizer.nextToken();
             paramsHelper.httpVersion = tokenizer.nextToken();
-            //paramsHelper.linkedHashMap =  new ConcurrentHashMap<>();
             paramsHelper.hashMap =  Collections.synchronizedMap(new HashMap<String, String>());
         }
 
@@ -54,6 +53,7 @@ public class ParamsHelper {
             if(line==null||line.trim().length()==0) break;
                 tokenizer = new StringTokenizer(line);
                 key = tokenizer.nextToken(tokenStr);
+
                 value = tokenizer.nextToken(tokenStr);
                 paramsHelper.hashMap.put(key, value);
         }
@@ -88,7 +88,7 @@ public class ParamsHelper {
         return sb;
     }
     public  static final boolean checkFirstLine(String firstline){
-        if(firstline==null){
+        if(firstline==null||firstline.trim().length()<1){
             return false;
         }
         if((firstline.startsWith("GET")||(firstline.startsWith("CONNECT")||(firstline.startsWith("POST"))))){

@@ -6,109 +6,6 @@
 #define LOG_TAG "sssssssssssssNDK"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
-char config1[] = "<config version=\"2.0\" dns=\"129.29.29.29\"  apn_apn=\"cmwap\" apn_proxy=\"10.0.0.172\" apn_port=\"80\">\n"
-        "\n"
-        "    <http host=\"10.0.0.172\" port=\"80\">\n"
-        "        <delate>host , x-online-host</delate>\n"
-        "        <first-line>\n"
-        "            [method][tab] [url][tab] [version]\\r\\n\n"
-        "            Host: [tab][host]\\r\\n\n"
-        "            Accept:[tab] */*,[tab] application/vnd.wap.mms-message,[tab] application/vnd.wap.sic\\r\\n\n"
-        "            Content-Type:[tab] application/vnd.wap.mms-message\\r\\n\n"
-        "        </first-line>\n"
-        "    </http>\n"
-        "\n"
-        "\n"
-        "    <https host=\"10.0.0.172\" port=\"80\" switch=\"on\">\n"
-        "        <delate>host , x-online-host</delate>\n"
-        "        <first-line>\n"
-        "            [method][tab] / [tab] [version]\\r\\n\n"
-        "            Host: [tab][host]:443\\r\\n\n"
-        "            Accept:[tab] */*,[tab] application/vnd.wap.mms-message,[tab] application/vnd.wap.sic\\r\\n\n"
-        "            Content-Type:[tab] application/vnd.wap.mms-message\\r\\n\n"
-        "        </first-line>\n"
-        "    </https>\n"
-        "\n"
-        "</config>\n"
-        "\n"
-        "\n"
-        "";
-char config1s[] ="<config version=\"2.0\"  dns=\"114.114.114.114\"   apn_apn=\"cmwap\" apn_proxy=\"10.0.0.172\" apn_port=\"80\">\n"
-        "\n"
-        "    <http host=\"10.0.0.172\" port=\"80\">\n"
-        "        <delate>host , x-oline-host</delate>\n"
-        "        <first-line>\n"
-        "            [method][tab] [url][tab] [version]\\r\\n\n"
-        "            Host: [tab][host]\\r\\n\n"
-        "            Accept:[tab] */*,[tab] application/vnd.wap.mms-message,[tab] application/vnd.wap.sic\\r\\n\n"
-        "            Content-Type:[tab] application/vnd.wap.mms-message\\r\\n\n"
-        "        </first-line>\n"
-        "    </http>\n"
-        "\n"
-        "\n"
-        "    <https host=\"10.0.0.172\" port=\"80\" switch=\"on\">\n"
-        "        <delate>host , x-oline-host</delate>\n"
-        "        <first-line>\n"
-        "            [method][tab] [url] [tab] [version]\\r\\n\n"
-        "            Host: [tab][host]:443\\r\\n\n"
-        "            Accept:[tab] */*,[tab] application/vnd.wap.mms-message,[tab] application/vnd.wap.sic\\r\\n\n"
-        "            Content-Type:[tab] application/vnd.wap.mms-message\\r\\n\n"
-        "        </first-line>\n"
-        "    </https>\n"
-        "\n"
-        "</config>\n"
-        "\n"
-        "\n"
-        "";
-char config2[] = "\n"
-        "<config version=\"2.0\" dns=\"129.29.29.29\"  apn_apn=\"cmwap\" apn_proxy=\"10.0.0.172\" apn_port=\"80\">\n"
-        "\n"
-        "    <http host=\"10.0.0.172\" port=\"80\">\n"
-        "        <delate>host , x-online-host</delate>\n"
-        "        <first-line>\n"
-        "            [method][tab] [url][tab] [version]\\r\\n\n"
-        "           \\n[method] [tab]http://wap.10086.cn[uri] [tab]  [version]\\r\\n\n"
-        "           Host:[host]\\r\\n\n"
-        "        </first-line>\n"
-        "    </http>\n"
-        "\n"
-        "\n"
-        " <https host=\"10.0.0.172\" port=\"80\"  switch=\"on\">\n"
-        "        <delate>host , x-online-host</delate>\n"
-        "        <first-line>\n"
-        "            [method][tab] [url][tab] [version]\\r\\n\n"
-        "            Host: [tab][host]:443\\r\\n\n"
-        "            Accept:[tab] */*, [tab]application/vnd.wap.mms-message, [tab]application/vnd.wap.sic\\r\\n\n"
-        "            Content-Type:[tab] application/vnd.wap.mms-message\\r\\n\n"
-        "        </first-line>\n"
-        "    </https>\n"
-        "\n"
-        "</config>";
-
-char configL1[] = "<config version=\"2.0\" dns=\"129.29.29.29\"  apn_apn=\"cmwap\" apn_proxy=\"10.0.0.172\" apn_port=\"80\">\n"
-        "\n"
-        "    <http host=\"10.0.0.172\" port=\"80\">\n"
-        "        <delate>host , x-online-host</delate>\n"
-        "        <first-line>\n"
-        "            [method] [tab][url][tab] [version]\\r\\n\n"
-        "            X-Online-Host:[tab] m.10010.com\\r\\n\n"
-        "            Host: [tab][host]\\r\\n\n"
-        "            X-Online-Host:[tab] m.10010.com\\r\\n\n"
-        "        </first-line>\n"
-        "    </http>\n"
-        "\n"
-        "\n"
-        "    <https host=\"10.0.0.172\" port=\"80\" switch=\"on\">\n"
-        "        <delate>host,x-online-host</delate>\n"
-        "        <first-line>\n"
-        "            [method][tab] / [tab] [version]\\r\\n\n"
-        "            Host: [tab][host]:443\\r\\n\n"
-        "            Host:[tab] m.10010.com\\r\\n\n"
-        "        </first-line>\n"
-        "    </https>\n"
-        "\n"
-        "</config>";
-
 extern "C"
 JNIEXPORT void JNICALL
 Java_cn_wsgwz_gravity_util_NativeUtils_fork(JNIEnv *env, jclass type) {
@@ -181,7 +78,7 @@ Java_cn_wsgwz_gravity_util_NativeUtils_getConfig(JNIEnv *env, jclass type, jstri
 
 
 
-    if(strcmp(typeStr,"config1")==0){
+   /* if(strcmp(typeStr,"config1")==0){
         return env->NewStringUTF(config1);
     }else if(strcmp(typeStr,"config1s")==0){
         return env->NewStringUTF(config1s);
@@ -190,7 +87,7 @@ Java_cn_wsgwz_gravity_util_NativeUtils_getConfig(JNIEnv *env, jclass type, jstri
         return env->NewStringUTF(config2);
     } else if(strcmp(typeStr,"configL1")==0){
         return env->NewStringUTF(configL1);
-    }
+    }*/
 
     return env->NewStringUTF(NULL);
 }
