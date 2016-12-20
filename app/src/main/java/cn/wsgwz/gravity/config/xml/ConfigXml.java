@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.StringTokenizer;
+import  java.util.Collections;
 
 import cn.wsgwz.gravity.config.Config;
 import cn.wsgwz.gravity.config.ModuleEnum;
@@ -35,7 +36,6 @@ public class ConfigXml {
     public static final Config read(InputStream in) throws DocumentException, FileNotFoundException {
 
 
-        //LogUtil.printSS("          -----------"+SPLIT);
 
 
         Config config = null;
@@ -80,7 +80,8 @@ public class ConfigXml {
 
         httpFirstLine = http.elementTextTrim("first-line").trim();
 
-        httpNeedDelateHeaders = new ArrayList<>();
+       // httpNeedDelateHeaders = new ArrayList<>();
+        httpNeedDelateHeaders =Collections.synchronizedList(new ArrayList<String>());
         String tempDelateStr = http.elementTextTrim("delate").trim();
         if(tempDelateStr!=null&&tempDelateStr.trim().length()>0){
             if(tempDelateStr.contains(SPLIT)){
@@ -122,7 +123,8 @@ public class ConfigXml {
 
         connectFirstLine = connnect.elementTextTrim("first-line").trim();
 
-        connectNeedDelateHeaders = new ArrayList<>();
+        //connectNeedDelateHeaders = new ArrayList<>();
+        connectNeedDelateHeaders = Collections.synchronizedList(new ArrayList<String>());
         String tempDelateConnectStr = connnect.elementTextTrim("delate").trim();
         if(tempDelateConnectStr!=null&&tempDelateConnectStr.trim().length()>0){
             if(tempDelateConnectStr.contains(SPLIT)){

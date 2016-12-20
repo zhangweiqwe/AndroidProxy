@@ -77,8 +77,8 @@ public class RequestHandler implements Runnable{
         clientToServerThread.join();
         serverToClientThread.join();
     }
-    public static void doPost(ParamsHelper paramsHelper,OutputStream remoteOutputStream,InputStream clientInputStream)throws IOException{
-        String contentLenStr = paramsHelper.getLinkedHashMap().get(ParamsHelper.getKeyIgnoreLowerCase("Content-Length",paramsHelper.getLinkedHashMap()));
+    public static final void doPost(ParamsHelper paramsHelper,OutputStream remoteOutputStream,InputStream clientInputStream)throws IOException{
+        String contentLenStr = paramsHelper.getHashMap().get(ParamsHelper.getKeyIgnoreLowerCase("Content-Length",paramsHelper.getHashMap()));
         if(contentLenStr==null){
             return;
         }
@@ -88,8 +88,8 @@ public class RequestHandler implements Runnable{
             {
                 remoteOutputStream.write(clientInputStream.read());
             }
-            byte[] bytes1 = "\r\n".getBytes("iso-8859-1");
-            remoteOutputStream.write(bytes1);
+            byte[] bytes = "\r\n".getBytes("iso-8859-1");
+            remoteOutputStream.write(bytes);
             remoteOutputStream.flush();
         }
     }

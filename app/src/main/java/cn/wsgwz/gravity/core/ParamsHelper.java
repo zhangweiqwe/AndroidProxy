@@ -6,35 +6,34 @@ import java.io.InputStream;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.concurrent.*;
 
 import cn.wsgwz.gravity.config.Config;
 import cn.wsgwz.gravity.config.Matching;
 import cn.wsgwz.gravity.util.LogUtil;
-
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.*;
 /**
  * Created by Administrator on 2016/11/1.
  */
 
 public class ParamsHelper {
-
-    protected String firstline,requestType,url,uri,httpVersion,host;
-    private LinkedHashMap<String, String> linkedHashMap;
+    private String firstline,requestType,url,uri,httpVersion,host;
+    private  Map<String, String> hashMap;
     private Config config;
 
     public  static final ParamsHelper read(InputStream  clientInputStream ,Config config) throws IOException {
-
-
-
         ParamsHelper paramsHelper=null;
         String line = ParamsHelper.readLine(clientInputStream).toString();
         StringTokenizer tokenizer;
         if(!checkFirstLine(line)){
-             // LogUtil.printSS("line   bug (udp)"+line );
             return null;
         }else {
             paramsHelper = new ParamsHelper();
@@ -44,32 +43,26 @@ public class ParamsHelper {
             paramsHelper.requestType = tokenizer.nextToken();
             paramsHelper.url = tokenizer.nextToken();
             paramsHelper.httpVersion = tokenizer.nextToken();
-            paramsHelper.linkedHashMap = new LinkedHashMap<>();
+            //paramsHelper.linkedHashMap =  new ConcurrentHashMap<>();
+            paramsHelper.hashMap =  Collections.synchronizedMap(new HashMap<String, String>());
         }
 
         String key,value;
         while (line!=null){
             line = paramsHelper.readLine(clientInputStream).toString();
             if(line==null||line.trim().length()==0) break;
-            try {
                 tokenizer = new StringTokenizer(line);
                 key = tokenizer.nextToken(":");
                 value = line.replaceAll(key, "").replace(": ", "");
-                paramsHelper.linkedHashMap.put(key, value);
-            }catch (ArrayIndexOutOfBoundsException e){
-                e.printStackTrace();
-                //LogUtil.printSS(" ArrayIndexOutOfBoundsException    "+line);
-            }
-
+                paramsHelper.hashMap.put(key, value);
+            LogUtil.printSS(paramsHelper.toString()+"<----------");
         }
-
-                getUri(paramsHelper);
+        getUri(paramsHelper);
         return paramsHelper;
     }
 
-    public    static  final    StringBuffer readLine(InputStream in) throws IOException {
-        StringBuffer
-            sb= new StringBuffer();
+    private static final StringBuffer readLine(InputStream in) throws IOException {
+        StringBuffer sb= new StringBuffer();
             int c;
             loop:      while (true){
                 switch ((c=in.read())){
@@ -92,7 +85,6 @@ public class ParamsHelper {
                         break ;
                 }
             }
-        //LogUtil.printSS("-------->"+sb.toString()+"<---");
         return sb;
     }
     public  static final boolean checkFirstLine(String firstline){
@@ -104,12 +96,15 @@ public class ParamsHelper {
         }
         return false;
     }
-    private  static void getUri(ParamsHelper paramsHelper) {
+    private  static final void getUri(ParamsHelper paramsHelper) {
         if(paramsHelper.url==null){
             return;
         }
-        String key = getKeyIgnoreLowerCase("Host",paramsHelper.getLinkedHashMap());
-        String value = paramsHelper.linkedHashMap.get(key);
+        String key = getKeyIgnoreLowerCase("Host",paramsHelper.getHashMap());
+        String value = null;
+        if(key!=null){
+            value = paramsHelper.hashMap.get(key);
+        }
         //如果http请请求体没找到host,尝试从url找
         if(value==null){
             value = getHost(paramsHelper.url);
@@ -123,23 +118,9 @@ public class ParamsHelper {
                     paramsHelper.uri = paramsHelper.url;
                 }
         }
-
-    /*    if(header.containsKey("host"))
-        {
-            int temp = url.indexOf(header.get("host"));
-            temp += header.get("host").length();
-
-            if(temp < 0) {
-                // prevent index out of bound, use entire url instead
-                uri = url;
-            } else {
-                // get uri from part of the url
-                uri = url.substring(temp);
-            }
-        }*/
     }
 
-    public static final String  getKeyIgnoreLowerCase(String keyIgnoreLowerCase,LinkedHashMap<String, String> linkedHashMap){
+    public static final String  getKeyIgnoreLowerCase(String keyIgnoreLowerCase,Map<String, String> linkedHashMap){
         if(keyIgnoreLowerCase==null||linkedHashMap==null){
             return  null;
         }
@@ -152,27 +133,13 @@ public class ParamsHelper {
         return null;
     }
     public String toString(){
-    /*    StringBuffer sb = new StringBuffer();
-        for(String key:linkedHashMap.keySet()){
-            sb.append(key+": "+ParamsHelper.this.linkedHashMap.get(key)+"\r\n");
-        }
-*/
-       // LogUtil.printSS("----->");
         StringBuffer sb = Matching.match(ParamsHelper.this, config);
-       // LogUtil.printSS("<-----------------");
-
-
-       /* LogUtil.printSS(""+sb.toString()+"<-------");
-        LogUtil.printSS("<-------");*/
-
-
-
         //LogUtil.printSS("          ------>"+sb.toString()+"<-------");
         return sb.toString();
     }
 
     private  static String getHost(String url){
-        if(url==null||url.trim().equals("")){
+        if(url==null){
             return "";
         }
         String host = "";
@@ -224,12 +191,20 @@ public class ParamsHelper {
         this.httpVersion = httpVersion;
     }
 
-    public LinkedHashMap<String, String> getLinkedHashMap() {
-        return linkedHashMap;
+    public Map<String, String> getHashMap() {
+        return hashMap;
     }
 
-    public void setLinkedHashMap(LinkedHashMap<String, String> linkedHashMap) {
-        this.linkedHashMap = linkedHashMap;
+    public void setHashMap(Map<String, String> hashMap) {
+        this.hashMap = hashMap;
+    }
+
+    public Config getConfig() {
+        return config;
+    }
+
+    public void setConfig(Config config) {
+        this.config = config;
     }
 
     public String getHost() {

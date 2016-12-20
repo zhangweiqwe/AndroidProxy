@@ -58,6 +58,7 @@ import android.widget.Toast;
 
 
 
+
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -102,7 +103,6 @@ import static junit.framework.Assert.assertEquals;
 public class MainActivity extends AppCompatActivity implements LogFragment.OnListFragmentInteractionListenner,ServiceConnection{
     //选择背景请求值
     public static final  int REQUEST_CODE_SELECT_WALLPAPER = 4;
-
 
 
     private  Toolbar toolbar;

@@ -44,7 +44,7 @@ public class ServerToClientForConnectThread extends Thread{
                 try {
                     isOut.close();
                 } catch (IOException e) {
-                    //e.printStackTrace();
+                    e.printStackTrace();
                 }
             }
             if(osIn!=null){

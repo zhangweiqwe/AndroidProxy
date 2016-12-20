@@ -3,7 +3,7 @@ package cn.wsgwz.gravity.config;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.concurrent.*;
 import cn.wsgwz.gravity.core.ParamsHelper;
 import cn.wsgwz.gravity.util.LogUtil;
 
@@ -12,7 +12,7 @@ import cn.wsgwz.gravity.util.LogUtil;
  */
 
 public class Matching {
-    public static StringBuffer match(ParamsHelper paramsHelper,Config config){
+    public static final StringBuffer match(ParamsHelper paramsHelper,Config config){
         StringBuffer sb=null;
         switch (paramsHelper.getRequestType()){
             case "GET":
@@ -40,12 +40,12 @@ public class Matching {
         return sb;
     }
 
-    public static StringBuffer matchHttp_2_0(ParamsHelper paramsHelper,Config config){
+    public static final StringBuffer matchHttp_2_0(ParamsHelper paramsHelper,Config config){
         String httpFirstLine = ModuleEnum.match(config.getHttpFirstLine(),paramsHelper);
         StringBuffer sb = new StringBuffer();
 
 
-        LinkedHashMap<String,String>  linkedHashMap = paramsHelper.getLinkedHashMap();
+        Map<String,String>  linkedHashMap = paramsHelper.getHashMap();
         List<String> delateHeaders = config.getHttpNeedDelateHeaders();
         if(delateHeaders!=null){
             for(int i=0;i<delateHeaders.size();i++){
@@ -60,12 +60,12 @@ public class Matching {
         return sb;
     }
 
-    public static StringBuffer matchConnect_2_0(ParamsHelper paramsHelper,Config config){
+    public static final StringBuffer matchConnect_2_0(ParamsHelper paramsHelper,Config config){
         String connectFirstLine = ModuleEnum.match(config.getConnectFirstLine(),paramsHelper);
         StringBuffer sb = new StringBuffer();
 
 
-        LinkedHashMap<String,String>  linkedHashMap = paramsHelper.getLinkedHashMap();
+        Map<String,String>  linkedHashMap = paramsHelper.getHashMap();
         List<String> delateHeaders = config.getConnectNeedDelateHeaders();
         if(delateHeaders!=null){
             for(int i=0;i<delateHeaders.size();i++){

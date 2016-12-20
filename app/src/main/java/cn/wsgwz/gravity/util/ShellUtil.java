@@ -277,7 +277,6 @@ public class ShellUtil {
             String currentConfigPath = sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null);
             if(!isRemote){
                 LogContent.addItemAndNotify(currentConfigPath);
-                LogContent.addItemAndNotify("建议接入点:"+" apn:"+config.getApn_apn()+" 代理:"+config.getApn_proxy()+" 端口:"+config.getApn_port());
             }
             if(currentConfigPath==null){
                 return null;
@@ -315,6 +314,12 @@ public class ShellUtil {
         }else {
             InputStream in = context.getAssets().open("text.xml");
             config = ConfigXml.read(in);
+        }
+
+        if(!isRemote){
+            if(config!=null){
+                LogContent.addItemAndNotify("建议接入点:"+" apn:"+config.getApn_apn()+" 代理:"+config.getApn_proxy()+" 端口:"+config.getApn_port());
+            }
         }
         return  config;
     }
