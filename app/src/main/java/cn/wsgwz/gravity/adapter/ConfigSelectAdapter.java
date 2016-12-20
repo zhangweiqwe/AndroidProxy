@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.List;
 
 import cn.wsgwz.gravity.R;
+import cn.wsgwz.gravity.config.EnumAssetsConfig;
 
 /**
  * Created by Jeremy Wang on 2016/11/7.
@@ -19,22 +20,22 @@ import cn.wsgwz.gravity.R;
 public class ConfigSelectAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private Context context;
-    private List<File> fileList;
+    private List<Object> list;
 
-    public ConfigSelectAdapter(Context context, List<File> fileList) {
+    public ConfigSelectAdapter(Context context, List<Object> list) {
         this.context = context;
-        this.fileList = fileList;
+        this.list = list;
         inflater  = LayoutInflater.from(context);
     }
 
     @Override
     public int getCount() {
-        return fileList==null?0:fileList.size();
+        return list==null?0:list.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return fileList.get(position);
+        return list.get(position);
     }
 
     @Override
@@ -59,9 +60,20 @@ public class ConfigSelectAdapter extends BaseAdapter {
         return convertView;
     }
     private void initView(int position, View convertView, ViewGroup parent,ViewHolder viewHolder){
-        File file = fileList.get(position);
-        viewHolder.fileName_TV.setText(file.getName());
-        viewHolder.filePath_TV.setText(file.getAbsolutePath());
+
+        Object obj = list.get(position);
+        if(obj==null){
+            return;
+        }
+        if(obj instanceof File){
+            File file = (File) obj;
+            viewHolder.fileName_TV.setText(file.getName());
+            viewHolder.filePath_TV.setText(file.getAbsolutePath());
+        }else if(obj instanceof EnumAssetsConfig){
+            EnumAssetsConfig enumAssetsConfig = (EnumAssetsConfig) obj;
+            viewHolder.fileName_TV.setText(enumAssetsConfig.getValues());
+            viewHolder.filePath_TV.setText(enumAssetsConfig.getKey());
+        }
         viewHolder.hint_TV.setText(position+".");
     }
     private class ViewHolder{

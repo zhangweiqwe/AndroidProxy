@@ -320,6 +320,7 @@ public class ShellUtil {
             if(config!=null){
                 LogContent.addItemAndNotify("建议接入点:"+" apn:"+config.getApn_apn()+" 代理:"+config.getApn_proxy()+" 端口:"+config.getApn_port());
             }
+
         }
         return  config;
     }

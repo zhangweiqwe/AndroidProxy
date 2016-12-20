@@ -39,6 +39,7 @@ import cn.wsgwz.gravity.MainActivity;
 import cn.wsgwz.gravity.R;
 import cn.wsgwz.gravity.activity.ConfigEditActivity;
 import cn.wsgwz.gravity.adapter.ConfigSelectAdapter;
+import cn.wsgwz.gravity.config.EnumAssetsConfig;
 import cn.wsgwz.gravity.config.EnumMyConfig;
 import cn.wsgwz.gravity.fragment.MainFragment;
 import cn.wsgwz.gravity.service.ProxyService;
@@ -71,11 +72,11 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
     private TextView hint_TV,currentConfig_TV;
     private XListView list_view;
     private ConfigSelectAdapter configSelectAdapter;
-    private List<File> fileList;
+    private List<Object> list;
 
     private Intent intentServer;
     private SharedPreferences sharedPreferences;
-
+    private   File file;
 
 
     @Override
@@ -96,12 +97,13 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
         list_view = (XListView)findViewById(R.id.list_view);
         list_view.setPullLoadEnable(false);
         list_view.setPullRefreshEnable(false);
-        fileList =  new ArrayList<>();
-        configSelectAdapter = new ConfigSelectAdapter(getContext(),fileList);
+        list =  new ArrayList<>();
+        configSelectAdapter = new ConfigSelectAdapter(getContext(),list);
         list_view.setOnItemClickListener(this);
 
         initListView();
     }
+
 
     @Override
     public void onItemClick(AdapterView<?> parent, final View view,  int position, long id) {
@@ -112,19 +114,27 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("重启生效");
         builder.setMessage("是否重启？");
-        final File file = fileList.get(position1);
+        Object obj = list.get(position1);
+
+        if(obj instanceof File){
+            file = (File) obj;
+        }else if(obj instanceof EnumAssetsConfig){
+            EnumAssetsConfig enumAssetsConfig = (EnumAssetsConfig) obj;
+            file = new File(enumAssetsConfig.getKey());
+        }
+
         if(file.exists()&&!file.getPath().contains("android_asset")){
             builder.setNegativeButton("编辑", new OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    startEditConfig(fileList.get(position1));
+                    startEditConfig(file);
                 }
             });
             builder.setNeutralButton("删除", new OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if(file.exists()){
-                        fileList.remove(position1);
+                        list.remove(position1);
                         file.delete();
                         configSelectAdapter.notifyDataSetChanged();
                     }
@@ -136,7 +146,7 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
         builder.setPositiveButton("确定", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                sharedPreferences.edit().putString(SharedPreferenceMy.CURRENT_CONFIG_PATH,fileList.get(position1).getAbsolutePath()).commit();
+                sharedPreferences.edit().putString(SharedPreferenceMy.CURRENT_CONFIG_PATH,file.getAbsolutePath()).commit();
                 currentConfig_TV.setText(file.getAbsolutePath());
                 ConfigSelectDialog.this.getWindow().getDecorView().postDelayed(new Runnable() {
                     @Override
@@ -205,7 +215,7 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                             return false;
                         }
                     });
-                    Collections.addAll(fileList,files);
+                    Collections.addAll(list,files);
                 }
 
                 File file1 = new File(FileUtil.SD_APTH_CONFIG);
@@ -219,49 +229,30 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                             return false;
                         }
                     });
-                    Collections.addAll(fileList,files);
+                    Collections.addAll(list,files);
                 }
 
 
-                List<EnumMyConfig> listEnum = EnumMyConfig.getMeConfig();
+               /* List<EnumMyConfig> listEnum = EnumMyConfig.getMeConfig();
                 if(listEnum!=null){
                     for(int i=0;i<listEnum.size();i++){
-                        Collections.addAll(fileList,new File(listEnum.get(i).getName()));
+                        Collections.addAll(list,new File(listEnum.get(i).getName()));
                     }
-                }
+                }*/
 
-                
-                //addAssetsConfigs();
+                list.add(EnumAssetsConfig.ChongQing_YiDong_1);
+                list.add(EnumAssetsConfig.ChongQing_YiDong_1_S);
+                list.add(EnumAssetsConfig.ChongQing_YiDong_2);
+                list.add(EnumAssetsConfig.ChongQing_LianTong_1);
+
+
+
                 handler.sendEmptyMessage(1000);
 
             }
         }).start();
     }
-    //添加assets目录里的配置文件
-    private void addAssetsConfigs(){
-        try {
-           String[] filesPath =  context.getAssets().list("config");
-            for(int i=0;i<filesPath.length;i++){
-                fileList.add(new File(FileUtil.ASSETS_CONFIG_PATH+filesPath[i]));
-                //Log.d("sssssssss",""+filesPath[i]);
-            }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-       /* if(file1.exists()){
-            File[] files= file1.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                    if (name.endsWith(".xml")){
-                        return true;
-                    }
-                    return false;
-                }
-            });
-            Collections.addAll(fileList,files);
-        }*/
-    }
 
     public    void setListViewHeight(ListView listView) {
         Adapter adapter = listView.getAdapter();

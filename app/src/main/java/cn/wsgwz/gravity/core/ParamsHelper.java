@@ -48,14 +48,14 @@ public class ParamsHelper {
         }
 
         String key,value;
+        String tokenStr = ": ";
         while (line!=null){
             line = paramsHelper.readLine(clientInputStream).toString();
             if(line==null||line.trim().length()==0) break;
                 tokenizer = new StringTokenizer(line);
-                key = tokenizer.nextToken(":");
-                value = line.replaceAll(key, "").replace(": ", "");
+                key = tokenizer.nextToken(tokenStr);
+                value = tokenizer.nextToken(tokenStr);
                 paramsHelper.hashMap.put(key, value);
-            LogUtil.printSS(paramsHelper.toString()+"<----------");
         }
         getUri(paramsHelper);
         return paramsHelper;
