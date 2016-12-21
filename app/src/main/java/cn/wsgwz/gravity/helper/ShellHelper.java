@@ -23,7 +23,6 @@ public class ShellHelper {
     public static final String DEFAULT_DNS = "129.29.29.29";
     private  static final ShellHelper shellParamsHelper  = new ShellHelper();
 
-    private  Context context;
     private String startStr,stopStr;
     private String dns;
     private String proxy;
@@ -38,8 +37,7 @@ public class ShellHelper {
 
 
 
-    public void init(Context context){
-        ShellHelper.this.context = context;
+    public static final void init(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences("main",Context.MODE_PRIVATE);
         if(sharedPreferences.getBoolean("hasShell",false)){
             shellParamsHelper.startStr=sharedPreferences.getString("start.sh",null);

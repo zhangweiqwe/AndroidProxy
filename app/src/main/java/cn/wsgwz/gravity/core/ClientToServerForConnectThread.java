@@ -38,7 +38,7 @@ public class ClientToServerForConnectThread extends Thread {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } finally{
             if(osOut!=null){
                 try {
@@ -51,7 +51,7 @@ public class ClientToServerForConnectThread extends Thread {
                 try {
                     isIn.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             }
 

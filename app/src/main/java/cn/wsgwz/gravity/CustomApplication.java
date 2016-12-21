@@ -16,6 +16,8 @@ import cn.wsgwz.gravity.util.LogUtil;
 import cn.wsgwz.gravity.util.NativeUtils;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
+import android.app.ActivityManager;
+import android.util.Log;
 
 /**
  * Created by Jeremy Wang on 2016/10/26.
@@ -25,8 +27,11 @@ public class CustomApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        SharedPreferences sharedPreferences = getSharedPreferences(SharedPreferenceMy.MAIN_CONFIG, Context.MODE_PRIVATE);
-        sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,false).commit();
+        if(getCurProcessName(this).equals("cn.wsgwz.gravity")){
+            ShellHelper.init(this);
+            SharedPreferences sharedPreferences = getSharedPreferences(SharedPreferenceMy.MAIN_CONFIG, Context.MODE_PRIVATE);
+            sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,false).commit();
+        }
     }
 
     @Override
@@ -40,11 +45,21 @@ public class CustomApplication extends Application {
         // 低内存的时候执行
         super.onLowMemory();
     }
-
-    int i=0;
     @Override
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
     }
+    private String getCurProcessName(Context context) {
+        int pid = android.os.Process.myPid();
+        ActivityManager mActivityManager = (ActivityManager) context
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningAppProcessInfo appProcess : mActivityManager
+                .getRunningAppProcesses()) {
+            if (appProcess.pid == pid) {
+                return appProcess.processName;
+            }
 
+        }
+        return null;
+    }
 }

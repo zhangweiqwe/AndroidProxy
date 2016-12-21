@@ -36,22 +36,23 @@ public class ServerToClientForConnectThread extends Thread{
                     osIn.write(buffer, 0, len);
                     osIn.flush();
                }
+
             }
-        } catch (Exception e) { e.printStackTrace();
+        } catch (Exception e) { //e.printStackTrace();
         }finally{
 
             if(isOut!=null){
                 try {
                     isOut.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             }
             if(osIn!=null){
                 try {
                     osIn.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             }
 

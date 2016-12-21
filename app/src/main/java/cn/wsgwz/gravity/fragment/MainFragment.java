@@ -4,12 +4,16 @@ package cn.wsgwz.gravity.fragment;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -65,6 +69,8 @@ import cn.wsgwz.photospreview.PhotosPreviewActivity;
 
 public class MainFragment extends Fragment implements View.OnClickListener,ShellUtil.IsProgressListenner,GestureDetector.OnGestureListener{
 
+    public static final int NOTIFY_SERVER_ID = 123564;
+
     private GestureDetector detector;
     private MyScrollView2 myScrollView;
 
@@ -77,6 +83,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
 
     public static boolean isStartOrStopDoing;
     private Intent intentServer;
+    private NotificationManager notificationManager;
 
     private void fllowServer(boolean isStart){
 
@@ -146,7 +153,21 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         ShellUtil.setIsProgressListenner(this);
 
     }
-
+    private void showNotification(){
+        Notification.Builder builder = new Notification.Builder(getActivity());
+        builder.setSmallIcon(R.mipmap.diqiu);
+        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.diqiu));
+        Intent intentMain = new Intent(getActivity(), MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(),0,intentMain,PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+        builder.setContentTitle(getResources().getString(R.string.app_name));
+        builder.setContentText(getResources().getString(R.string.app_name)+" "+FileUtil.VERSION_NUMBER+" "+"运行中");
+        builder.setTicker(getResources().getString(R.string.app_name)+"  "+FileUtil.VERSION_NUMBER+"已运行");
+        builder.setOngoing(true);
+        Notification  notification = builder.build();
+        notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(NOTIFY_SERVER_ID,notification);
+    }
 
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
@@ -158,10 +179,12 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
                     LogContent.addItemAndNotify("当前版本: "+getResources().getString(R.string.app_name)+FileUtil.VERSION_NUMBER);
                     getActivity().startService(intentServer);
                     fllowServer(true);
+                    showNotification();
                 } else {
                     sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,false).commit();
                     getActivity().stopService(intentServer);
                     fllowServer(false);
+                    notificationManager.cancel(NOTIFY_SERVER_ID);
                 }
             }else {
                 Snackbar.make(service_Switch,getString(R.string.please_select_config), Snackbar.LENGTH_SHORT).show();

@@ -26,6 +26,7 @@ import java.util.concurrent.*;
 
 public class ParamsHelper {
     private String firstline,requestType,url,uri,httpVersion,host;
+    public String POST ="POST",GET="GET",CONNECT="CONNECT",endOfLine="\r\n";
     private  Map<String, String> hashMap;
     private Config config;
 
@@ -46,16 +47,13 @@ public class ParamsHelper {
             paramsHelper.hashMap =  Collections.synchronizedMap(new HashMap<String, String>());
         }
 
-        String key,value;
-        String tokenStr = ": ";
-        while (line!=null){
-            line = paramsHelper.readLine(clientInputStream).toString();
-            if(line==null||line.trim().length()==0) break;
-                tokenizer = new StringTokenizer(line);
-                key = tokenizer.nextToken(tokenStr);
-
-                value = tokenizer.nextToken(tokenStr);
-                paramsHelper.hashMap.put(key, value);
+        String key, value = null;
+        while ((line = paramsHelper.readLine(clientInputStream).toString()) != null) {
+            if (line.trim().length() == 0) break;
+            tokenizer = new StringTokenizer(line);
+            key = tokenizer.nextToken(":");
+            value = line.replaceAll(key, "").replace(": ", "");
+            paramsHelper.hashMap.put(key.toLowerCase(), value);
         }
         getUri(paramsHelper);
         return paramsHelper;
@@ -121,7 +119,6 @@ public class ParamsHelper {
     @Override
     public String toString(){
         StringBuffer sb = Matching.match(ParamsHelper.this, config);
-        ///LogUtil.printSS("--------->"+sb.toString()+"<-------");
         return sb.toString();
     }
 

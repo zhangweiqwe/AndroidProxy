@@ -89,7 +89,7 @@ public class RequestHandler implements Runnable{
             {
                 remoteOutputStream.write(clientInputStream.read());
             }
-            byte[] bytes = "\r\n".getBytes();
+            byte[] bytes = paramsHelper.endOfLine.getBytes();
             remoteOutputStream.write(bytes);
             remoteOutputStream.flush();
         }
@@ -106,7 +106,7 @@ public class RequestHandler implements Runnable{
             String requestType = paramsHelper.getRequestType();
 
 
-            if(requestType.startsWith("GET")){
+            if(requestType.startsWith(paramsHelper.GET)){
                 String host = paramsHelper.getHost();
                 if(host!=null){
                     if(host.trim().startsWith("11.22.33.44")){
@@ -118,7 +118,7 @@ public class RequestHandler implements Runnable{
                 }
                 writeHeader(paramsHelper);
                 getOrPostThread();
-            }else if(requestType.startsWith("CONNECT")){
+            }else if(requestType.startsWith(paramsHelper.CONNECT)){
                 if(!httpsSpport){
                     return;
                 }
@@ -129,27 +129,60 @@ public class RequestHandler implements Runnable{
                 clientToServerForConnectThread.start();
                 clientToServerForConnectThread.join();
                 serverToClientForConnectThread.join();
-            }else  if(requestType.startsWith("POST")){
+            }else  if(requestType.startsWith(paramsHelper.POST)){
                 writeHeader(paramsHelper);
                 doPost(paramsHelper,remoteOutputStream,clientInputStream);
                 getOrPostThread();
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }finally {
+            if(remoteOutputStream!=null){
                 try {
-                    if(remoteOutputStream != null) remoteOutputStream.close();
-                    if(remoteInputStream != null) remoteInputStream.close();
-                    if(remoteSocket != null) remoteSocket.close();
-                    if(clientOutputStream != null) clientOutputStream.close();
-                    if(clientInputStream != null) clientInputStream.close();
-                    if(clientSocket != null) clientSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+                    remoteOutputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+                    if(remoteInputStream != null){
+                        try {
+                            remoteInputStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if(remoteSocket != null) {
+                        try {
+                            remoteSocket.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    };
+                    if(clientOutputStream != null){
+                        try {
+                            clientOutputStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    };
+                    if(clientInputStream != null){
+                        try {
+                            clientInputStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    };
+                    if(clientSocket != null){
+                        try {
+                            clientSocket.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    };
+
         }
     }
 

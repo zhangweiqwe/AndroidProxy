@@ -37,7 +37,7 @@ public class SocketServer extends Thread{
             }
         }
         catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -49,7 +49,7 @@ public class SocketServer extends Thread{
             try {
                 serverSocket.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
 

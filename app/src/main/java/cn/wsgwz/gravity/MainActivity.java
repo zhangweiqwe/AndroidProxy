@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements LogFragment.OnLis
     private SlidingTabLayout slidingTabLayout;
     private  ViewPager my_viewPager;
     private   ScreenSlidePagerAdapter screenSlidePagerAdapter;
-    private ShellHelper shellHelper = ShellHelper.getInstance();
+
 
 
     private SharedPreferences sharedPreferences;
@@ -177,7 +177,6 @@ n. 装饰，布置
     @Override
     public void onServiceDisconnected(ComponentName componentName) {
       //  LogUtil.printSS("onServiceDisconnected");
-
     }
 
 
@@ -185,7 +184,6 @@ n. 装饰，布置
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        shellHelper.init(getApplicationContext());
         if (Build.VERSION.SDK_INT >= 21) {
             Window window = getWindow();
             window.requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);

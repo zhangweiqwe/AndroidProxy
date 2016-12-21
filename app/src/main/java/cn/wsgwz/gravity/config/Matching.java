@@ -46,9 +46,9 @@ public class Matching {
         }
         sb.append(httpFirstLine);
         for(String key:hashMap.keySet()){
-            sb.append(key+": "+hashMap.get(key)+"\r\n");
+            sb.append(key+": "+hashMap.get(key)+paramsHelper.endOfLine);
         }
-        sb.append("\r\n");
+        sb.append(paramsHelper.endOfLine);
         return sb;
     }
 
@@ -66,9 +66,9 @@ public class Matching {
         }
         sb.append(connectFirstLine);
         for(String key:hashMap.keySet()){
-            sb.append(key+": "+hashMap.get(key)+"\r\n");
+            sb.append(key+": "+hashMap.get(key)+paramsHelper.endOfLine);
         }
-        sb.append("\r\n");
+        sb.append(paramsHelper.endOfLine);
         return sb;
     }
 }

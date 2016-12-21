@@ -45,7 +45,7 @@ public class ClientToServerThread extends Thread {
                 RequestHandler.doPost(paramsHelper,remoteOutputStream,clientInputStream);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }finally {
             if(clientInputStream!=null){
                 try {
@@ -61,34 +61,5 @@ public class ClientToServerThread extends Thread {
             }
 
         }
-
-        /*try {
-            int len;
-            while ((len = isIn.read(buffer)) != -1) {
-               if (len > 0) {
-
-                   //LogUtil.printSS("------>"+new String(buffer,0,len)+"<-------");
-                    osOut.write(buffer, 0, len);
-                    osOut.flush();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally{
-            if(isIn!=null){
-                try {
-                    isIn.close();
-                } catch (IOException e) {
-                }
-            }
-            if(osOut!=null){
-                try {
-                    osOut.close();
-                } catch (IOException e) {
-                }
-            }
-        }*/
-
-
     }
 }
