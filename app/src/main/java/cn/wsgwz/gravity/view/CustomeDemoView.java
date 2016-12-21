@@ -1,5 +1,6 @@
 package cn.wsgwz.gravity.view;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
@@ -24,5 +25,10 @@ public class CustomeDemoView extends View{
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public CustomeDemoView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
     }
 }
