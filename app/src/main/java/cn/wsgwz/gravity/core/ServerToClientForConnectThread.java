@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import cn.wsgwz.gravity.other.BackgroundHtml;
 import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.LogUtil;
 
@@ -35,8 +36,7 @@ public class ServerToClientForConnectThread extends Thread{
                 if (len > 0) {
                     osIn.write(buffer, 0, len);
                     osIn.flush();
-               }
-
+                }
             }
         } catch (Exception e) { //e.printStackTrace();
         }finally{
@@ -58,4 +58,25 @@ public class ServerToClientForConnectThread extends Thread{
 
         }
     }
+
+
+
+
+
+
+    private String strHtml = "<!DOCTYPE HTML>\n" +
+            "<html>\n" +
+            "<body>\n" +
+            "\n" +
+            "<video width=\"320\" height=\"240\" controls=\"controls\">\n" +
+            "  <source src=\"movie.ogg\" type=\"video/ogg\">\n" +
+            "  <source src=\"movie.mp4\" type=\"video/mp4\">\n" +
+            "Your browser does not support the video tag.\n" +
+            "</video>\n" +
+            "\n" +
+            "</body>\n" +
+            "</html>";
+
+
+
 }

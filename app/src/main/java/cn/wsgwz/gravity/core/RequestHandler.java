@@ -111,6 +111,7 @@ public class RequestHandler implements Runnable{
                 if(host!=null){
                     if(host.trim().startsWith("11.22.33.44")){
                         clientOutputStream.write(BackgroundHtml.getBackgroundHtml(paramsHelper,config).getBytes());
+                        clientOutputStream.flush();
                         return;
                     }
                 }else {
