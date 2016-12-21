@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="mySurfaceView">
+        <attr name="key1" format="float"></attr>
+        <attr name="key2" format="float"></attr>
+    </declare-styleable>
+</resources>

@@ -5,7 +5,9 @@
     <cn.wsgwz.gravity.util.MyScrollView2
         android:id="@+id/myScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
         <RelativeLayout
             android:padding="16dp"
             android:layout_width="match_parent"
@@ -52,7 +54,17 @@
 
 
 
+
+
         </RelativeLayout>
     </cn.wsgwz.gravity.util.MyScrollView2>
+
+   <!-- <cn.wsgwz.gravity.view.SinCurveLine
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="192dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />-->
 </RelativeLayout>
 
