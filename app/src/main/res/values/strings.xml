@@ -3,31 +3,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="exlpain"><Data><![CDATA[
-
-<font color="#21ADD8"><b>1、将应用加入白名单：</b></font>
-<br/>
-<br />
-      &#12288;&#12288;现在很多手机品牌为了省电，提高用户体验，用户新安装的新应用，除了一些知名的App列如qq，都会在待机过程中销毁；
-<br />
-<br />
-<br />
-<font color="#21ADD8"><b>2、关于apn接入点：</b></font>
-<br />
-<br />
-&#12288;&#12288;建议 移动 cmwap  连通 3gwap，列如 移动cmnet 有些地方支持有些地方是不支持的；
-<br />
-<br />
-<br />
-<font color="#21ADD8"><b>3、跳点的问题：</b></font>
-<br />
-<br />
-&#12288;&#12288;就是走流量，使用时多多注意就行；
-<br />
-<br />
-<br />
-]]></Data>
-    </string>
+    <string name="exlpain"></string>
     <array name="spinner_fragment_main">
         <item>默认模式</item>
         <item>自定义</item>

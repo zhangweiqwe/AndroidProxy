@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
-    android:background="@drawable/main_activity_background"
+    android:background="@mipmap/bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="cn.wsgwz.gravity.MainActivity">
@@ -11,7 +11,7 @@
         android:id="@+id/toolbar"
         android:layout_height="?attr/actionBarSize"
         android:layout_width="match_parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dialog.Alert">
     </android.support.v7.widget.Toolbar>
     <RelativeLayout
         android:id="@+id/main_RL"

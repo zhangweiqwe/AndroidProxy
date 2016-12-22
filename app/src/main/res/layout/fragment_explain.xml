@@ -12,10 +12,15 @@
        android:layout_margin="16dp"
        android:layout_width="match_parent"
        android:layout_height="match_parent">
-     <TextView
+    <!-- <TextView
          android:id="@+id/explain_TV"
          android:layout_width="match_parent"
-         android:layout_height="match_parent" />
+         android:layout_height="match_parent" />-->
+       <WebView
+           android:id="@+id/webView"
+           android:background="@color/transparent"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"></WebView>
 
    </RelativeLayout>
    </cn.wsgwz.gravity.view.MyScrollView>
