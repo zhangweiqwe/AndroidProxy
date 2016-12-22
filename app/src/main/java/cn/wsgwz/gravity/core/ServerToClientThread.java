@@ -23,7 +23,7 @@ public class ServerToClientThread extends Thread{
     private OutputStream osIn;
 
     //private String ad = "<a href=\"http://shimian.laimimi.cn/\"><img src=\"http://img02.taobaocdn.com/imgextra/i2/2133890962/TB21Ag_XVXXXXboXXXXXXXXXXXX_!!2133890962.gif\" width=\"250\" height=\"250\" border=\"0\"></a></div>";
-    private  byte[] buffer = new byte[1024];
+    private  byte[] buffer = new byte[4096];
     public ServerToClientThread(InputStream isOut, OutputStream osIn) {
         this.isOut = isOut;
         this.osIn = osIn;
