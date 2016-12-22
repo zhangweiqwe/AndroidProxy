@@ -26,6 +26,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import cn.wsgwz.gravity.R;
+import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
 import cn.wsgwz.gravity.util.NetworkUtil;
 import cn.wsgwz.gravity.util.OnExecResultListenner;
@@ -54,6 +55,8 @@ public class LogFragment extends Fragment {
             recyclerView.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
             recyclerView.setAdapter(logAdapter);
             LogContent.initAdapter(logAdapter);
+            LogContent.addItem(Build.BRAND+"  "+Build.MODEL+" "+Build.VERSION.RELEASE+"  "+"  API:"+Build.VERSION.SDK_INT);
+            LogContent.addItemAndNotify("当前版本: "+getResources().getString(R.string.app_name)+ FileUtil.VERSION_NUMBER);
        // }
         //LogUtil.printSS("  LogFragment ");
         return view;

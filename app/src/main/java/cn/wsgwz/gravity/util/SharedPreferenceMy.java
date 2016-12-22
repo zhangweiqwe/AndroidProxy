@@ -28,6 +28,14 @@ public class SharedPreferenceMy {
     //是否已经启动服务
     public static final String SERVICE_IS_START = "SERVICE_IS_START";
 
+    //保存上一次的流量'
+    public static final String LAST_UID_TXBYTES = "LAST_UID_TXBYTES";
+    public static final String LAST_UID_RXBYTES = "LAST_UID_RXBYTES";
+
+    //保存上一次上一次n的流量和'
+    public static final String LAST_ALL_UID_TXBYTES = "LAST_ALL_UID_TXBYTES";
+    public static final String LAST_ALL_UID_RXBYTES = "LAST_ALL_UID_RXBYTES";
+
 
 
 

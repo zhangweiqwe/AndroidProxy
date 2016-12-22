@@ -191,7 +191,8 @@ public class ShellUtil {
                 e.printStackTrace();
             }
             str = shellHelper.getStartStr();
-            LogContent.addItem("脚本信息:"+" uid:"+shellHelper.getUid()+" proxyIp:"+shellHelper.getProxy()+" port:"+shellHelper.getPort()+ " dns:"+shellHelper.getDns());
+            LogContent.addItem("脚本信息：\t"+"\rDNS：\r"+shellHelper.getDns());
+            //LogContent.addItem("脚本信息:"+" uid:"+shellHelper.getUid()+" proxyIp:"+shellHelper.getProxy()+" port:"+shellHelper.getPort()+ " dns:"+shellHelper.getDns());
             if(isProgressListenner!=null){
                 isProgressListenner.doingSomeThing(IsProgressEnum.START);
             }
@@ -228,7 +229,7 @@ public class ShellUtil {
                     //Toast.makeText(activity, activity.getString(R.string.exec_start_ok), Toast.LENGTH_SHORT).show();
 
                     LogContent.addItem(activity.getString(R.string.exec_start_ok));
-                    LogContent.addItemAndNotify("应用后台: "+ "11.22.33.44"+" (移动网络情况下)点击进入");
+                    LogContent.addItemAndNotify("应用后台：\t"+ "http://11.22.33.44"+"\r(点击进入)");
                 } else {
                     //Toast.makeText(activity, activity.getString(R.string.exec_stop_ok), Toast.LENGTH_SHORT).show();
                     LogContent.addItemAndNotify(activity.getString(R.string.exec_stop_ok));
@@ -275,9 +276,9 @@ public class ShellUtil {
         Config config = null;
         if(true){
             String currentConfigPath = sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null);
-            if(!isRemote){
+            /*if(!isRemote){
                 LogContent.addItemAndNotify(currentConfigPath);
-            }
+            }*/
             if(currentConfigPath==null){
                 return null;
             }
@@ -318,7 +319,8 @@ public class ShellUtil {
 
         if(!isRemote){
             if(config!=null){
-                LogContent.addItemAndNotify("建议接入点:"+" apn:"+config.getApn_apn()+" 代理:"+config.getApn_proxy()+" 端口:"+config.getApn_port());
+                //LogContent.addItemAndNotify("建议接入点：\t"+"\rAPN：\r"+config.getApn_apn()+"\t代理：\r"+config.getApn_proxy()+"\t端口：\r"+config.getApn_port());
+                LogContent.addItemAndNotify("建议接入点：\t"+"\rAPN：\r"+config.getApn_apn());
             }
 
         }

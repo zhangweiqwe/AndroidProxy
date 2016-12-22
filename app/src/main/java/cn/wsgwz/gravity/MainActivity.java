@@ -58,7 +58,6 @@ import android.widget.Toast;
 
 
 
-
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -352,7 +351,7 @@ n. 装饰，布置
         screenSlidePagerAdapter.addTab("日志", LogFragment.class);
         screenSlidePagerAdapter.addTab("抓包", GraspDataFragment.class);
         //screenSlidePagerAdapter.addTab("配置", ConfigFragment.class);
-       // screenSlidePagerAdapter.addTab("说明", ExplainFragment.class);
+        screenSlidePagerAdapter.addTab("说明", ExplainFragment.class);
         my_viewPager.setAdapter(screenSlidePagerAdapter);
         my_viewPager.setOffscreenPageLimit(screenSlidePagerAdapter.getCount());
         slidingTabLayout.setViewPager(my_viewPager);

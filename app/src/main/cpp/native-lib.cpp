@@ -62,6 +62,12 @@ Java_cn_wsgwz_gravity_util_NativeUtils_serverToClient(JNIEnv *env, jclass type,
                                                       jobject remoteSocket, jobject clientSocket) {
     char logStr[] = "ndk----serverToClient";
     __android_log_print(ANDROID_LOG_INFO, LOG_TAG, "%s", logStr);
+    double a1[4] = {1,2,3,4};
+    int len_d = sizeof a1 / sizeof a1[0];
+    for (int i = 0; i < len_d; i++) {
+    }
+    //*（a1-2）找到a1 指向的地方 向前移动两个double元素
+    //*(a1 - 2) = .5;
     // TODO
 
 }

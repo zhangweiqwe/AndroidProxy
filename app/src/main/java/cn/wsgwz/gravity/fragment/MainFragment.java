@@ -13,9 +13,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.icu.text.DecimalFormat;
+import android.net.TrafficStats;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -169,14 +173,63 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         notificationManager.notify(NOTIFY_SERVER_ID,notification);
     }
 
+    private void flowStatistics(){
+        int numM = 1048576;
+        //1.获取一个包管理器。
+        PackageManager pm = getActivity().getPackageManager();
+//2.遍历手机操作系统 获取所有的应用程序的uid
+        ApplicationInfo appcationInfo = null;
+        try {
+            appcationInfo = pm.getApplicationInfo(getActivity().getPackageName(),0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        int uid = appcationInfo.uid;    // 获得软件uid
+        //proc/uid_stat/10086
+        long alltTx = TrafficStats.getUidTxBytes(uid);//发送的 上传的流量byte
+        long allRx = TrafficStats.getUidRxBytes(uid);//下载的流量 byte
+        
+        //方法返回值 -1 代表的是应用程序没有产生流量 或者操作系统不支持流量统计
+        java.text.DecimalFormat decimalFormat = new java.text.DecimalFormat("#.###");
+        //查找是否上一次存在使用记录，则减去上一次使用的流量
+        long lastTx = sharedPreferences.getLong(SharedPreferenceMy.LAST_UID_TXBYTES,0);
+        long lastRx = sharedPreferences.getLong(SharedPreferenceMy.LAST_UID_RXBYTES,0);
+
+        long lastAllTx = sharedPreferences.getLong(SharedPreferenceMy.LAST_ALL_UID_TXBYTES,0);
+        long lastAllRx = sharedPreferences.getLong(SharedPreferenceMy.LAST_ALL_UID_RXBYTES,0);
+
+
+        long thisTx = alltTx-lastAllTx;
+        long thisRx = allRx-lastAllRx;
+
+
+
+        LogContent.addItem("本次\t上传：\r"+decimalFormat.format( (double)thisTx/numM)+"\t下载：\r"+decimalFormat.format((double)thisRx/numM));
+        LogContent.addItem("上次\t上传：\r"+decimalFormat.format((double)lastTx/numM)+"\t下载：\r"+decimalFormat.format((double)lastRx/numM));
+        LogContent.addItemAndNotify("总共\t上传：\r"+decimalFormat.format((double)alltTx/numM)+"\t下载：\r"+decimalFormat.format((double)allRx/numM));
+        //LogUtil.printSS(alltTx+"------"+allRx+"---"+decimalFormat.format(alltTx/1048576f)+"--------"+decimalFormat.format(allRx/1048576f));
+
+        lastTx = thisTx;
+        lastRx = thisRx;
+        lastAllTx+=lastTx;
+        lastAllRx+=lastRx;
+        sharedPreferences.edit().putLong(SharedPreferenceMy.LAST_ALL_UID_TXBYTES,lastAllTx).putLong(SharedPreferenceMy.LAST_ALL_UID_RXBYTES,lastAllRx)
+                .putLong(SharedPreferenceMy.LAST_UID_TXBYTES,lastTx).putLong(SharedPreferenceMy.LAST_UID_RXBYTES,lastRx).commit();
+
+
+
+       // TrafficStats.getMobileTxBytes();//获取手机3g/2g网络上传的总流量
+      //  TrafficStats.getMobileRxBytes();//手机2g/3g下载的总流量
+
+       // TrafficStats.getTotalTxBytes();//手机全部网络接口 包括wifi，3g、2g上传的总流量
+        //TrafficStats.getTotalRxBytes();//手机全部网络接口 包括wifi，3g、2g下载的总流量</applicationinfo>
+    }
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
             if( sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null)!=null){
                 if(b){
                     sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,true).commit();
-                    LogContent.addItem(Build.BRAND+"  "+Build.MODEL+" "+Build.VERSION.RELEASE+"  "+"  API:"+Build.VERSION.SDK_INT);
-                    LogContent.addItemAndNotify("当前版本: "+getResources().getString(R.string.app_name)+FileUtil.VERSION_NUMBER);
                     getActivity().startService(intentServer);
                     fllowServer(true);
                     showNotification();
@@ -184,7 +237,14 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
                     sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,false).commit();
                     getActivity().stopService(intentServer);
                     fllowServer(false);
-                    notificationManager.cancel(NOTIFY_SERVER_ID);
+                    try {
+                        if(notificationManager!=null){
+                            notificationManager.cancel(NOTIFY_SERVER_ID);
+                        }
+                    }catch (Exception e){
+                        LogContent.addItemAndNotify(e.getMessage().toString());
+                    }
+                    flowStatistics();
                 }
             }else {
                 Snackbar.make(service_Switch,getString(R.string.please_select_config), Snackbar.LENGTH_SHORT).show();
