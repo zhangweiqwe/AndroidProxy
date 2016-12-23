@@ -3,6 +3,7 @@ package cn.wsgwz.gravity.fragment.log;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import cn.wsgwz.gravity.R;
+import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
 
 /**
@@ -20,7 +23,12 @@ import cn.wsgwz.gravity.util.LogUtil;
 
 public class LogContent {
 
-    public static final List<String>  ITEMS = new ArrayList<>();
+    public static final List<String>  ITEMS;
+    static {
+        ITEMS = new ArrayList<>();
+        LogContent.addItem(Build.BRAND+"  "+Build.MODEL+" "+Build.VERSION.RELEASE+"  "+"  API:"+Build.VERSION.SDK_INT);
+        LogContent.addItemAndNotify("当前版本：\tGravity"+ FileUtil.VERSION_NUMBER);
+    }
     /*static {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:MM:ss:SSS");
         ITEMS.add(simpleDateFormat.format(new Date())+"  ..."+"");

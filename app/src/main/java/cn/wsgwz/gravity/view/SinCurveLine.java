@@ -83,7 +83,6 @@ public class SinCurveLine extends SurfaceView implements SurfaceHolder.Callback{
         canvas.drawLine(0, centerY, width, centerY, paint);//在屏幕中心绘制x轴
         canvas.drawLine(0, 0, 0, height, paint);//绘制Y轴
 
-
         final Handler handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {

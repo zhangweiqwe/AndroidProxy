@@ -6,10 +6,19 @@
 #define LOG_TAG "sssssssssssssNDK"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
+
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_cn_wsgwz_gravity_util_NativeUtils_testBackground(JNIEnv *env, jclass type) {
+
+    // TODO
+
+}
+
 extern "C"
 JNIEXPORT void JNICALL
 Java_cn_wsgwz_gravity_util_NativeUtils_fork(JNIEnv *env, jclass type) {
-
  //TODO
     int pid = fork();
     FILE *f;

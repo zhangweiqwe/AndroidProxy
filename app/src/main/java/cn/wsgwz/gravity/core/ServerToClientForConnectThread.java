@@ -21,7 +21,7 @@ public class ServerToClientForConnectThread extends Thread{
      */
     private InputStream isOut;
     private OutputStream osIn;
-    private  byte[] buffer = new byte[4096];
+    private  byte[] buffer = new byte[2048];
     public ServerToClientForConnectThread(InputStream isOut, OutputStream osIn) {
         this.isOut = isOut;
         this.osIn = osIn;
@@ -33,11 +33,14 @@ public class ServerToClientForConnectThread extends Thread{
         try {
             int len;
             while ((len = isOut.read(buffer)) != -1) {
-                if (len > 0) {
                     osIn.write(buffer, 0, len);
                     osIn.flush();
-                }
             }
+
+            /*int a=0;
+            while ((a=isOut.read())!=-1){
+                osIn.write(a);
+            }*/
         } catch (Exception e) { //e.printStackTrace();
         }finally{
 

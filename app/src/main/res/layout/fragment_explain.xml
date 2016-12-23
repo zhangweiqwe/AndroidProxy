@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     tools:context="cn.wsgwz.gravity.fragment.ExplainFragment">
 
-   <cn.wsgwz.gravity.view.MyScrollView
+   <cn.wsgwz.gravity.util.MyScrollView2
        android:id="@+id/xScrollView"
        android:layout_width="match_parent"
        android:layout_height="match_parent">
@@ -23,6 +23,6 @@
            android:layout_height="match_parent"></WebView>
 
    </RelativeLayout>
-   </cn.wsgwz.gravity.view.MyScrollView>
+   </cn.wsgwz.gravity.util.MyScrollView2>
 
 </FrameLayout>

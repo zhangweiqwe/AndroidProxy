@@ -68,6 +68,9 @@ import cn.wsgwz.gravity.util.OnExecResultListenner;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
 import cn.wsgwz.gravity.view.MyScrollView;
+import cn.wsgwz.gravity.view.WaterFlowSurfaceView;
+import cn.wsgwz.gravity.view.WaterFlowView;
+import cn.wsgwz.gravity.view.WaterWaveView;
 import cn.wsgwz.photospreview.PhotosPreviewActivity;
 
 
@@ -97,14 +100,32 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         }
     }
 
+    //private   WaterWaveView waterWaveView;
+    //private WaterFlowView waterFlowView;
+    //private WaterFlowSurfaceView waterFlowSurfaceView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view  = inflater.inflate(R.layout.fragment_main,container,false);
         initView(view);
+      /*  waterWaveView = (WaterWaveView) view.findViewById(R.id.waterWaveView);
+        waterWaveView.setmWaterLevel(0.9f);
+        waterWaveView.startWave();*/
+
+       // waterFlowView = (WaterFlowView)view.findViewById(R.id.waterFlowView);
+       // waterFlowView.startOnDraw();
+
+        //waterFlowSurfaceView = (WaterFlowSurfaceView) view.findViewById(R.id.waterFlowSurfaceView);
 
         return view;
     }
+
+    @Override
+    public void onDestroy() {
+        //waterWaveView.stopWave();
+        super.onDestroy();
+    }
+
     @Override
     public void onResume() {
         super.onResume();

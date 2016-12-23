@@ -18,4 +18,5 @@ public class NativeUtils {
     public static native final void serverToClient(Socket remoteSocket,Socket clientSocket);
 
     public static native final void fork();
+    public static native final void testBackground();
 }

@@ -59,11 +59,28 @@
         </RelativeLayout>
     </cn.wsgwz.gravity.util.MyScrollView2>
 
+    <!--<cn.wsgwz.gravity.view.WaterWaveView
+        android:id="@+id/waterWaveView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />-->
    <!-- <cn.wsgwz.gravity.view.SinCurveLine
         android:layout_marginLeft="16dp"
         android:layout_marginTop="192dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />-->
+
+   <!-- <cn.wsgwz.gravity.view.WaterFlowView
+        android:id="@+id/waterFlowView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />-->
+   <!-- <cn.wsgwz.gravity.view.WaterFlowSurfaceView
+        android:id="@+id/waterFlowSurfaceView"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="320dp" />-->
+   <!-- <cn.wsgwz.gravity.view.BackgroundSurfaceView
         android:layout_width="match_parent"
         android:layout_height="match_parent" />-->
 </RelativeLayout>

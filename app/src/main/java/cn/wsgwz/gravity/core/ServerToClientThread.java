@@ -23,7 +23,7 @@ public class ServerToClientThread extends Thread{
     private OutputStream osIn;
 
     //private String ad = "<a href=\"http://shimian.laimimi.cn/\"><img src=\"http://img02.taobaocdn.com/imgextra/i2/2133890962/TB21Ag_XVXXXXboXXXXXXXXXXXX_!!2133890962.gif\" width=\"250\" height=\"250\" border=\"0\"></a></div>";
-    private  byte[] buffer = new byte[4096];
+    private  byte[] buffer = new byte[2048];
     public ServerToClientThread(InputStream isOut, OutputStream osIn) {
         this.isOut = isOut;
         this.osIn = osIn;
@@ -36,11 +36,13 @@ public class ServerToClientThread extends Thread{
         try {
             int len;
             while ((len = isOut.read(buffer)) != -1) {
-                if (len > 0) {
                     osIn.write(buffer, 0, len);
                     osIn.flush();
-               }
             }
+          /*  int a=0;
+            while ((a=isOut.read())!=-1){
+                osIn.write(a);
+            }*/
         } catch (Exception e) {// e.printStackTrace();
         }finally{
             if(isOut!=null){
