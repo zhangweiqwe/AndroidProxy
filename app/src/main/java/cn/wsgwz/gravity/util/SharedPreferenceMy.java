@@ -6,12 +6,15 @@ package cn.wsgwz.gravity.util;
  */
 
 public class SharedPreferenceMy {
+
+    public static final String MAIN_CONFIG = "config";
+    public static final String MAIN = "main";
     //SharedPreferences
     //是否已经初始化
     public static final String IS_INIT_SDCARD = "IS_INIT_SDCARD";
     public static final String IS_INIT_SYSTEM = "IS_INIT_SYSTEM";
 
-    public static final String MAIN_CONFIG = "config";
+
 
 
 

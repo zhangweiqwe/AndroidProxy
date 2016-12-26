@@ -214,7 +214,7 @@ n. 装饰，布置
                 if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
                     initFileToSdcard();
                 }else {
-                    Toast.makeText(this,getString(R.string.init_sdcard_file_request_permisson_error),Toast.LENGTH_SHORT).show();
+                    finish();
                 }
                 break;
         }

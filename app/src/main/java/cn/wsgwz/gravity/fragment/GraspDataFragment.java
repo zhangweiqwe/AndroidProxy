@@ -93,7 +93,12 @@ public class GraspDataFragment extends Fragment implements View.OnClickListener 
         }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         String fileName = simpleDateFormat.format(new Date())+".pcap";
-        File directoryRoot = new File(FileUtil.SD_APTH_PCAP);
+        File directoryRoot;
+        if(!(Build.VERSION.SDK_INT>=23)){
+            directoryRoot = new File(FileUtil.SD_APTH_PCAP_2);
+        }else {
+            directoryRoot = new File(FileUtil.SD_APTH_PCAP_1);
+        }
         if(!directoryRoot.exists()){
             directoryRoot.mkdirs();
         }
@@ -107,14 +112,15 @@ public class GraspDataFragment extends Fragment implements View.OnClickListener 
         }*/
         String str = null;
 
+        String path=null;
         if(!(Build.VERSION.SDK_INT>=23)){
-
-                   str= "mount -o remount,rw /system"+"\n"+
-                            "cd /system/xbin/"+getResources().getString(R.string.app_name)+"\n"+
-                            "./tcpdump -i any -p -s 0 -w "+ FileUtil.SD_APTH_PCAP+"/"+fileName;
+            path=FileUtil.SD_APTH_PCAP_2;
         }else {
-
+            path=FileUtil.SD_APTH_PCAP_1;
         }
+        str= "mount -o remount,rw /system"+"\n"+
+                "cd /system/xbin/"+getResources().getString(R.string.app_name)+"\n"+
+                "./tcpdump -i any -p -s 0 -w "+path+"/"+fileName;
         ShellUtil.execShell(getActivity(), str, new OnExecResultListenner() {
             @Override
             public void onSuccess(StringBuffer sb) {
@@ -275,7 +281,12 @@ public class GraspDataFragment extends Fragment implements View.OnClickListener 
 
     private  List<File> getFiles(){
         List<File> tempList = new ArrayList<>();
-        File directoryTemp = new File(FileUtil.SD_APTH_PCAP);
+        File directoryTemp;
+        if(Build.VERSION.SDK_INT>=23){
+            directoryTemp = new File(FileUtil.SD_APTH_PCAP_2);
+        }else {
+            directoryTemp = new File(FileUtil.SD_APTH_PCAP_1);
+        }
         if(!directoryTemp.exists()){
             return tempList;
         }else {
