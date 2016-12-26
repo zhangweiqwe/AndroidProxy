@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SnapHelper;
@@ -182,9 +183,15 @@ public class ShellUtil {
 
         final ShellHelper shellHelper = ShellHelper.getInstance();
         String str = null;
+        Config config;
         if(state){
             try {
-                configInitShell(shellHelper,getConfig(activity,false),activity);
+                config = getConfig(activity,false);
+                if(config==null){
+                    Toast.makeText(activity,activity.getString(R.string.config_not_fund),Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                configInitShell(shellHelper,config,activity);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (DocumentException e) {
