@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -31,6 +32,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -63,11 +65,11 @@ import cn.wsgwz.gravity.util.UnzipFromAssets;
 import cn.wsgwz.gravity.view.slidingTabLayout.ScreenSlidePagerAdapter;
 import cn.wsgwz.gravity.view.slidingTabLayout.SlidingTabLayout;
 import cn.wsgwz.gravity.view.slidingTabLayout.ViewPager;
-
+import cn.wsgwz.gravity.util.LogUtil;
 import static junit.framework.Assert.assertEquals;
 
 
-public class MainActivity extends AppCompatActivity implements LogFragment.OnListFragmentInteractionListenner,ServiceConnection{
+public class MainActivity extends AppCompatActivity implements LogFragment.OnListFragmentInteractionListenner{
     //选择背景请求值
     public static final  int REQUEST_CODE_SELECT_WALLPAPER = 4;
 
@@ -89,35 +91,9 @@ public class MainActivity extends AppCompatActivity implements LogFragment.OnLis
             Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS
 
     };
-
-    private ProxyService proxyService;
    // private Intent intentServer;
 
 
-    //界面绘制完成
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-
-
-                //Other2.onCreate2();
-        //NativeUtils.fork();
-
-        if(Build.VERSION.SDK_INT >= 21) {
-            Rect frame = new Rect();
-            getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
-            int statusBarHeight = frame.top;
-            int toolbarHeight = toolbar.getHeight();
-            /* RelativeLayout.LayoutParams  params = ((RelativeLayout.LayoutParams)main_RL.getLayoutParams());
-        params.setMargins(0,statusBarHeight+toolbarHeight,0,0);
-        main_RL.setLayoutParams(params);*/
-
-            RelativeLayout.LayoutParams params = ((RelativeLayout.LayoutParams)(toolbar.getLayoutParams()));
-            params.setMargins(0,statusBarHeight,0,0);
-            toolbar.setLayoutParams(params);
-        }
-
-    }
     /*
     feature
  英 ['fiːtʃə]   美 ['fitʃɚ]   全球发音 跟读 口语练习
@@ -135,17 +111,22 @@ decor
 n. 装饰，布置
      */
 
-    @Override
-    public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-       // LogUtil.printSS(iBinder.toString()+"<---   <");
-       // LogUtil.printSS("onServiceConnected");
-    }
 
-    @Override
-    public void onServiceDisconnected(ComponentName componentName) {
-      //  LogUtil.printSS("onServiceDisconnected");
+    private void setMarginDector(){
+        /**
+         * 获取状态栏高度——方法1
+         * */
+        int statusBarHeight1 = -1;
+//获取status_bar_height资源的ID
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            //根据资源ID获取响应的尺寸值
+            statusBarHeight1 = getResources().getDimensionPixelSize(resourceId);
+        }
+        RelativeLayout.LayoutParams params = ((RelativeLayout.LayoutParams)(toolbar.getLayoutParams()));
+            params.setMargins(0,statusBarHeight1,0,0);
+            toolbar.setLayoutParams(params);
     }
-
 
 
     @Override
@@ -163,12 +144,22 @@ n. 装饰，布置
             window.setStatusBarColor(Color.TRANSPARENT);
             window.setNavigationBarColor(Color.TRANSPARENT);
         }
+
+
         setContentView(R.layout.activity_main);
 //        intentServer = new Intent(this, ProxyService.class);
         //bindService(intentServer,this,BIND_AUTO_CREATE);
         initView();
-        setBackground();
-        overridePendingTransition(R.anim.main_start_animation, R.anim.main_exit_animation);
+        setMarginDector();
+        main_RL.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setBackground();
+            }
+        },200);
+        LogUtil.printSS(getCacheDir()+"--------"+getExternalCacheDir());
+
+        //overridePendingTransition(R.anim.main_start_animation, R.anim.main_exit_animation);
 
     }
 
@@ -184,7 +175,6 @@ n. 装饰，布置
     @Override
     protected void onStart() {
         //demoSocket();
-
         super.onStart();
         boolean isInitSdcard = sharedPreferences.getBoolean(SharedPreferenceMy.IS_INIT_SDCARD,false);
         if(!isInitSdcard){
@@ -198,8 +188,6 @@ n. 装饰，布置
                 initFileToSdcard();
             }
         }
-
-
     }
 
 
@@ -315,6 +303,24 @@ n. 装饰，布置
         slidingTabLayout = (SlidingTabLayout)findViewById(R.id.slidingTabLayout);
         my_viewPager = (ViewPager) findViewById(R.id.my_viewPager);
         screenSlidePagerAdapter = new ScreenSlidePagerAdapter(getFragmentManager(),this);
+        addFragment();
+     /*   int uid = 0;
+        try {
+           uid =  (getPackageManager().getApplicationInfo(getPackageName(), 0)).uid;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Spannable spannable = new SpannableString(getString(R.string.app_name)+" uid:"+uid);
+        spannable.setSpan(new AbsoluteSizeSpan(23,true), 0, getString(R.string.app_name).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(new AbsoluteSizeSpan(16,true), getString(R.string.app_name).length(), spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);*/
+
+    }
+
+
+
+
+    private void addFragment(){
         screenSlidePagerAdapter.addTab("控制台", MainFragment.class);
         screenSlidePagerAdapter.addTab("日志", LogFragment.class);
         screenSlidePagerAdapter.addTab("抓包", GraspDataFragment.class);
@@ -323,6 +329,7 @@ n. 装饰，布置
         my_viewPager.setAdapter(screenSlidePagerAdapter);
         my_viewPager.setOffscreenPageLimit(screenSlidePagerAdapter.getCount());
         slidingTabLayout.setViewPager(my_viewPager);
+        my_viewPager.setOffscreenPageLimit(1);
 
         slidingTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -338,28 +345,28 @@ n. 装饰，布置
                 }
                 switch (position){
                     case 0:
-                      //  if(screenSlidePagerAdapter.getItem(position) instanceof MainFragment){
-                            menu.findItem(R.id.about_Appme).setVisible(true);
-                            menu.findItem(R.id.log_clear).setVisible(false);
-                            menu.findItem(R.id.log_share).setVisible(false);
-                      //  }
+                        //  if(screenSlidePagerAdapter.getItem(position) instanceof MainFragment){
+                        menu.findItem(R.id.about_Appme).setVisible(true);
+                        menu.findItem(R.id.log_clear).setVisible(false);
+                        menu.findItem(R.id.log_share).setVisible(false);
+                        //  }
                         break;
                     case 1:
-                            if(!MainFragment.isStartOrStopDoing){
-                                menu.findItem(R.id.about_Appme).setVisible(false);
-                            }
-                            menu.findItem(R.id.log_clear).setVisible(true);
-                            menu.findItem(R.id.log_share).setVisible(true);
-                       // }
+                        if(!MainFragment.isStartOrStopDoing){
+                            menu.findItem(R.id.about_Appme).setVisible(false);
+                        }
+                        menu.findItem(R.id.log_clear).setVisible(true);
+                        menu.findItem(R.id.log_share).setVisible(true);
+                        // }
                         break;
                     case 2:
-                       // if(screenSlidePagerAdapter.getItem(position) instanceof GraspDataFragment){
-                            if(!MainFragment.isStartOrStopDoing){
-                                menu.findItem(R.id.about_Appme).setVisible(false);
-                            }
-                            menu.findItem(R.id.log_clear).setVisible(false);
-                            menu.findItem(R.id.log_share).setVisible(false);
-                       // }
+                        // if(screenSlidePagerAdapter.getItem(position) instanceof GraspDataFragment){
+                        if(!MainFragment.isStartOrStopDoing){
+                            menu.findItem(R.id.about_Appme).setVisible(false);
+                        }
+                        menu.findItem(R.id.log_clear).setVisible(false);
+                        menu.findItem(R.id.log_share).setVisible(false);
+                        // }
                         break;
                 }
             }
@@ -369,17 +376,6 @@ n. 装饰，布置
 
             }
         });
-        int uid = 0;
-        try {
-           uid =  (getPackageManager().getApplicationInfo(getPackageName(), 0)).uid;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        Spannable spannable = new SpannableString(getString(R.string.app_name)+" uid:"+uid);
-        spannable.setSpan(new AbsoluteSizeSpan(23,true), 0, getString(R.string.app_name).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannable.setSpan(new AbsoluteSizeSpan(16,true), getString(R.string.app_name).length(), spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
     }
 
     private void toolbarAnimateMe(boolean isShow){
@@ -509,11 +505,11 @@ n. 装饰，布置
                 }
             }
         }  if(uriPath==null) {
-        /*    try {
+            try {
                 activity_main.setBackground(Drawable.createFromStream(getAssets().open("bg.jpg"),null) );
             } catch (IOException e) {
                 e.printStackTrace();
-            }*/
+            }
         }
 
     }

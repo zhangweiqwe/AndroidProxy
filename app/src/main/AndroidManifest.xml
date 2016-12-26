@@ -34,7 +34,6 @@
             android:theme="@style/AppThemeMianAcivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
 
                 <!--
@@ -69,10 +68,6 @@
         </receiver>
 
         <activity android:name=".activity.ConfigEditActivity" />
-
-        <meta-data
-            android:name="cbb9601a"
-            android:value="e866cfb0" />
 
 
         <activity android:name=".demo.Main2Activity" />

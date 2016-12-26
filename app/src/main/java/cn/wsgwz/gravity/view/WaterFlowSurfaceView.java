@@ -42,7 +42,7 @@ public class WaterFlowSurfaceView extends SurfaceView implements SurfaceHolder.C
                     case 1000:
                         //Log.d("ssssssssss","---->"+x);
                         if(x<getWidth()-86){
-                            x=x+2;
+                            x=x+1;
                         }else {
                             timer.cancel();
                             //timer.cancel();
@@ -121,10 +121,10 @@ public class WaterFlowSurfaceView extends SurfaceView implements SurfaceHolder.C
         canvas.drawText("y",offsetX+distanceAxis,distanceAxis,paint);
 
         //正弦曲线
-        double y = Math.sin(degreeToRad(x));
+        double y = Math.cos(degreeToRad(x));
         paint.setStrokeWidth(5);
         paint.setColor(Color.BLUE);
-        float sinY = centerY+(float)(y*400);
+        float sinY = centerY+(float)(y*20);
         //LogUtil.printSS(y+"<--");
         canvas.drawPoint(x+offsetX,sinY,paint);
     }
