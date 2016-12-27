@@ -100,12 +100,8 @@ public class ShellUtil {
                     localDataOutputStream.writeBytes("exit\n");
                     localDataOutputStream.flush();
                     process.waitFor();
-                    /*BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                    String line = null;
-                    while ((line=br.readLine())!=null){
-                        LogUtil.printSS("--->"+br.readLine()+"<----");
-                    }*/
-                    errorBr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+                   /* errorBr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
                     String line = null;
                     while ((line=errorBr.readLine())!=null){
                         if(line.equals("[-] Unallowed user")){
@@ -115,7 +111,7 @@ public class ShellUtil {
                             handler.sendMessage(msg);
                             return;
                         }
-                    }
+                    }*/
 
                     if (process.exitValue() == 0) {
                         Message msg = new Message();

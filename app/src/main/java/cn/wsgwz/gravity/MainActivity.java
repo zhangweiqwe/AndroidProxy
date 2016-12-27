@@ -183,133 +183,16 @@ n. 装饰，布置
                 if(ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
                     ActivityCompat.requestPermissions(this,REQUEST_WRITE_READ_EXTERNALPERMISSION,REQUEST_WRITE_READ_EXTERNAL_CODE);
                 }else {
-                    initFileToSdcard();
+                    new FirstUseInitHelper(MainActivity.this,sharedPreferences,main_RL).initFileToSdcard();
                 }
             }else {
-                initFileToSdcard();
+                new FirstUseInitHelper(MainActivity.this,sharedPreferences,main_RL).initFileToSdcard();
             }
         }
     }
 
-    private void initSystemFile(){
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
-        builder.setMessage(getString(R.string.start_init_app_util));
-        final Dialog dialog = builder.create();
-        dialog.getWindow().setWindowAnimations(R.style.payDialogStyleAnimation);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
-        dialog.show();
-        String drectoryName = getResources().getString(R.string.app_name);
-        final String str =
-                "mount -o remount ,rw /"+"\n"+
-                        "mkdir /system/xbin/"+drectoryName+"\n"+
-                        "mkdir /system/xbin/Jume"+"\n"+
-                        "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.ABC_FILE_NAME+" "+"/system/xbin/"+drectoryName+"\n"+
-                        "cd /system/xbin/"+drectoryName+"\n"+
-                        "unzip -o "  +FileUtil.ABC_FILE_NAME  +"\n"+
-                        "chmod -R 777  /system/xbin/"+drectoryName+"\n"+
-                        "cd ..\n"+
-                        "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.JUME_FILE_NAME+" "+"/system/xbin/Jume"+"\n"+
-                        "cd /system/xbin/Jume"+"\n"+
-                        "unzip -o "  +FileUtil.JUME_FILE_NAME  +"\n"+
-                        "chmod -R 777  /system/xbin/Jume";
 
 
-                main_RL.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        ShellUtil.execShell(MainActivity.this, str, new OnExecResultListenner() {
-                            @Override
-                            public void onSuccess(StringBuffer sb) {
-                                sharedPreferences.edit().putBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,true).commit();
-                                dialog.dismiss();
-                                Toast.makeText(MainActivity.this,getString(R.string.init_app_util_success),Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onError(StringBuffer sb) {
-                                dialog.dismiss();
-                                Toast.makeText(MainActivity.this,getString(R.string.init_app_util_error),Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                },2000);
-
-
-    }
-
-    private void initFileToSdcard(){
-        try {
-            UnzipFromAssets.unZip( this,  FileUtil.CONFIG_FILE_NAME,  FileUtil.SD_APTH_CONFIG,  true);
-            UnzipFromAssets.toSdcard( this,  FileUtil.ABC_FILE_NAME, FileUtil.SD_APTH_CONFIG,  true);
-            UnzipFromAssets.toSdcard( this,  FileUtil.JUME_FILE_NAME, FileUtil.SD_APTH_CONFIG,  true);
-            sharedPreferences.edit().putBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,true).commit();
-            final Handler handler = new Handler(){
-                @Override
-                public void handleMessage(Message msg) {
-                    super.handleMessage(msg);
-                    switch (msg.what){
-                        case 1000:
-                            initSystemFile();
-                            break;
-                        case 1001:
-                            LogContent.addItemAndNotify(getString(R.string.get_root_permission_error));
-                            break;
-                    }
-                }
-            };
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Process process = null;
-                    DataOutputStream dataOutputStream = null;
-                    BufferedReader errorBr = null;
-                    try {
-                        process = Runtime.getRuntime().exec("su");
-                        dataOutputStream = new DataOutputStream(process.getOutputStream());
-                        dataOutputStream.writeBytes("exit\n");
-                        dataOutputStream.flush();
-                        process.waitFor();
-                    //process.waitFor();
-                        errorBr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-                    String line = null;
-                    while ((line=errorBr.readLine())!=null){
-                        if(line.equals("[-] Unallowed user")){
-                            handler.sendEmptyMessage(1001);
-                            return;
-                        }
-                    }
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } finally {
-                        process.destroy();
-                        if(dataOutputStream!=null){
-                            try {
-                                dataOutputStream.close();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        if(errorBr!=null){
-                            try {
-                                errorBr.close();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-
-                    handler.sendEmptyMessage(1000);
-                }
-            }).start();
-
-        } catch (IOException e) {
-        }
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -317,7 +200,7 @@ n. 装饰，布置
         switch (requestCode){
             case REQUEST_WRITE_READ_EXTERNAL_CODE:
                 if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
-                    initFileToSdcard();
+                    new FirstUseInitHelper(MainActivity.this,sharedPreferences,main_RL).initFileToSdcard();
                 }else {
                     finish();
                 }
