@@ -17,9 +17,13 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
+import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -45,9 +49,14 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 import cn.wsgwz.gravity.activity.ConfigEditActivity;
@@ -133,25 +142,18 @@ n. 装饰，布置
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= 21) {
-            Window window = getWindow();
-            window.requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        Window window = getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.setStatusBarColor(Color.TRANSPARENT);
-            window.setNavigationBarColor(Color.TRANSPARENT);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }else {
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         }
-
-
         setContentView(R.layout.activity_main);
-//        intentServer = new Intent(this, ProxyService.class);
-        //bindService(intentServer,this,BIND_AUTO_CREATE);
         initView();
-        setMarginDector();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            setMarginDector();
+        }
         main_RL.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -174,7 +176,6 @@ n. 装饰，布置
 
     @Override
     protected void onStart() {
-        //demoSocket();
         super.onStart();
         boolean isInitSystem = sharedPreferences.getBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,false);
         if(!isInitSystem){
@@ -192,42 +193,49 @@ n. 装饰，布置
 
     private void initSystemFile(){
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
-        builder.setMessage("初始化App工具");
+        builder.setMessage(getString(R.string.start_init_app_util));
         final Dialog dialog = builder.create();
         dialog.getWindow().setWindowAnimations(R.style.payDialogStyleAnimation);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
         dialog.show();
-
         String drectoryName = getResources().getString(R.string.app_name);
-        String str2 =
-                "mount -o remount,rw /"+"\n"+
-                        "mkdir /system/xbin/Jume"+"\n"+
-                        "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.JUME_FILE_NAME+" "+"system/xbin/Jume"+"\n"+
-                        "cd /system/xbin/Jume"+"\n"+
-                        "unzip -o "  +FileUtil.JUME_FILE_NAME  +"\n"+
-                        "chmod -R 777  /system/xbin/Jume";
-        String str =
-                "mount -o remount,rw /"+"\n"+
+        final String str =
+                "mount -o remount ,rw /"+"\n"+
                         "mkdir /system/xbin/"+drectoryName+"\n"+
                         "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.ABC_FILE_NAME+" "+"system/xbin/"+drectoryName+"\n"+
                         "cd /system/xbin/"+drectoryName+"\n"+
                         "unzip -o "  +FileUtil.ABC_FILE_NAME  +"\n"+
                         "chmod -R 777  /system/xbin/"+drectoryName;
-        ShellUtil.execShell(this, str+"\n"+str2, new OnExecResultListenner() {
-            @Override
-            public void onSuccess(StringBuffer sb) {
-                sharedPreferences.edit().putBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,true).commit();
-                dialog.dismiss();
-                Toast.makeText(MainActivity.this,getString(R.string.init_app_util_success),Toast.LENGTH_SHORT).show();
-            }
+        final String str2 =
+                /*"mount -o remount,rw /"+"\n"+*/
+                        "mkdir /system/xbin/Jume"+"\n"+
+                        "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.JUME_FILE_NAME+" "+"system/xbin/Jume"+"\n"+
+                        "cd /system/xbin/Jume"+"\n"+
+                        "unzip -o "  +FileUtil.JUME_FILE_NAME  +"\n"+
+                        "chmod -R 777  /system/xbin/Jume";
 
+
+        new Timer().schedule(new TimerTask() {
             @Override
-            public void onError(StringBuffer sb) {
-                dialog.dismiss();
-                Toast.makeText(MainActivity.this,getString(R.string.init_app_util_error),Toast.LENGTH_SHORT).show();
+            public void run() {
+                ShellUtil.execShell(MainActivity.this, str+"\n"+str2, new OnExecResultListenner() {
+                    @Override
+                    public void onSuccess(StringBuffer sb) {
+                        sharedPreferences.edit().putBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,true).commit();
+                        dialog.dismiss();
+                        Toast.makeText(MainActivity.this,getString(R.string.init_app_util_success),Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(StringBuffer sb) {
+                        dialog.dismiss();
+                        Toast.makeText(MainActivity.this,getString(R.string.init_app_util_error),Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
-        });
+        },5000);
+
     }
 
     private void initFileToSdcard(){
@@ -236,9 +244,73 @@ n. 装饰，布置
             UnzipFromAssets.toSdcard( this,  FileUtil.ABC_FILE_NAME, FileUtil.SD_APTH_CONFIG,  true);
             UnzipFromAssets.toSdcard( this,  FileUtil.JUME_FILE_NAME, FileUtil.SD_APTH_CONFIG,  true);
             sharedPreferences.edit().putBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,true).commit();
-            initSystemFile();
+
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Looper.prepare();
+                    final Handler handler = new Handler(){
+                        @Override
+                        public void handleMessage(Message msg) {
+                            super.handleMessage(msg);
+                            switch (msg.what){
+                                case 1000:
+                                    initSystemFile();
+                                    break;
+                                case 1001:
+                                    LogContent.addItemAndNotify(getString(R.string.get_root_permission_error));
+                                    break;
+                            }
+                        }
+                    };
+                    Process process = null;
+                    DataOutputStream dataOutputStream = null;
+                    BufferedReader errorBr = null;
+                    try {
+                        process = Runtime.getRuntime().exec("su");
+                        dataOutputStream = new DataOutputStream(process.getOutputStream());
+                        dataOutputStream.writeBytes("exit\n");
+                        dataOutputStream.flush();
+                        process.waitFor();
+                    //process.waitFor();
+                        errorBr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                    String line = null;
+                    while ((line=errorBr.readLine())!=null){
+                        if(line.equals("[-] Unallowed user")){
+                            handler.sendEmptyMessage(1001);
+                            return;
+                        }
+                    }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } finally {
+                        process.destroy();
+                        if(dataOutputStream!=null){
+                            try {
+                                dataOutputStream.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if(errorBr!=null){
+                            try {
+                                errorBr.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    handler.sendEmptyMessage(1000);
+                    Looper.loop();
+                }
+            }).start();
+
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

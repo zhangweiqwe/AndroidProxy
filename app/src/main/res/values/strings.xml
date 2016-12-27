@@ -6,6 +6,7 @@
     <string name="exlpain"></string>
 
 
+    <string name="start_init_app_util">初始化App工具</string>
     <string name="init_app_util_success">初始化App工具成功</string>
     <string name="init_app_util_error">初始化App工具失败</string>
 
@@ -32,8 +33,9 @@
 
     <string name="new_file_name_illegality">文件名不合法!</string>
 
+    <string name="donot_have_root_permission_">没有root权限</string>
+    <string name="get_root_permission_error">获取root权限失败!!!</string>
 
-    <string name="root_permission_error">获取root权限失败!!!</string>
 
     <string name="doing_capture">正在抓包。。</string>
     <string name="already_stop_capture">已停止抓包</string>

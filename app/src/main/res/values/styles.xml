@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="@style/ThemeOverlay.AppCompat.Dark">
@@ -38,6 +38,7 @@
     <style name="AppThemeMianAcivity" parent="Theme.AppCompat">
      <!--   <item name="windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>-->
+        <!--<item name="android:windowFullscreen">true</item>-->
         <item name="android:windowBackground">@color/transparent</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>

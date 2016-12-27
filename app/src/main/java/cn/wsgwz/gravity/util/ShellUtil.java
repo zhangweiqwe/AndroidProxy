@@ -48,128 +48,144 @@ import cn.wsgwz.gravity.service.ProxyService;
 
 public class ShellUtil {
 
-    //是否显示toast
-    private static final boolean showToast = false;
-    public static void execShell(final Context context, final String shellStr,final OnExecResultListenner onExecResultListenner){
-        if(context==null||shellStr==null){
+
+
+    public static final void execShell(final Context context, final String shellStr, final OnExecResultListenner onExecResultListenner) {
+        if (context == null || shellStr == null) {
             return;
         }
-        if(!checkRoot()){
-            Toast.makeText(context,context.getString(R.string.root_permission_error),Toast.LENGTH_SHORT).show();
-            if (onExecResultListenner!=null){
-                onExecResultListenner.onError(new StringBuffer().append(context.getString(R.string.root_permission_error)));
+        if (!isRoot()) {
+            if (onExecResultListenner != null) {
+                onExecResultListenner.onError(new StringBuffer().append(context.getString(R.string.donot_have_root_permission_)));
             }
             return;
         }
 
 
-        final Handler handler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                StringBuffer sb = null;
-                switch (msg.what){
-                    case 1000:
-                        sb= ((StringBuffer)msg.obj);
-                        if (onExecResultListenner!=null){
-                            onExecResultListenner.onSuccess(sb);
-                        }
-                        if(context!=null&&showToast){
-                            Toast.makeText(context,"OK："+sb, Toast.LENGTH_SHORT).show();
-                        }
-
-                        break;
-                    case 1001:
-                        sb = ((StringBuffer)msg.obj);
-                        if (onExecResultListenner!=null){
-                            onExecResultListenner.onError(sb);
-                        }
-                        if(context!=null&&showToast){
-                            Toast.makeText(context,"异常："+sb, Toast.LENGTH_SHORT).show();
-                        }
-
-                        break;
-
-                    case 1004:
-                        LogContent.addItemAndNotify((String)msg.obj);
-                        break;
-                }
-                super.handleMessage(msg);
-            }
-        };
 
         new Thread(new Runnable() {
             @Override
             public void run() {
 
-
-                StringBuffer sb =new StringBuffer();
-                String str1 = "#!/system/bin/sh\n"+shellStr+"\n";
+                Looper.prepare();
+                final Handler handler = new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        StringBuffer sb = null;
+                        switch (msg.what) {
+                            case 1000:
+                                sb = ((StringBuffer) msg.obj);
+                                if (onExecResultListenner != null) {
+                                    onExecResultListenner.onSuccess(sb);
+                                }
+                                break;
+                            case 1001:
+                                sb = ((StringBuffer) msg.obj);
+                                if (onExecResultListenner != null) {
+                                    onExecResultListenner.onError(sb);
+                                }
+                                break;
+                        }
+                        super.handleMessage(msg);
+                    }
+                };
+                StringBuffer sb = new StringBuffer();
+                String str1 = "#!/system/bin/sh\n" + shellStr + "\n";
                 Process process = null;
 
-                InputStream localInputStream =null;
-                DataOutputStream localDataOutputStream =null;
+                DataOutputStream localDataOutputStream = null;
+                BufferedReader errorBr = null;
                 try {
                     process = Runtime.getRuntime().exec("su");
-                    localInputStream = process.getErrorStream();
                     localDataOutputStream = new DataOutputStream(process.getOutputStream());
                     localDataOutputStream.writeUTF(str1);
                     localDataOutputStream.writeBytes("exit\n");
                     localDataOutputStream.flush();
                     process.waitFor();
-                    if (process.exitValue() != 0) {
-                        //LogUtil.printSS("---!=0");
-                    }else {
-                        //LogUtil.printSS("---=0");
+                    /*BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    String line = null;
+                    while ((line=br.readLine())!=null){
+                        LogUtil.printSS("--->"+br.readLine()+"<----");
+                    }*/
+                    errorBr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                    String line = null;
+                    while ((line=errorBr.readLine())!=null){
+                        if(line.equals("[-] Unallowed user")){
+                            Message msg = Message.obtain();
+                            msg.what = 1001;
+                            msg.obj = line;
+                            handler.sendMessage(msg);
+                            return;
+                        }
+                    }
+
+                    if (process.exitValue() == 0) {
+                        Message msg = new Message();
+                        msg.obj = new StringBuffer().append("0");
+                        msg.what = 1000;
+                        handler.sendMessage(msg);
+                    } else {
+                        Message msg = new Message();
+                        msg.obj =  new StringBuffer().append("!0");
+                        msg.what = 1001;
+                        handler.sendMessage(msg);
                     }
 
                 } catch (IOException e) {
                     e.printStackTrace();
                     Message msg = Message.obtain();
-                    msg.what=1004;
-                    msg.obj = e.getMessage().toString();
+                    msg.what = 1001;
+                    msg.obj = new StringBuffer().append(e.getMessage().toString());
                     handler.sendMessage(msg);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     Message msg = Message.obtain();
-                    msg.what=1004;
-                    msg.obj = e.getMessage().toString();
-                    handler.sendMessage(msg);
-                }
-
-
-                if (process.exitValue() == 0) {
-                    Message msg = new Message();
-                    msg.obj = sb;
-                    msg.what =1000;
-                    handler.sendMessage(msg);
-                }else {
-                    Message msg = new Message();
-                    msg.obj = sb;
                     msg.what = 1001;
+                    msg.obj = new StringBuffer().append(e.getMessage().toString()) ;
                     handler.sendMessage(msg);
+                } finally {
+                    process.destroy();
+                    if(localDataOutputStream!=null){
+                        try {
+                            localDataOutputStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if(errorBr!=null){
+                        try {
+                            errorBr.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
 
 
-
-
+                Looper.loop();
 
             }
         }).start();
     }
 
-    private static boolean checkRoot(){
 
-        boolean b = true;
-            try {
-                Runtime.getRuntime().exec("su");
-            }catch (IOException e) {
-                e.printStackTrace();
-                b=false;
-                LogContent.addItemAndNotify(e.getMessage().toString());
+
+    private static final boolean isRoot(){
+        boolean bool = false;
+        try{
+            if ((!new File("/system/bin/su").exists()) && (!new File("/system/xbin/su").exists())){
+                bool = false;
+            } else {
+                bool = true;
             }
-        return b;
+        } catch (Exception e) {
 
+        }
+        return bool;
     }
+
+
+
     private static void configInitShell(ShellHelper shellHelper,Config config,Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(SharedPreferenceMy.MAIN,Context.MODE_PRIVATE);
         String startStr =  shellHelper.getStartStr().replace(shellHelper.getDns(),config.getDns());
