@@ -54,6 +54,7 @@
     <!-- item name="android:windowIsTranslucent"      设置当前Activity是否透明-->
     <!-- item name="android:windowAnimationStyle"     设置当前Activity进出方式-->
     <style name="GraspPreViewTheme" parent="@style/ThemeOverlay.AppCompat.Dark">
+        <item name="android:textColor">#ffffff</item>
        <item name="android:windowActionBar">@null</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>

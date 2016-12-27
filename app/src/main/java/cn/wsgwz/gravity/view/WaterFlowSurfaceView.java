@@ -47,7 +47,6 @@ public class WaterFlowSurfaceView extends SurfaceView implements SurfaceHolder.C
                             timer.cancel();
                             //timer.cancel();
                             timerTask.cancel();
-                            LogUtil.printSS("     timer.cancel(); auto"+getWidth());
                         }
                         canvas = surfaceHolder.lockCanvas();
                         draw();
@@ -65,7 +64,6 @@ public class WaterFlowSurfaceView extends SurfaceView implements SurfaceHolder.C
     private int x=0;
     public WaterFlowSurfaceView(Context context) {
         super(context);
-        LogUtil.printSS("--1");
     }
 
     public WaterFlowSurfaceView(Context context, AttributeSet attrs) {
@@ -73,19 +71,16 @@ public class WaterFlowSurfaceView extends SurfaceView implements SurfaceHolder.C
         surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
         surfaceHolder.setFormat(PixelFormat.TRANSPARENT);
-        LogUtil.printSS("--2");
     }
 
     public WaterFlowSurfaceView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        LogUtil.printSS("--3");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public WaterFlowSurfaceView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        LogUtil.printSS("--4");
     }
 
 
@@ -132,7 +127,6 @@ public class WaterFlowSurfaceView extends SurfaceView implements SurfaceHolder.C
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        LogUtil.printSS("onDraw");
     }
 
     @Override
@@ -141,17 +135,14 @@ public class WaterFlowSurfaceView extends SurfaceView implements SurfaceHolder.C
        // WaterFlowSurfaceView.this.setZOrderOnTop(true);//设置画布  背景透明
 
         startOnDraw();
-        LogUtil.printSS("surfaceCreated");
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-        LogUtil.printSS(" surfaceChanged");
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-        LogUtil.printSS("  surfaceDestroyed");
         if(timer!=null){
             timer.cancel();
         }

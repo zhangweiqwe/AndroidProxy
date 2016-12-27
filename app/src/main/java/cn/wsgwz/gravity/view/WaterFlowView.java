@@ -55,7 +55,6 @@ public class WaterFlowView extends View {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        LogUtil.printSS("onDetachedFromWindow()");
     }
 
     public void startOnDraw(){
@@ -68,14 +67,12 @@ public class WaterFlowView extends View {
                     handler.sendEmptyMessage(1000);
                 }else {
                     timer.cancel();
-                    LogUtil.printSS("     timer.cancel(); ");
                 }
             }
         },200,200);
     }
     private double degreeToRad(double degree){
         if(x==1){
-            LogUtil.printSS(Math.PI+"--");
         }
         return degree * (Math.PI/180);
     }
@@ -105,14 +102,12 @@ public class WaterFlowView extends View {
         paint.setStrokeWidth(5);
         paint.setColor(Color.BLUE);
         float sinY = centerY+(float)(y*10);
-        LogUtil.printSS(sinY+"----");
         canvas.drawPoint(x,sinY,paint);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        LogUtil.printSS("  onFinishInflate()");
     }
 
     @Override

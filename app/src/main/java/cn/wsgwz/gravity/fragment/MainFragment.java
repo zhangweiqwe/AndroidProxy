@@ -308,7 +308,6 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         }
     }
 
-
     @Override
     public void doingSomeThing(final IsProgressEnum isProgressEnum) {
         isStartOrStopDoing = true;

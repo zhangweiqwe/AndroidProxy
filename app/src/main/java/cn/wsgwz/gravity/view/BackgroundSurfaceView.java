@@ -43,7 +43,6 @@ public class BackgroundSurfaceView extends SurfaceView implements SurfaceHolder.
                             timer.cancel();
                             //timer.cancel();
                             timerTask.cancel();
-                            LogUtil.printSS("     timer.cancel(); auto"+getWidth());
                         }
                         canvas = surfaceHolder.lockCanvas();
                         draw();
@@ -61,7 +60,6 @@ public class BackgroundSurfaceView extends SurfaceView implements SurfaceHolder.
     private int x=0;
     public BackgroundSurfaceView(Context context) {
         super(context);
-        LogUtil.printSS("--1");
     }
 
     public BackgroundSurfaceView(Context context, AttributeSet attrs) {
@@ -69,19 +67,16 @@ public class BackgroundSurfaceView extends SurfaceView implements SurfaceHolder.
         surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
         surfaceHolder.setFormat(PixelFormat.TRANSPARENT);
-        LogUtil.printSS("--2");
     }
 
     public BackgroundSurfaceView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        LogUtil.printSS("--3");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public BackgroundSurfaceView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        LogUtil.printSS("--4");
     }
 
 
@@ -128,7 +123,6 @@ public class BackgroundSurfaceView extends SurfaceView implements SurfaceHolder.
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        LogUtil.printSS("onDraw");
     }
     public static final int DIM = 1024;
     public static final int DM1 = 1024;
@@ -167,7 +161,6 @@ public class BackgroundSurfaceView extends SurfaceView implements SurfaceHolder.
         color[2] = (int)BL(i,j)&255;
 
 
-        LogUtil.printSS(color[0]+"---"+color[1]+"------"+color[2]);
     }
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
@@ -178,17 +171,14 @@ public class BackgroundSurfaceView extends SurfaceView implements SurfaceHolder.
         } catch (IOException e) {
             e.printStackTrace();
         }
-        LogUtil.printSS("surfaceCreated");
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-        LogUtil.printSS(" surfaceChanged");
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-        LogUtil.printSS("  surfaceDestroyed");
         if(timer!=null){
             timer.cancel();
         }

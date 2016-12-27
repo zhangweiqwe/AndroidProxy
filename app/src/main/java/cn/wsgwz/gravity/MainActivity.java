@@ -203,38 +203,38 @@ n. 装饰，布置
         final String str =
                 "mount -o remount ,rw /"+"\n"+
                         "mkdir /system/xbin/"+drectoryName+"\n"+
-                        "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.ABC_FILE_NAME+" "+"system/xbin/"+drectoryName+"\n"+
+                        "mkdir /system/xbin/Jume"+"\n"+
+                        "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.ABC_FILE_NAME+" "+"/system/xbin/"+drectoryName+"\n"+
                         "cd /system/xbin/"+drectoryName+"\n"+
                         "unzip -o "  +FileUtil.ABC_FILE_NAME  +"\n"+
-                        "chmod -R 777  /system/xbin/"+drectoryName;
-        final String str2 =
-                /*"mount -o remount,rw /"+"\n"+*/
-                        "mkdir /system/xbin/Jume"+"\n"+
-                        "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.JUME_FILE_NAME+" "+"system/xbin/Jume"+"\n"+
+                        "chmod -R 777  /system/xbin/"+drectoryName+"\n"+
+                        "cd ..\n"+
+                        "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.JUME_FILE_NAME+" "+"/system/xbin/Jume"+"\n"+
                         "cd /system/xbin/Jume"+"\n"+
                         "unzip -o "  +FileUtil.JUME_FILE_NAME  +"\n"+
                         "chmod -R 777  /system/xbin/Jume";
 
 
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                ShellUtil.execShell(MainActivity.this, str+"\n"+str2, new OnExecResultListenner() {
+                main_RL.postDelayed(new Runnable() {
                     @Override
-                    public void onSuccess(StringBuffer sb) {
-                        sharedPreferences.edit().putBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,true).commit();
-                        dialog.dismiss();
-                        Toast.makeText(MainActivity.this,getString(R.string.init_app_util_success),Toast.LENGTH_SHORT).show();
-                    }
+                    public void run() {
+                        ShellUtil.execShell(MainActivity.this, str, new OnExecResultListenner() {
+                            @Override
+                            public void onSuccess(StringBuffer sb) {
+                                sharedPreferences.edit().putBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,true).commit();
+                                dialog.dismiss();
+                                Toast.makeText(MainActivity.this,getString(R.string.init_app_util_success),Toast.LENGTH_SHORT).show();
+                            }
 
-                    @Override
-                    public void onError(StringBuffer sb) {
-                        dialog.dismiss();
-                        Toast.makeText(MainActivity.this,getString(R.string.init_app_util_error),Toast.LENGTH_SHORT).show();
+                            @Override
+                            public void onError(StringBuffer sb) {
+                                dialog.dismiss();
+                                Toast.makeText(MainActivity.this,getString(R.string.init_app_util_error),Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
-                });
-            }
-        },5000);
+                },2000);
+
 
     }
 
@@ -244,26 +244,24 @@ n. 装饰，布置
             UnzipFromAssets.toSdcard( this,  FileUtil.ABC_FILE_NAME, FileUtil.SD_APTH_CONFIG,  true);
             UnzipFromAssets.toSdcard( this,  FileUtil.JUME_FILE_NAME, FileUtil.SD_APTH_CONFIG,  true);
             sharedPreferences.edit().putBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,true).commit();
-
+            final Handler handler = new Handler(){
+                @Override
+                public void handleMessage(Message msg) {
+                    super.handleMessage(msg);
+                    switch (msg.what){
+                        case 1000:
+                            initSystemFile();
+                            break;
+                        case 1001:
+                            LogContent.addItemAndNotify(getString(R.string.get_root_permission_error));
+                            break;
+                    }
+                }
+            };
 
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    Looper.prepare();
-                    final Handler handler = new Handler(){
-                        @Override
-                        public void handleMessage(Message msg) {
-                            super.handleMessage(msg);
-                            switch (msg.what){
-                                case 1000:
-                                    initSystemFile();
-                                    break;
-                                case 1001:
-                                    LogContent.addItemAndNotify(getString(R.string.get_root_permission_error));
-                                    break;
-                            }
-                        }
-                    };
                     Process process = null;
                     DataOutputStream dataOutputStream = null;
                     BufferedReader errorBr = null;
@@ -306,7 +304,6 @@ n. 装饰，布置
                     }
 
                     handler.sendEmptyMessage(1000);
-                    Looper.loop();
                 }
             }).start();
 

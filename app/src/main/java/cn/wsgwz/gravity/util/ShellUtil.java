@@ -60,35 +60,33 @@ public class ShellUtil {
             }
             return;
         }
-
+        final Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                StringBuffer sb = null;
+                switch (msg.what) {
+                    case 1000:
+                        sb = ((StringBuffer) msg.obj);
+                        if (onExecResultListenner != null) {
+                            onExecResultListenner.onSuccess(sb);
+                        }
+                        break;
+                    case 1001:
+                        sb = ((StringBuffer) msg.obj);
+                        if (onExecResultListenner != null) {
+                            onExecResultListenner.onError(sb);
+                        }
+                        break;
+                }
+                super.handleMessage(msg);
+            }
+        };
 
 
         new Thread(new Runnable() {
             @Override
             public void run() {
 
-                Looper.prepare();
-                final Handler handler = new Handler() {
-                    @Override
-                    public void handleMessage(Message msg) {
-                        StringBuffer sb = null;
-                        switch (msg.what) {
-                            case 1000:
-                                sb = ((StringBuffer) msg.obj);
-                                if (onExecResultListenner != null) {
-                                    onExecResultListenner.onSuccess(sb);
-                                }
-                                break;
-                            case 1001:
-                                sb = ((StringBuffer) msg.obj);
-                                if (onExecResultListenner != null) {
-                                    onExecResultListenner.onError(sb);
-                                }
-                                break;
-                        }
-                        super.handleMessage(msg);
-                    }
-                };
                 StringBuffer sb = new StringBuffer();
                 String str1 = "#!/system/bin/sh\n" + shellStr + "\n";
                 Process process = null;
@@ -161,8 +159,6 @@ public class ShellUtil {
                     }
                 }
 
-
-                Looper.loop();
 
             }
         }).start();

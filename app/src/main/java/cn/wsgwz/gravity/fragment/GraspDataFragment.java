@@ -111,7 +111,8 @@ public class GraspDataFragment extends Fragment implements View.OnClickListener 
             path=FileUtil.SD_APTH_PCAP;
         str= "mount -o remount,rw /system"+"\n"+
                 "cd /system/xbin/"+getResources().getString(R.string.app_name)+"\n"+
-                "./tcpdump -i any -p -s 0 -w "+path+"/"+fileName;
+                "./tcpdump -i any -p -s 0 -w "+path+"/"+fileName+"\n"+
+        "chmod 777 "+path+"/"+fileName;
         ShellUtil.execShell(getActivity(), str, new OnExecResultListenner() {
             @Override
             public void onSuccess(StringBuffer sb) {
