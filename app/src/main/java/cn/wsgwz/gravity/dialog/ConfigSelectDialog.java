@@ -90,7 +90,7 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
 
     private void initView(){
         intentServer = new Intent(getContext(), ProxyService.class);
-        sharedPreferences  = getContext().getSharedPreferences(SharedPreferenceMy.MAIN_CONFIG,Context.MODE_PRIVATE);
+        sharedPreferences  = getContext().getSharedPreferences(SharedPreferenceMy.CONFIG,Context.MODE_PRIVATE);
         hint_TV = (TextView)findViewById(R.id.hint_TV);
         currentConfig_TV = (TextView) findViewById(R.id.currentConfig_TV);
         currentConfig_TV.setText(sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,"(当前未选择模式)"));

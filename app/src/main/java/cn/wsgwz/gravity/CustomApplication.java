@@ -29,7 +29,7 @@ public class CustomApplication extends Application {
         super.onCreate();
         if(getCurProcessName(this).equals("cn.wsgwz.gravity")){
             ShellHelper.init(this);
-            SharedPreferences sharedPreferences = getSharedPreferences(SharedPreferenceMy.MAIN_CONFIG, Context.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getSharedPreferences(SharedPreferenceMy.CONFIG, Context.MODE_PRIVATE);
             sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,false).commit();
         }
     }

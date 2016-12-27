@@ -44,8 +44,7 @@ public class FileUtil {
 
    // public static final String SD_APTH_CONFIG = "/data/data/cn.wsgwz.gravity/cache"+"/"+"gravity"+"/config";
    // public static final String SD_APTH_PCAP = "/data/data/cn.wsgwz.gravity/cache"+"/"+"gravity"+"/pcap";
-    public static final String SD_APTH_PCAP_1 = CACHE_DIR+"/"+"Gravity"+"/pcap";
-    public static final String SD_APTH_PCAP_2 = Environment.getExternalStorageDirectory()+"/"+"Gravity"+"/pcap";
+    public static final String SD_APTH_PCAP = CACHE_DIR+"/"+"Gravity"+"/pcap";
     public static  final String CONFIG_FILE_NAME = "config.zip";
     public static  final String ABC_FILE_NAME = "abc.zip";
     public static  final String JUME_FILE_NAME = "Jume.zip";

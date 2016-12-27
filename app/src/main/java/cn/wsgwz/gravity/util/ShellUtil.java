@@ -171,9 +171,9 @@ public class ShellUtil {
 
     }
     private static void configInitShell(ShellHelper shellHelper,Config config,Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences("main",Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SharedPreferenceMy.MAIN,Context.MODE_PRIVATE);
         String startStr =  shellHelper.getStartStr().replace(shellHelper.getDns(),config.getDns());
-        sharedPreferences.edit().putString("start.sh",startStr).commit();
+        sharedPreferences.edit().putString(SharedPreferenceMy.START_SH,startStr).commit();
         shellHelper.setStartStr(startStr);
     }
     //public static boolean isStartOrStopDoing;
@@ -279,7 +279,7 @@ public class ShellUtil {
     }
 
     public static final Config getConfig(Context context,boolean isRemote) throws IOException, DocumentException {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(SharedPreferenceMy.MAIN_CONFIG,Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SharedPreferenceMy.CONFIG,Context.MODE_PRIVATE);
         Config config = null;
         if(true){
             String currentConfigPath = sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null);

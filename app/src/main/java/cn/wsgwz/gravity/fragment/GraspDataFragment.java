@@ -57,7 +57,6 @@ public class GraspDataFragment extends Fragment implements View.OnClickListener 
     private GraspDataAdapter adapter;
     private List<File> list;
 
-    private SharedPreferences sharedPreferences;
       /*  String str = "cd /system/xbin/gravity\n"+
             "./tcpdump -i any -p -s 0 -w "+ FileUtil.SD_APTH+"/"+fileName;*/
  /* String str = "busybox pkill -SIGINT tcpdump";*/
@@ -94,11 +93,7 @@ public class GraspDataFragment extends Fragment implements View.OnClickListener 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         String fileName = simpleDateFormat.format(new Date())+".pcap";
         File directoryRoot;
-        if(!(Build.VERSION.SDK_INT>=23)){
-            directoryRoot = new File(FileUtil.SD_APTH_PCAP_2);
-        }else {
-            directoryRoot = new File(FileUtil.SD_APTH_PCAP_1);
-        }
+            directoryRoot = new File(FileUtil.SD_APTH_PCAP);
         if(!directoryRoot.exists()){
             directoryRoot.mkdirs();
         }
@@ -112,12 +107,8 @@ public class GraspDataFragment extends Fragment implements View.OnClickListener 
         }*/
         String str = null;
 
-        String path=null;
-        if(!(Build.VERSION.SDK_INT>=23)){
-            path=FileUtil.SD_APTH_PCAP_2;
-        }else {
-            path=FileUtil.SD_APTH_PCAP_1;
-        }
+        String path;
+            path=FileUtil.SD_APTH_PCAP;
         str= "mount -o remount,rw /system"+"\n"+
                 "cd /system/xbin/"+getResources().getString(R.string.app_name)+"\n"+
                 "./tcpdump -i any -p -s 0 -w "+path+"/"+fileName;
@@ -136,50 +127,13 @@ public class GraspDataFragment extends Fragment implements View.OnClickListener 
         });
     }
 
-    private void initSystemFile(){
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
-        builder.setMessage("初始化抓包工具");
-        final Dialog dialog = builder.create();
-        dialog.getWindow().setWindowAnimations(R.style.payDialogStyleAnimation);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
-        dialog.show();
 
-        String drectoryName = getResources().getString(R.string.app_name);
-        String str =
-                "mount -o remount,rw /"+"\n"+
-                        "mkdir /system/xbin/"+drectoryName+"\n"+
-                        "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.ABC_FILE_NAME+" "+"system/xbin/"+drectoryName+"\n"+
-                        "cd /system/xbin/"+drectoryName+"\n"+
-                        "unzip -o "  +FileUtil.ABC_FILE_NAME  +"\n"+
-                        "chmod -R 777  /system/xbin/"+drectoryName;
-        ShellUtil.execShell(getActivity(), str, new OnExecResultListenner() {
-            @Override
-            public void onSuccess(StringBuffer sb) {
-                sharedPreferences.edit().putBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,true).commit();
-                dialog.dismiss();
-                Toast.makeText(getActivity(),getString(R.string.grash_data_ok),Toast.LENGTH_SHORT).show();
-
-             //   LogUtil.printSS(sb.toString());
-            }
-
-            @Override
-            public void onError(StringBuffer sb) {
-                dialog.dismiss();
-                Toast.makeText(getActivity(),getString(R.string.grash_data_error),Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
     @Override
     public void onClick(View v) {
-        boolean isInitSdcard =  sharedPreferences.getBoolean(SharedPreferenceMy.IS_INIT_SDCARD,false);
-        boolean isInitSystem = sharedPreferences.getBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,false);
-
         //LogUtil.printSS("       -----isInitSdcard"+isInitSdcard+"            isInitSystem"+isInitSystem);
         switch (v.getId()){
             case R.id.start_graspData:
-                if(isInitSdcard){
-                    if(isInitSystem){
+
                         if(!isCaptureDoing){
                             Intent intentMain = new Intent(Intent.ACTION_MAIN);
                             intentMain.addCategory(Intent.CATEGORY_HOME);
@@ -189,17 +143,6 @@ public class GraspDataFragment extends Fragment implements View.OnClickListener 
                         }else {
                             stopCapture();
                         }
-
-
-                    }else {
-                        initSystemFile();
-                    }
-
-
-                }else {
-                    Toast.makeText(getActivity(),getString(R.string.init_sdcard_hint),Toast.LENGTH_SHORT).show();
-                }
-                break;
 
         }
     }
@@ -261,10 +204,10 @@ public class GraspDataFragment extends Fragment implements View.OnClickListener 
     }
 
     private void initView(View view){
-        sharedPreferences = getActivity().getSharedPreferences(SharedPreferenceMy.MAIN_CONFIG, Context.MODE_PRIVATE);
         start_graspData = (Button) view.findViewById(R.id.start_graspData);
        // stop_graspData = (Button) view.findViewById(R.id.stop_graspData);
         start_graspData.setOnClickListener(this);
+        if(isCaptureDoing){start_graspData.setText("停止抓包");}
        // stop_graspData.setOnClickListener(this);
 
         list_view  = (ListView) view.findViewById(R.id.list_view);
@@ -282,11 +225,8 @@ public class GraspDataFragment extends Fragment implements View.OnClickListener 
     private  List<File> getFiles(){
         List<File> tempList = new ArrayList<>();
         File directoryTemp;
-        if(Build.VERSION.SDK_INT>=23){
-            directoryTemp = new File(FileUtil.SD_APTH_PCAP_2);
-        }else {
-            directoryTemp = new File(FileUtil.SD_APTH_PCAP_1);
-        }
+            directoryTemp = new File(FileUtil.SD_APTH_PCAP);
+
         if(!directoryTemp.exists()){
             return tempList;
         }else {

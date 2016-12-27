@@ -59,6 +59,7 @@ import cn.wsgwz.gravity.fragment.log.LogContent;
 import cn.wsgwz.gravity.fragment.log.LogFragment;
 import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.FileUtil;
+import cn.wsgwz.gravity.util.OnExecResultListenner;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
 import cn.wsgwz.gravity.util.UnzipFromAssets;
@@ -157,7 +158,6 @@ n. 装饰，布置
                 setBackground();
             }
         },200);
-        LogUtil.printSS(getCacheDir()+"--------"+getExternalCacheDir());
 
         //overridePendingTransition(R.anim.main_start_animation, R.anim.main_exit_animation);
 
@@ -176,8 +176,8 @@ n. 装饰，布置
     protected void onStart() {
         //demoSocket();
         super.onStart();
-        boolean isInitSdcard = sharedPreferences.getBoolean(SharedPreferenceMy.IS_INIT_SDCARD,false);
-        if(!isInitSdcard){
+        boolean isInitSystem = sharedPreferences.getBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,false);
+        if(!isInitSystem){
             if(Build.VERSION.SDK_INT>=23){
                 if(ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
                     ActivityCompat.requestPermissions(this,REQUEST_WRITE_READ_EXTERNALPERMISSION,REQUEST_WRITE_READ_EXTERNAL_CODE);
@@ -190,17 +190,53 @@ n. 装饰，布置
         }
     }
 
+    private void initSystemFile(){
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
+        builder.setMessage("初始化App工具");
+        final Dialog dialog = builder.create();
+        dialog.getWindow().setWindowAnimations(R.style.payDialogStyleAnimation);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
 
+        String drectoryName = getResources().getString(R.string.app_name);
+        String str2 =
+                "mount -o remount,rw /"+"\n"+
+                        "mkdir /system/xbin/Jume"+"\n"+
+                        "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.JUME_FILE_NAME+" "+"system/xbin/Jume"+"\n"+
+                        "cd /system/xbin/Jume"+"\n"+
+                        "unzip -o "  +FileUtil.JUME_FILE_NAME  +"\n"+
+                        "chmod -R 777  /system/xbin/Jume";
+        String str =
+                "mount -o remount,rw /"+"\n"+
+                        "mkdir /system/xbin/"+drectoryName+"\n"+
+                        "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.ABC_FILE_NAME+" "+"system/xbin/"+drectoryName+"\n"+
+                        "cd /system/xbin/"+drectoryName+"\n"+
+                        "unzip -o "  +FileUtil.ABC_FILE_NAME  +"\n"+
+                        "chmod -R 777  /system/xbin/"+drectoryName;
+        ShellUtil.execShell(this, str+"\n"+str2, new OnExecResultListenner() {
+            @Override
+            public void onSuccess(StringBuffer sb) {
+                sharedPreferences.edit().putBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,true).commit();
+                dialog.dismiss();
+                Toast.makeText(MainActivity.this,getString(R.string.init_app_util_success),Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(StringBuffer sb) {
+                dialog.dismiss();
+                Toast.makeText(MainActivity.this,getString(R.string.init_app_util_error),Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private void initFileToSdcard(){
         try {
             UnzipFromAssets.unZip( this,  FileUtil.CONFIG_FILE_NAME,  FileUtil.SD_APTH_CONFIG,  true);
             UnzipFromAssets.toSdcard( this,  FileUtil.ABC_FILE_NAME, FileUtil.SD_APTH_CONFIG,  true);
             UnzipFromAssets.toSdcard( this,  FileUtil.JUME_FILE_NAME, FileUtil.SD_APTH_CONFIG,  true);
-            sharedPreferences.edit().putBoolean(SharedPreferenceMy.IS_INIT_SDCARD,true).commit();
-
-            initJume();
-            Toast.makeText(this,getString(R.string.init_sdcard_file_ok),Toast.LENGTH_SHORT).show();
+            sharedPreferences.edit().putBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,true).commit();
+            initSystemFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -271,20 +307,10 @@ n. 装饰，布置
                         aboutDialogShow();
                         break;
                     case R.id.wallpaper:
-                        boolean isInitSdcard = sharedPreferences.getBoolean(SharedPreferenceMy.IS_INIT_SDCARD,false);
-                        if(isInitSdcard){
                             selectWallpaper();
-                        }else {
-                            Toast.makeText(MainActivity.this,getString(R.string.init_sdcard_hint),Toast.LENGTH_SHORT).show();
-                        }
                         break;
                     case R.id.create_config:
-                        boolean isInitSdcard2 = sharedPreferences.getBoolean(SharedPreferenceMy.IS_INIT_SDCARD,false);
-                        if(isInitSdcard2){
                             createConfig();
-                        }else {
-                            Toast.makeText(MainActivity.this,getString(R.string.init_sdcard_hint),Toast.LENGTH_SHORT).show();
-                        }
                         break;
                     case R.id.log_clear:
                         LogContent.clear(MainActivity.this);
@@ -297,7 +323,7 @@ n. 装饰，布置
                 return false;
             }
         });
-        sharedPreferences = getSharedPreferences(SharedPreferenceMy.MAIN_CONFIG,MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(SharedPreferenceMy.CONFIG,MODE_PRIVATE);
         main_RL = (RelativeLayout) findViewById(R.id.main_RL);
         activity_main = (RelativeLayout) findViewById(R.id.activity_main);
         slidingTabLayout = (SlidingTabLayout)findViewById(R.id.slidingTabLayout);
@@ -493,7 +519,7 @@ n. 装饰，布置
         super.onActivityResult(requestCode, resultCode, data);
     }
     private void setBackground(){
-        boolean isInitSdcard = sharedPreferences.getBoolean(SharedPreferenceMy.IS_INIT_SDCARD,false);
+        boolean isInitSdcard = sharedPreferences.getBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,false);
          String uriPath = sharedPreferences.getString(SharedPreferenceMy.WALLPAPER_PATH,null);
         if(isInitSdcard){
             if(uriPath!=null){
@@ -514,16 +540,6 @@ n. 装饰，布置
 
     }
 
-    private void initJume(){
-        String str =
-                "mount -o remount,rw /"+"\n"+
-                        "mkdir /system/xbin/Jume"+"\n"+
-                        "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.JUME_FILE_NAME+" "+"system/xbin/Jume"+"\n"+
-                        "cd /system/xbin/Jume"+"\n"+
-                        "unzip -o "  +FileUtil.JUME_FILE_NAME  +"\n"+
-                        "chmod -R 777  /system/xbin/Jume";
-        ShellUtil.execShell(this, str, null);
-    }
 
     //创建新配置文件
     private void createConfig(){

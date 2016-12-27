@@ -136,7 +136,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
     }
 
     private void initView(final View view){
-        sharedPreferences = getActivity().getSharedPreferences(SharedPreferenceMy.MAIN_CONFIG, Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences(SharedPreferenceMy.CONFIG, Context.MODE_PRIVATE);
 
 
         detector = new GestureDetector(getActivity(),this);
@@ -288,8 +288,6 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.select_Bn:
-                boolean isInitSdcard = sharedPreferences.getBoolean(SharedPreferenceMy.IS_INIT_SDCARD,false);
-                if(isInitSdcard){
                     final ConfigSelectDialog configSelectDialog = new ConfigSelectDialog(getActivity());
                     configSelectDialog.setOnServerStateChangeListenner(new ConfigSelectDialog.OnServerStateChangeListenner() {
                         @Override
@@ -305,9 +303,6 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
                         }
                     });
                     configSelectDialog.show();
-                }else {
-                    Toast.makeText(getActivity(),getString(R.string.init_sdcard_hint),Toast.LENGTH_SHORT).show();
-                }
                 break;
 
         }
