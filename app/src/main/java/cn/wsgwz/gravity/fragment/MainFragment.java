@@ -26,6 +26,7 @@ import android.os.IBinder;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -44,6 +45,9 @@ import android.widget.Toast;
 
 import com.example.pull.refreshview.XListView;
 import com.example.pull.refreshview.XScrollView;
+import com.qq.e.ads.banner.ADSize;
+import com.qq.e.ads.banner.AbstractBannerADListener;
+import com.qq.e.ads.banner.BannerView;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -60,6 +64,7 @@ import cn.wsgwz.gravity.dialog.ConfigSelectDialog;
 import cn.wsgwz.gravity.fragment.log.LogContent;
 import cn.wsgwz.gravity.helper.ShellHelper;
 import cn.wsgwz.gravity.service.ProxyService;
+import cn.wsgwz.gravity.util.$InterfaceTest;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
 import cn.wsgwz.gravity.util.MyScrollView2;
@@ -92,22 +97,28 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
     private Intent intentServer;
     private NotificationManager notificationManager;
 
+    @$InterfaceTest("MainFragment")
+    private String ar;
+    @$InterfaceTest(getTestBoolean = true)
+    private boolean b;
     private void fllowServer(boolean isStart){
-
         boolean isExecShell = sharedPreferences.getBoolean(SharedPreferenceMy.SHELL_IS_FLLOW_MENU, true);
         if(isExecShell){
             ShellUtil.maybeExecShell(isStart,(MainActivity) getActivity());
         }
+
     }
 
     //private   WaterWaveView waterWaveView;
     //private WaterFlowView waterFlowView;
     //private WaterFlowSurfaceView waterFlowSurfaceView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view  = inflater.inflate(R.layout.fragment_main,container,false);
         initView(view);
+        //LogUtil.printSS(ar+b);
       /*  waterWaveView = (WaterWaveView) view.findViewById(R.id.waterWaveView);
         waterWaveView.setmWaterLevel(0.9f);
         waterWaveView.startWave();*/
@@ -136,6 +147,35 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
     }
 
     private void initView(final View view){
+
+
+        ViewGroup bannerContainer = (ViewGroup) view.findViewById(R.id.bannerContainer);
+
+        // appId : 在 http://e.qq.com/dev/ 能看到的app唯一字符串
+        // posId : 在 http://e.qq.com/dev/ 生成的数字串，并非 appid 或者 appkey
+        BannerView banner = new BannerView(getActivity(), ADSize.BANNER, "1104624414", "6080206366159087");
+        //设置广告轮播时间，为0或30~120之间的数字，单位为s,0标识不自动轮播
+        banner.setRefresh(30);
+        banner.setADListener(new AbstractBannerADListener() {
+
+            @Override
+            public void onNoAD(int arg0) {
+                Log.i("AD_DEMO", "BannerNoAD，eCode=" + arg0);
+            }
+
+            @Override
+            public void onADReceiv() {
+                Log.i("AD_DEMO", "ONBannerReceive");
+            }
+        });
+        bannerContainer.addView(banner);
+        /* 发起广告请求，收到广告数据后会展示数据   */
+        banner.loadAD();
+
+
+
+
+
         sharedPreferences = getActivity().getSharedPreferences(SharedPreferenceMy.CONFIG, Context.MODE_PRIVATE);
 
 
