@@ -149,7 +149,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
     private void initView(final View view){
 
 
-        ViewGroup bannerContainer = (ViewGroup) view.findViewById(R.id.bannerContainer);
+    /*    ViewGroup bannerContainer = (ViewGroup) view.findViewById(R.id.bannerContainer);
 
         // appId : 在 http://e.qq.com/dev/ 能看到的app唯一字符串
         // posId : 在 http://e.qq.com/dev/ 生成的数字串，并非 appid 或者 appkey
@@ -169,8 +169,8 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
             }
         });
         bannerContainer.addView(banner);
-        /* 发起广告请求，收到广告数据后会展示数据   */
-        banner.loadAD();
+        *//* 发起广告请求，收到广告数据后会展示数据   *//*
+        banner.loadAD();*/
 
 
 
