@@ -95,7 +95,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
 
     public static boolean isStartOrStopDoing;
     private Intent intentServer;
-    private NotificationManager notificationManager;
+    private  NotificationManager notificationManager;
 
     @$InterfaceTest("MainFragment")
     private String ar;

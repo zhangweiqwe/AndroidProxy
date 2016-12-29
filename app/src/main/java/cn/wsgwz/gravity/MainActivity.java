@@ -6,11 +6,15 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.content.ComponentName;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PermissionInfo;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -28,6 +32,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -61,11 +66,13 @@ import java.util.TimerTask;
 
 import cn.wsgwz.gravity.activity.ConfigEditActivity;
 import cn.wsgwz.gravity.activity.DefinedShellActivity;
+import cn.wsgwz.gravity.core.ParamsHelper;
 import cn.wsgwz.gravity.fragment.GraspDataFragment;
 import cn.wsgwz.gravity.fragment.MainFragment;
 import cn.wsgwz.gravity.fragment.ExplainFragment;
 import cn.wsgwz.gravity.fragment.log.LogContent;
 import cn.wsgwz.gravity.fragment.log.LogFragment;
+import cn.wsgwz.gravity.helper.PermissionHelper;
 import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.OnExecResultListenner;
@@ -84,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements LogFragment.OnLis
     public static final  int REQUEST_CODE_SELECT_WALLPAPER = 4;
 
 
-    private  Toolbar toolbar;
+    private Toolbar toolbar;
     private RelativeLayout main_RL;
     private RelativeLayout activity_main;
     private SlidingTabLayout slidingTabLayout;
@@ -122,21 +129,6 @@ n. 装饰，布置
      */
 
 
-    private void setMarginDector(){
-        /**
-         * 获取状态栏高度——方法1
-         * */
-        int statusBarHeight1 = -1;
-//获取status_bar_height资源的ID
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            //根据资源ID获取响应的尺寸值
-            statusBarHeight1 = getResources().getDimensionPixelSize(resourceId);
-        }
-        RelativeLayout.LayoutParams params = ((RelativeLayout.LayoutParams)(toolbar.getLayoutParams()));
-            params.setMargins(0,statusBarHeight1,0,0);
-            toolbar.setLayoutParams(params);
-    }
 
 
     @Override
@@ -152,7 +144,7 @@ n. 装饰，布置
         setContentView(R.layout.activity_main);
         initView();
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            setMarginDector();
+            setStatusBarHeight();
         }
         main_RL.postDelayed(new Runnable() {
             @Override
@@ -181,7 +173,9 @@ n. 装饰，布置
         if(!isInitSystem){
             if(Build.VERSION.SDK_INT>=23){
                 if(ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(this,REQUEST_WRITE_READ_EXTERNALPERMISSION,REQUEST_WRITE_READ_EXTERNAL_CODE);
+                    new PermissionHelper(MainActivity.this).requestPermissionsForMainActiivty();
+                    new FirstUseInitHelper(MainActivity.this,sharedPreferences,main_RL).initFileToSdcard();
+                    //ActivityCompat.requestPermissions(this,REQUEST_WRITE_READ_EXTERNALPERMISSION,REQUEST_WRITE_READ_EXTERNAL_CODE);
                 }else {
                     new FirstUseInitHelper(MainActivity.this,sharedPreferences,main_RL).initFileToSdcard();
                 }
@@ -229,6 +223,7 @@ n. 装饰，布置
 
     private void initView(){
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         //toolbar.setLogo(R.mipmap.diqiu);//设置app logo
         toolbar.setTitle(getResources().getString(R.string.app_name));
         setSupportActionBar(toolbar);
@@ -307,6 +302,8 @@ n. 装饰，布置
         my_viewPager.setAdapter(screenSlidePagerAdapter);
         my_viewPager.setOffscreenPageLimit(screenSlidePagerAdapter.getCount());
         slidingTabLayout.setViewPager(my_viewPager);
+       // TabLayout tabLayout = null;
+        //tabLayout.setupWithViewPager(my_viewPager);
         my_viewPager.setOffscreenPageLimit(1);
 
         slidingTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -566,6 +563,37 @@ n. 装饰，布置
             }
         }
     }
+    private void setStatusBarHeight(){
+     /*   *
+         * 获取状态栏高度——方法1
+         **/
+        int statusBarHeight1 = -1;
+//获取status_bar_height资源的ID
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            //根据资源ID获取响应的尺寸值
+            statusBarHeight1 = getResources().getDimensionPixelSize(resourceId);
+        }
+        RelativeLayout.LayoutParams params = ((RelativeLayout.LayoutParams)(toolbar.getLayoutParams()));
+            params.setMargins(0,statusBarHeight1,0,0);
+            toolbar.setLayoutParams(params);
+
+     /*   int statusBarHeight=0;
+        try {
+            Class<?> clazz = Class.forName("com.android.internal.R$dimen");
+            Object object = clazz.newInstance();
+            int height = Integer.parseInt(clazz.getField("status_bar_height")
+                    .get(object).toString());
+            statusBarHeight = getResources().getDimensionPixelSize(height);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        RelativeLayout.LayoutParams params = ((RelativeLayout.LayoutParams)(toolbar.getLayoutParams()));
+        params.setMargins(0,statusBarHeight,0,0);
+        LogUtil.printSS(" sta"+statusBarHeight);
+        toolbar.setLayoutParams(params);*/
+    }
+
 
 
     public ScreenSlidePagerAdapter getScreenSlidePagerAdapter() {

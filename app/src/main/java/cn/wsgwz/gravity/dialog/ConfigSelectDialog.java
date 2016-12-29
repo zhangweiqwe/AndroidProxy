@@ -215,7 +215,9 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                             return false;
                         }
                     });
-                    Collections.addAll(list,files);
+                    if(files!=null){
+                        Collections.addAll(list,files);
+                    }
                 }
 
                 File file1 = new File(FileUtil.APP_APTH_CONFIG);
@@ -229,7 +231,9 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                             return false;
                         }
                     });
-                    Collections.addAll(list,files);
+                    if(files!=null){
+                        Collections.addAll(list,files);
+                    }
                 }
 
 
