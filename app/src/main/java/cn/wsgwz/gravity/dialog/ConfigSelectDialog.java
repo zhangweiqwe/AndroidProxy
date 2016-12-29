@@ -218,7 +218,7 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                     Collections.addAll(list,files);
                 }
 
-                File file1 = new File(FileUtil.SD_APTH_CONFIG);
+                File file1 = new File(FileUtil.APP_APTH_CONFIG);
                 if(file1.exists()){
                    File[] files= file1.listFiles(new FilenameFilter() {
                         @Override

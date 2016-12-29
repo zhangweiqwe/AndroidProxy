@@ -495,7 +495,7 @@ n. 装饰，布置
 
     //创建新配置文件
     private void createConfig(){
-        final File file = new File(FileUtil.SD_APTH_CONFIG);
+        final File file = new File(FileUtil.APP_APTH_CONFIG);
         if(!file.exists()){
             file.mkdirs();
         }

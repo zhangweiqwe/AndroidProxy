@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -19,6 +20,7 @@ import cn.wsgwz.gravity.util.OnExecResultListenner;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
 import cn.wsgwz.gravity.util.UnzipFromAssets;
+import cn.wsgwz.gravity.util.ZipUtils;
 
 /**
  * Created by Jeremy Wang on 2016/12/27.
@@ -37,9 +39,22 @@ public class FirstUseInitHelper {
 
     public void initFileToSdcard(){
         try {
-            UnzipFromAssets.unZip( mainActivity,  FileUtil.CONFIG_FILE_NAME,  FileUtil.SD_APTH_CONFIG,  true);
-            UnzipFromAssets.toSdcard( mainActivity,  FileUtil.ABC_FILE_NAME, FileUtil.SD_APTH_CONFIG,  true);
-            UnzipFromAssets.toSdcard( mainActivity,  FileUtil.JUME_FILE_NAME, FileUtil.SD_APTH_CONFIG,  true);
+            UnzipFromAssets.unZip( mainActivity,  FileUtil.CONFIG_FILE_NAME,  FileUtil.APP_APTH_CONFIG,  true);
+            //UnzipFromAssets.unZip( mainActivity,  "xunlei.zip", FileUtil.APP_APTH_CONFIG+"/xunlei",  true);
+           // UnzipFromAssets.unZip( mainActivity,  "xunlei.zip", "/sdcard/Gravity/xunlei",  true);
+           // UnzipFromAssets.unZip( mainActivity,  "dc.zip", FileUtil.APP_APTH_CONFIG+"/dc",  true);
+            UnzipFromAssets.unZip( mainActivity,  FileUtil.ABC_FILE_NAME, FileUtil.APP_APTH_CONFIG+"/Gravity",  true);
+            UnzipFromAssets.unZip( mainActivity,  FileUtil.JUME_FILE_NAME, FileUtil.APP_APTH_CONFIG+"/Jume",  true);
+           /* try {
+                ZipUtils.upZipFile(new File("file:///android_asset/abc.zip"),FileUtil.SD_APTH);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                ZipUtils.upZipFile(new File("file:///android_asset/Jume.zip"),FileUtil.SD_APTH);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }*/
             sharedPreferences.edit().putBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,true).commit();
             final Handler handler = new Handler(){
                 @Override
@@ -99,7 +114,6 @@ public class FirstUseInitHelper {
                             }
                         }
                     }
-
                     handler.sendEmptyMessage(1000);
                 }
             }).start();
@@ -116,7 +130,7 @@ public class FirstUseInitHelper {
         dialog.setCancelable(false);
         dialog.show();
         String drectoryName = mainActivity.getResources().getString(R.string.app_name);
-        final String str =
+        /*final String str =
                 "mount -o remount ,rw /"+"\n"+
                         "mkdir /system/xbin/"+drectoryName+"\n"+
                         "mkdir /system/xbin/Jume"+"\n"+
@@ -128,6 +142,16 @@ public class FirstUseInitHelper {
                         "cp "+FileUtil.SD_APTH_CONFIG+"/"+FileUtil.JUME_FILE_NAME+" "+"/system/xbin/Jume"+"\n"+
                         "cd /system/xbin/Jume"+"\n"+
                         "unzip -o "  +FileUtil.JUME_FILE_NAME  +"\n"+
+                        "chmod -R 777  /system/xbin/Jume";*/
+        final String str =
+                "mount -o remount ,rw /"+"\n"+
+                        "cp -r "+ FileUtil.APP_APTH_CONFIG+"/Gravity"+" "+"/system/xbin/"+drectoryName+"\n"+
+                        "cd /system/xbin/"+drectoryName+"\n"+
+                        //"unzip -o "  +FileUtil.ABC_FILE_NAME  +"\n"+
+                        "chmod -R 777  /system/xbin/"+drectoryName+"\n"+
+                        "cd ..\n"+
+                        "cp -r "+ FileUtil.APP_APTH_CONFIG+"/Jume"+" "+"/system/xbin/Jume"+"\n"+
+                        "cd /system/xbin/Jume"+"\n"+
                         "chmod -R 777  /system/xbin/Jume";
 
 
