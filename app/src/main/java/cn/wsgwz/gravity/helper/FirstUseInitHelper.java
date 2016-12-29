@@ -1,4 +1,4 @@
-package cn.wsgwz.gravity;
+package cn.wsgwz.gravity.helper;
 
 import android.app.Dialog;
 import android.content.SharedPreferences;
@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import cn.wsgwz.gravity.MainActivity;
+import cn.wsgwz.gravity.R;
 import cn.wsgwz.gravity.fragment.log.LogContent;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.OnExecResultListenner;
@@ -173,7 +175,7 @@ public class FirstUseInitHelper {
                    }
                });
            }
-       },20000);
+       },2000);
 
     }
 
