@@ -81,7 +81,7 @@ import cn.wsgwz.photospreview.PhotosPreviewActivity;
 
 public class MainFragment extends Fragment implements View.OnClickListener,ShellUtil.IsProgressListenner,GestureDetector.OnGestureListener{
 
-    public static final int NOTIFY_SERVER_ID = 123564;
+
 
     private GestureDetector detector;
     private MyScrollView2 myScrollView;
@@ -95,7 +95,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
 
     public static boolean isStartOrStopDoing;
     private Intent intentServer;
-    private  NotificationManager notificationManager;
+
 
 
     @$InterfaceTest("MainFragment")
@@ -218,21 +218,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         ShellUtil.setIsProgressListenner(this);
 
     }
-    private void showNotification(){
-        Notification.Builder builder = new Notification.Builder(getActivity());
-        builder.setSmallIcon(R.mipmap.diqiu);
-        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.diqiu));
-        Intent intentMain = new Intent(getActivity(), MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(),0,intentMain,PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
-        builder.setContentTitle(getResources().getString(R.string.app_name));
-        builder.setContentText(getResources().getString(R.string.app_name)+" "+FileUtil.VERSION_NUMBER+" "+"运行中");
-        builder.setTicker(getResources().getString(R.string.app_name)+"  "+FileUtil.VERSION_NUMBER+"已运行");
-        builder.setOngoing(true);
-        Notification  notification = builder.build();
-        notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(NOTIFY_SERVER_ID,notification);
-    }
+
 
     private void flowStatistics(){
         int numM = 1048576;
@@ -293,18 +279,10 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
                     sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,true).commit();
                     getActivity().startService(intentServer);
                     fllowServer(true);
-                    showNotification();
                 } else {
                     sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,false).commit();
                     getActivity().stopService(intentServer);
                     fllowServer(false);
-                    try {
-                        if(notificationManager!=null){
-                            notificationManager.cancel(NOTIFY_SERVER_ID);
-                        }
-                    }catch (Exception e){
-                        LogContent.addItemAndNotify(e.getMessage().toString());
-                    }
                     flowStatistics();
                 }
             }else {
