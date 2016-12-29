@@ -1,7 +1,7 @@
 package cn.wsgwz.gravity.fragment.log;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +26,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import cn.wsgwz.gravity.R;
+import cn.wsgwz.gravity.fragment.MainFragment;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
 import cn.wsgwz.gravity.util.NetworkUtil;
@@ -38,11 +39,10 @@ public class LogFragment extends Fragment {
     private MyRecyclerView recyclerView;
     private LogAdapter logAdapter;
     private OnListFragmentInteractionListenner mListenner;
-
-
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_log, container, false);
        // if(view instanceof MyRecyclerView){
@@ -55,8 +55,7 @@ public class LogFragment extends Fragment {
             recyclerView.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
             recyclerView.setAdapter(logAdapter);
             LogContent.initAdapter(logAdapter);
-       // }
-        //LogUtil.printSS("  LogFragment ");
+        //LogUtil.printSS( "          LogFragment");
         return view;
     }
 

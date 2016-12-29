@@ -2,7 +2,7 @@ package cn.wsgwz.gravity.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -60,7 +60,6 @@ public class GraspDataFragment extends Fragment implements View.OnClickListener 
       /*  String str = "cd /system/xbin/gravity\n"+
             "./tcpdump -i any -p -s 0 -w "+ FileUtil.SD_APTH+"/"+fileName;*/
  /* String str = "busybox pkill -SIGINT tcpdump";*/
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

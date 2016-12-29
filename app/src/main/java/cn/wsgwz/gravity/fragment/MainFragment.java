@@ -3,7 +3,6 @@ package cn.wsgwz.gravity.fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -24,6 +23,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -97,6 +97,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
     private Intent intentServer;
     private  NotificationManager notificationManager;
 
+
     @$InterfaceTest("MainFragment")
     private String ar;
     @$InterfaceTest(getTestBoolean = true)
@@ -118,6 +119,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
                              Bundle savedInstanceState) {
         View view  = inflater.inflate(R.layout.fragment_main,container,false);
         initView(view);
+        //LogUtil.printSS( "          MainFragment");
         //LogUtil.printSS(ar+b);
       /*  waterWaveView = (WaterWaveView) view.findViewById(R.id.waterWaveView);
         waterWaveView.setmWaterLevel(0.9f);
@@ -140,8 +142,6 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
     @Override
     public void onResume() {
         super.onResume();
-
-
         boolean serviceIsStart =  sharedPreferences.getBoolean(SharedPreferenceMy.SERVICE_IS_START,false);
         service_Switch.setChecked(serviceIsStart);
     }

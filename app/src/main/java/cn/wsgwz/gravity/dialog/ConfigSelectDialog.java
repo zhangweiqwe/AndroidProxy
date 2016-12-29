@@ -39,6 +39,7 @@ import cn.wsgwz.gravity.MainActivity;
 import cn.wsgwz.gravity.R;
 import cn.wsgwz.gravity.activity.ConfigEditActivity;
 import cn.wsgwz.gravity.adapter.ConfigSelectAdapter;
+import cn.wsgwz.gravity.adapter.MyFragmentPagerAdapter;
 import cn.wsgwz.gravity.config.EnumAssetsConfig;
 import cn.wsgwz.gravity.config.EnumMyConfig;
 import cn.wsgwz.gravity.fragment.MainFragment;
@@ -157,9 +158,9 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                 if(context!=null){
                     if(context instanceof MainActivity){
                         MainActivity mainActivity = (MainActivity)context;
-                        cn.wsgwz.gravity.view.slidingTabLayout.ViewPager viewPager =  mainActivity.getMy_viewPager();
-                        ScreenSlidePagerAdapter screenSlidePagerAdapter = mainActivity.getScreenSlidePagerAdapter();
-                        android.app.Fragment fragment =  screenSlidePagerAdapter.getItem(viewPager.getCurrentItem());
+                        ViewPager viewPager =  mainActivity.getMy_viewPager();
+                       MyFragmentPagerAdapter myFragmentPagerAdapter = mainActivity.getFragmentPagerAdapter();
+                       Fragment fragment =  myFragmentPagerAdapter.getItem(viewPager.getCurrentItem());
                         if(fragment instanceof MainFragment){
                             if(onServerStateChangeListenner!=null){
                                 onServerStateChangeListenner.onChange(true);

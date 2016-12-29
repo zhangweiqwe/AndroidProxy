@@ -2,7 +2,7 @@ package cn.wsgwz.gravity.fragment;
 
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +15,7 @@ import com.example.pull.refreshview.XListView;
 import com.example.pull.refreshview.XScrollView;
 
 import cn.wsgwz.gravity.R;
+import cn.wsgwz.gravity.util.LogUtil;
 
 public class ExplainFragment extends Fragment {
     private WebView webView;
@@ -27,6 +28,7 @@ public class ExplainFragment extends Fragment {
         webView.setWebViewClient(new WebViewClient());
         webView.loadUrl("file:///android_asset/explain.html");
         webView.setBackgroundColor(0);
+        //LogUtil.printSS("  ExplainFragment ");
         //webView.getBackground().setAlpha(0);
         return view;
     }

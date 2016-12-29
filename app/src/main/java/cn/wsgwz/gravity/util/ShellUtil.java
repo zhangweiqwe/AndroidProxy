@@ -234,7 +234,7 @@ public class ShellUtil {
                     isProgressListenner.finallyThat();
                 }
 
-                if(!(activity.getScreenSlidePagerAdapter().getItem(activity.getMy_viewPager().getCurrentItem()) instanceof MainFragment)){
+                if(!(activity.getFragmentPagerAdapter().getItem(activity.getMy_viewPager().getCurrentItem()) instanceof MainFragment)){
                     menu.findItem(R.id.about_Appme).setVisible(false).setActionView(null);
                 }else {
                     menu.findItem(R.id.about_Appme).setVisible(true).setActionView(null);
@@ -258,7 +258,7 @@ public class ShellUtil {
                 if(isProgressListenner!=null){
                     isProgressListenner.finallyThat();
                 }
-                if(!(activity.getScreenSlidePagerAdapter().getItem(activity.getMy_viewPager().getCurrentItem()) instanceof MainFragment)){
+                if(!(activity.getFragmentPagerAdapter().getItem(activity.getMy_viewPager().getCurrentItem()) instanceof MainFragment)){
                     menu.findItem(R.id.about_Appme).setVisible(false).setActionView(null);
                 }else {
                     menu.findItem(R.id.about_Appme).setVisible(true).setActionView(null);

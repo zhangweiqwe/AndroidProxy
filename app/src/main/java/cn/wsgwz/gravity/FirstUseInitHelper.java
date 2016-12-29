@@ -5,8 +5,11 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.TabLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import org.apache.http.conn.scheme.HostNameResolver;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -29,12 +32,9 @@ import cn.wsgwz.gravity.util.ZipUtils;
 public class FirstUseInitHelper {
     private MainActivity mainActivity;
     private SharedPreferences sharedPreferences;
-    private RelativeLayout main_RL;
-
-    public FirstUseInitHelper(MainActivity mainActivity, SharedPreferences sharedPreferences, RelativeLayout main_RL) {
+    public FirstUseInitHelper(MainActivity mainActivity, SharedPreferences sharedPreferences) {
         this.mainActivity = mainActivity;
         this.sharedPreferences = sharedPreferences;
-        this.main_RL = main_RL;
     }
 
     public void initFileToSdcard(){
@@ -155,26 +155,25 @@ public class FirstUseInitHelper {
                         "chmod -R 777  /system/xbin/Jume";
 
 
-        main_RL.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ShellUtil.execShell(mainActivity, str, new OnExecResultListenner() {
-                    @Override
-                    public void onSuccess(StringBuffer sb) {
-                        sharedPreferences.edit().putBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,true).commit();
-                        dialog.dismiss();
-                        Toast.makeText(mainActivity,mainActivity.getString(R.string.init_app_util_success),Toast.LENGTH_SHORT).show();
-                    }
+       new Handler().postDelayed(new Runnable() {
+           @Override
+           public void run() {
+               ShellUtil.execShell(mainActivity, str, new OnExecResultListenner() {
+                   @Override
+                   public void onSuccess(StringBuffer sb) {
+                       sharedPreferences.edit().putBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,true).commit();
+                       dialog.dismiss();
+                       Toast.makeText(mainActivity,mainActivity.getString(R.string.init_app_util_success),Toast.LENGTH_SHORT).show();
+                   }
 
-                    @Override
-                    public void onError(StringBuffer sb) {
-                        dialog.dismiss();
-                        Toast.makeText(mainActivity,mainActivity.getString(R.string.init_app_util_error),Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        },2000);
-
+                   @Override
+                   public void onError(StringBuffer sb) {
+                       dialog.dismiss();
+                       Toast.makeText(mainActivity,mainActivity.getString(R.string.init_app_util_error),Toast.LENGTH_SHORT).show();
+                   }
+               });
+           }
+       },20000);
 
     }
 

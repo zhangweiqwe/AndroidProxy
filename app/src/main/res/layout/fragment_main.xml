@@ -1,23 +1,22 @@
-<RelativeLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <FrameLayout
-        android:id="@+id/bannerContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"></FrameLayout>
-    <cn.wsgwz.gravity.util.MyScrollView2
+<cn.wsgwz.gravity.util.MyScrollView2
+    xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/myScrollView"
-        android:layout_below="@+id/bannerContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
-        <RelativeLayout
-            android:padding="16dp"
+       >
+        <LinearLayout
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            <FrameLayout
+                android:id="@+id/bannerContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                ></FrameLayout>
             <LinearLayout
                 android:id="@+id/other_ll_00"
                 android:background="@drawable/main_fragment_switch_bn_parent_background"
@@ -60,34 +59,7 @@
 
 
 
-
-
-        </RelativeLayout>
+        </LinearLayout>
     </cn.wsgwz.gravity.util.MyScrollView2>
 
-    <!--<cn.wsgwz.gravity.view.WaterWaveView
-        android:id="@+id/waterWaveView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />-->
-   <!-- <cn.wsgwz.gravity.view.SinCurveLine
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="192dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />-->
-
-   <!-- <cn.wsgwz.gravity.view.WaterFlowView
-        android:id="@+id/waterFlowView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />-->
-   <!-- <cn.wsgwz.gravity.view.WaterFlowSurfaceView
-        android:id="@+id/waterFlowSurfaceView"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="320dp" />-->
-    <!--<cn.wsgwz.gravity.view.BackgroundSurfaceView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />-->
-</RelativeLayout>
 

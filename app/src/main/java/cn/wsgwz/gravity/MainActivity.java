@@ -28,6 +28,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -35,6 +36,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
@@ -46,10 +48,12 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -66,6 +70,7 @@ import java.util.TimerTask;
 
 import cn.wsgwz.gravity.activity.ConfigEditActivity;
 import cn.wsgwz.gravity.activity.DefinedShellActivity;
+import cn.wsgwz.gravity.adapter.MyFragmentPagerAdapter;
 import cn.wsgwz.gravity.core.ParamsHelper;
 import cn.wsgwz.gravity.fragment.GraspDataFragment;
 import cn.wsgwz.gravity.fragment.MainFragment;
@@ -81,7 +86,6 @@ import cn.wsgwz.gravity.util.ShellUtil;
 import cn.wsgwz.gravity.util.UnzipFromAssets;
 import cn.wsgwz.gravity.view.slidingTabLayout.ScreenSlidePagerAdapter;
 import cn.wsgwz.gravity.view.slidingTabLayout.SlidingTabLayout;
-import cn.wsgwz.gravity.view.slidingTabLayout.ViewPager;
 import cn.wsgwz.gravity.util.LogUtil;
 import static junit.framework.Assert.assertEquals;
 
@@ -92,11 +96,10 @@ public class MainActivity extends AppCompatActivity implements LogFragment.OnLis
 
 
     private Toolbar toolbar;
-    private RelativeLayout main_RL;
-    private RelativeLayout activity_main;
-    private SlidingTabLayout slidingTabLayout;
-    private  ViewPager my_viewPager;
-    private   ScreenSlidePagerAdapter screenSlidePagerAdapter;
+    private TabLayout tabLayout;
+    private ViewPager my_viewPager_V4;
+   // private   ScreenSlidePagerAdapter screenSlidePagerAdapter;
+    private MyFragmentPagerAdapter fragmentPagerAdapter;
 
 
 
@@ -146,12 +149,7 @@ n. 装饰，布置
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             setStatusBarHeight();
         }
-        main_RL.postDelayed(new Runnable() {
-            @Override
-            public void run() {
                 setBackground();
-            }
-        },200);
 
         //overridePendingTransition(R.anim.main_start_animation, R.anim.main_exit_animation);
 
@@ -174,13 +172,13 @@ n. 装饰，布置
             if(Build.VERSION.SDK_INT>=23){
                 if(ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
                     new PermissionHelper(MainActivity.this).requestPermissionsForMainActiivty();
-                    new FirstUseInitHelper(MainActivity.this,sharedPreferences,main_RL).initFileToSdcard();
+                    new FirstUseInitHelper(MainActivity.this,sharedPreferences).initFileToSdcard();
                     //ActivityCompat.requestPermissions(this,REQUEST_WRITE_READ_EXTERNALPERMISSION,REQUEST_WRITE_READ_EXTERNAL_CODE);
                 }else {
-                    new FirstUseInitHelper(MainActivity.this,sharedPreferences,main_RL).initFileToSdcard();
+                    new FirstUseInitHelper(MainActivity.this,sharedPreferences).initFileToSdcard();
                 }
             }else {
-                new FirstUseInitHelper(MainActivity.this,sharedPreferences,main_RL).initFileToSdcard();
+                new FirstUseInitHelper(MainActivity.this,sharedPreferences).initFileToSdcard();
             }
         }
     }
@@ -194,7 +192,7 @@ n. 装饰，布置
         switch (requestCode){
             case REQUEST_WRITE_READ_EXTERNAL_CODE:
                 if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
-                    new FirstUseInitHelper(MainActivity.this,sharedPreferences,main_RL).initFileToSdcard();
+                    new FirstUseInitHelper(MainActivity.this,sharedPreferences).initFileToSdcard();
                 }else {
                     finish();
                 }
@@ -207,7 +205,7 @@ n. 装饰，布置
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu,menu);
         if(menu!=null){
-            if(screenSlidePagerAdapter.getItem(0) instanceof MainFragment){
+            if(fragmentPagerAdapter.getItem(0) instanceof MainFragment){
                 menu.findItem(R.id.about_Appme).setVisible(true);
                 menu.findItem(R.id.log_clear).setVisible(false);
                 menu.findItem(R.id.log_share).setVisible(false);
@@ -271,11 +269,9 @@ n. 装饰，布置
             }
         });
         sharedPreferences = getSharedPreferences(SharedPreferenceMy.CONFIG,MODE_PRIVATE);
-        main_RL = (RelativeLayout) findViewById(R.id.main_RL);
-        activity_main = (RelativeLayout) findViewById(R.id.activity_main);
-        slidingTabLayout = (SlidingTabLayout)findViewById(R.id.slidingTabLayout);
-        my_viewPager = (ViewPager) findViewById(R.id.my_viewPager);
-        screenSlidePagerAdapter = new ScreenSlidePagerAdapter(getFragmentManager(),this);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        my_viewPager_V4 = (ViewPager) findViewById(R.id.my_viewPager_V4);
+        fragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         addFragment();
      /*   int uid = 0;
         try {
@@ -294,19 +290,18 @@ n. 装饰，布置
 
 
     private void addFragment(){
-        screenSlidePagerAdapter.addTab("控制台", MainFragment.class);
-        screenSlidePagerAdapter.addTab("日志", LogFragment.class);
-        screenSlidePagerAdapter.addTab("抓包", GraspDataFragment.class);
-        //screenSlidePagerAdapter.addTab("配置", ConfigFragment.class);
-        screenSlidePagerAdapter.addTab("说明", ExplainFragment.class);
-        my_viewPager.setAdapter(screenSlidePagerAdapter);
-        my_viewPager.setOffscreenPageLimit(screenSlidePagerAdapter.getCount());
-        slidingTabLayout.setViewPager(my_viewPager);
+        fragmentPagerAdapter.addFragment(new MainFragment(),"控制台");
+        fragmentPagerAdapter.addFragment(new LogFragment(),"日志");
+        fragmentPagerAdapter.addFragment(new GraspDataFragment(),"抓包");
+        fragmentPagerAdapter.addFragment(new ExplainFragment(),"说明");
+        my_viewPager_V4.setOffscreenPageLimit(1);
+        my_viewPager_V4.setAdapter(fragmentPagerAdapter);
+        tabLayout.setupWithViewPager(my_viewPager_V4);
        // TabLayout tabLayout = null;
         //tabLayout.setupWithViewPager(my_viewPager);
-        my_viewPager.setOffscreenPageLimit(1);
+        //my_viewPager_V4.setOffscreenPageLimit(1);
 
-        slidingTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        my_viewPager_V4.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -351,6 +346,7 @@ n. 装饰，布置
 
             }
         });
+
     }
 
     private void toolbarAnimateMe(boolean isShow){
@@ -373,7 +369,7 @@ n. 装饰，布置
     }
     //暴露 viewpager中的 fragment
     public Object getItemFragment(int position,Class<?> fragmentClassName){
-       Fragment fragment =  screenSlidePagerAdapter.getItem(position);
+       android.support.v4.app.Fragment fragment =  fragmentPagerAdapter.getItem(position);
         if(fragment.getClass().equals(fragmentClassName)){
             return fragment;
         }
@@ -460,7 +456,7 @@ n. 装饰，布置
             sharedPreferences.edit().putString(SharedPreferenceMy.WALLPAPER_PATH,uri.toString()).commit();
             ContentResolver contentResolver = this.getContentResolver();
             try {
-                activity_main.setBackground(Drawable.createFromStream(contentResolver.openInputStream(uri),null) );
+                MainActivity.this.getWindow().setBackgroundDrawable(Drawable.createFromStream(contentResolver.openInputStream(uri),null) );
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -474,14 +470,14 @@ n. 装饰，布置
             if(uriPath!=null){
                 ContentResolver contentResolver = this.getContentResolver();
                 try {
-                    activity_main.setBackground(Drawable.createFromStream(contentResolver.openInputStream(Uri.parse(uriPath)),null) );
+                    MainActivity.this.getWindow().setBackgroundDrawable(Drawable.createFromStream(contentResolver.openInputStream(Uri.parse(uriPath)),null) );
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
             }
         }  if(uriPath==null) {
             try {
-                activity_main.setBackground(Drawable.createFromStream(getAssets().open("bg.jpg"),null) );
+                MainActivity.this.getWindow().setBackgroundDrawable(Drawable.createFromStream(getAssets().open("bg.jpg"),null) );
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -506,7 +502,7 @@ n. 装饰，布置
             public void onClick(DialogInterface dialog, int which) {
                 String fileNeme = et.getText().toString().trim();
                 if(fileNeme==null||fileNeme.equals("")||fileNeme.length()>10){
-                    Snackbar.make(main_RL,getString(R.string.new_file_name_illegality),Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(toolbar,getString(R.string.new_file_name_illegality),Snackbar.LENGTH_SHORT).show();
                     return;
                 }
                 File newFile = new File(file.getAbsolutePath()+"/"+fileNeme+FileUtil.CONFIG_END_NAME);
@@ -574,7 +570,7 @@ n. 装饰，布置
             //根据资源ID获取响应的尺寸值
             statusBarHeight1 = getResources().getDimensionPixelSize(resourceId);
         }
-        RelativeLayout.LayoutParams params = ((RelativeLayout.LayoutParams)(toolbar.getLayoutParams()));
+        LinearLayout.LayoutParams params = ((LinearLayout.LayoutParams)(toolbar.getLayoutParams()));
             params.setMargins(0,statusBarHeight1,0,0);
             toolbar.setLayoutParams(params);
 
@@ -595,12 +591,11 @@ n. 装饰，布置
     }
 
 
-
-    public ScreenSlidePagerAdapter getScreenSlidePagerAdapter() {
-        return screenSlidePagerAdapter;
+    public MyFragmentPagerAdapter getFragmentPagerAdapter() {
+        return fragmentPagerAdapter;
     }
     public ViewPager getMy_viewPager() {
-        return my_viewPager;
+        return my_viewPager_V4;
     }
 
 
