@@ -8,6 +8,7 @@ import android.util.Log;
 
 public class LogUtil {
     private static final boolean NEED_PRINT = true;
+    public static final boolean IS_RELEASE = false;
     private static final String LOG_TAG = "sssssssssssss    ";
     public static synchronized void printSS(String str){
         if(NEED_PRINT){

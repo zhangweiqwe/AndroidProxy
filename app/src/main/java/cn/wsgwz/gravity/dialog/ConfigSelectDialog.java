@@ -84,7 +84,6 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setWindowAnimations(R.style.payDialogStyle);
-        //getWindow().setWindowAnimations(R.style.AppTheme);
         setContentView(R.layout.dialog_config_select);
         initView();
     }
@@ -94,7 +93,7 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
         sharedPreferences  = getContext().getSharedPreferences(SharedPreferenceMy.CONFIG,Context.MODE_PRIVATE);
         hint_TV = (TextView)findViewById(R.id.hint_TV);
         currentConfig_TV = (TextView) findViewById(R.id.currentConfig_TV);
-        currentConfig_TV.setText(sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,"(当前未选择模式)"));
+        currentConfig_TV.setText(sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,getContext().getString(R.string.not_select_config)));
         list_view = (XListView)findViewById(R.id.list_view);
         list_view.setPullLoadEnable(false);
         list_view.setPullRefreshEnable(false);
@@ -245,10 +244,13 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                     }
                 }*/
 
-                list.add(EnumAssetsConfig.ChongQing_YiDong_1);
-                list.add(EnumAssetsConfig.ChongQing_YiDong_1_S);
-                list.add(EnumAssetsConfig.ChongQing_YiDong_2);
-                list.add(EnumAssetsConfig.ChongQing_LianTong_1);
+                if(!LogUtil.IS_RELEASE){
+                    list.add(EnumAssetsConfig.ChongQing_YiDong_1);
+                    list.add(EnumAssetsConfig.ChongQing_YiDong_1_S);
+                    list.add(EnumAssetsConfig.ChongQing_YiDong_2);
+                    list.add(EnumAssetsConfig.ChongQing_LianTong_1);
+                }
+
 
 
 

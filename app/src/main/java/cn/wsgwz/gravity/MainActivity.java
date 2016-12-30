@@ -3,6 +3,7 @@ package cn.wsgwz.gravity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.Fragment;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +16,8 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.MessageQueue;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -54,11 +57,17 @@ import cn.wsgwz.gravity.fragment.log.LogFragment;
 import cn.wsgwz.gravity.helper.FirstUseInitHelper;
 import cn.wsgwz.gravity.helper.PermissionHelper;
 import cn.wsgwz.gravity.util.FileUtil;
+import cn.wsgwz.gravity.util.LogUtil;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
 
 import static junit.framework.Assert.assertEquals;
-
+/*
+adb push D:\me\app\app-release.apk /sdcard/
+adb shell
+su
+pm install -r /sdcard/app-release.apk
+ */
 
 public class MainActivity extends AppCompatActivity implements LogFragment.OnListFragmentInteractionListenner{
     //选择背景请求值
@@ -102,7 +111,13 @@ n. 装饰，布置
      */
 
 
-
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            setMarginStatusBar();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,11 +130,55 @@ n. 装饰，布置
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         }
         setContentView(R.layout.activity_main);
-        initView();
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            setStatusBarHeight();
-        }
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(getResources().getString(R.string.app_name));
+
+        sharedPreferences = getSharedPreferences(SharedPreferenceMy.CONFIG,MODE_PRIVATE);
                 setBackground();
+                addFragment();
+                setSupportActionBar(toolbar);
+                toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()){
+                            case R.id.apn_setting:
+                                Intent intentApn = new Intent(Settings.ACTION_APN_SETTINGS);
+                                startActivity(intentApn);
+                                break;
+                            case R.id.exec_start:
+                                ShellUtil.maybeExecShell(true,MainActivity.this);
+                                break;
+                            case R.id.exec_stop:
+                                ShellUtil.maybeExecShell(false,MainActivity.this);
+                                break;
+                            case R.id.fllow_shell:
+                                boolean b = !item.isChecked();
+                                item.setChecked(b);
+                                sharedPreferences.edit().putBoolean(SharedPreferenceMy.SHELL_IS_FLLOW_MENU,b).commit();
+                                break;
+                            case R.id.defined_shell:
+                                startActivity(new Intent(MainActivity.this,DefinedShellActivity.class));
+                                break;
+                            case R.id.about_Appme:
+                                aboutDialogShow();
+                                break;
+                            case R.id.wallpaper:
+                                selectWallpaper();
+                                break;
+                            case R.id.create_config:
+                                createConfig();
+                                break;
+                            case R.id.log_clear:
+                                LogContent.clear(MainActivity.this);
+                                break;
+                            case R.id.log_share:
+                                LogContent.share(MainActivity.this);
+                                break;
+
+                        }
+                        return false;
+                    }
+                });
 
         //overridePendingTransition(R.anim.main_start_animation, R.anim.main_exit_animation);
 
@@ -185,81 +244,12 @@ n. 装饰，布置
         return super.onCreateOptionsMenu(menu);
     }
 
-    public Toolbar getToolbar(){
-        return toolbar;
-    }
-
-    private void initView(){
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        //toolbar.setLogo(R.mipmap.diqiu);//设置app logo
-        toolbar.setTitle(getResources().getString(R.string.app_name));
-        setSupportActionBar(toolbar);
-        //toolbar.setSubtitle("gravity"+" "+FileUtil.VERSION_NUMBER);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.apn_setting:
-                        Intent intentApn = new Intent(Settings.ACTION_APN_SETTINGS);
-                        startActivity(intentApn);
-                        break;
-                    case R.id.exec_start:
-                        ShellUtil.maybeExecShell(true,MainActivity.this);
-                        break;
-                    case R.id.exec_stop:
-                        ShellUtil.maybeExecShell(false,MainActivity.this);
-                        break;
-                    case R.id.fllow_shell:
-                        boolean b = !item.isChecked();
-                       item.setChecked(b);
-                        sharedPreferences.edit().putBoolean(SharedPreferenceMy.SHELL_IS_FLLOW_MENU,b).commit();
-                        break;
-                    case R.id.defined_shell:
-                        startActivity(new Intent(MainActivity.this,DefinedShellActivity.class));
-                        break;
-                    case R.id.about_Appme:
-                        aboutDialogShow();
-                        break;
-                    case R.id.wallpaper:
-                            selectWallpaper();
-                        break;
-                    case R.id.create_config:
-                            createConfig();
-                        break;
-                    case R.id.log_clear:
-                        LogContent.clear(MainActivity.this);
-                        break;
-                    case R.id.log_share:
-                        LogContent.share(MainActivity.this);
-                        break;
-
-                }
-                return false;
-            }
-        });
-        sharedPreferences = getSharedPreferences(SharedPreferenceMy.CONFIG,MODE_PRIVATE);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        my_viewPager_V4 = (ViewPager) findViewById(R.id.my_viewPager_V4);
-        fragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
-        addFragment();
-     /*   int uid = 0;
-        try {
-           uid =  (getPackageManager().getApplicationInfo(getPackageName(), 0)).uid;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        Spannable spannable = new SpannableString(getString(R.string.app_name)+" uid:"+uid);
-        spannable.setSpan(new AbsoluteSizeSpan(23,true), 0, getString(R.string.app_name).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannable.setSpan(new AbsoluteSizeSpan(16,true), getString(R.string.app_name).length(), spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);*/
-
-    }
-
-
 
 
     private void addFragment(){
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        my_viewPager_V4 = (ViewPager) findViewById(R.id.my_viewPager_V4);
+        fragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         fragmentPagerAdapter.addFragment(new MainFragment(),"控制台");
         fragmentPagerAdapter.addFragment(new LogFragment(),"日志");
         fragmentPagerAdapter.addFragment(new GraspDataFragment(),"抓包");
@@ -447,7 +437,7 @@ n. 装饰，布置
             }
         }  if(uriPath==null) {
             try {
-                MainActivity.this.getWindow().setBackgroundDrawable(Drawable.createFromStream(getAssets().open("bg.jpg"),null) );
+                MainActivity.this.getWindow().setBackgroundDrawable(Drawable.createFromStream(getAssets().open("2583.jpg"),null) );
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -529,7 +519,7 @@ n. 装饰，布置
             }
         }
     }
-    private void setStatusBarHeight(){
+    private void setMarginStatusBar(){
      /*   *
          * 获取状态栏高度——方法1
          **/
@@ -567,7 +557,9 @@ n. 装饰，布置
     public ViewPager getMy_viewPager() {
         return my_viewPager_V4;
     }
-
+    public Toolbar getToolbar(){
+        return toolbar;
+    }
 
 
 }

@@ -35,11 +35,11 @@
     <style name="ADTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <!-- API 14 theme customizations can go here. -->
     </style>
-    <style name="AppThemeMianAcivity" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppThemeMianAcivity" parent="Theme.AppCompat">
      <!--   <item name="windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>-->
         <!--<item name="android:windowFullscreen">true</item>-->
-       <!-- <item name="android:windowBackground">@color/transparent</item>-->
+        <item name="android:windowBackground">@color/transparent</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>
        <!-- <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>-->

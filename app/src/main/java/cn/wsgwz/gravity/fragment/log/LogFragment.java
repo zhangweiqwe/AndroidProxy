@@ -50,9 +50,9 @@ public class LogFragment extends Fragment {
             recyclerView = (MyRecyclerView) view.findViewById(R.id.recyclerView);
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             logAdapter = new LogAdapter(LogContent.ITEMS,mListenner);
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            //recyclerView.setItemAnimator(new DefaultItemAnimator());
             //Decoration n. 装饰，装潢；装饰品；奖章
-            recyclerView.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
+            //recyclerView.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
             recyclerView.setAdapter(logAdapter);
             LogContent.initAdapter(logAdapter);
         //LogUtil.printSS( "          LogFragment");
@@ -60,10 +60,11 @@ public class LogFragment extends Fragment {
     }
 
 
-    @Override
+  /*  @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
+        LogUtil.printSS("        onAttach g   ");
         if(Build.VERSION.SDK_INT>=23){
             return;
         }
@@ -72,13 +73,13 @@ public class LogFragment extends Fragment {
         }else {
             throw new RuntimeException(activity.toString()+" must implement OnListFragmentInteractionListener");
         }
-    }
+    }*/
 
     // //SDK API<23时，onAttach(Context)不执行，需要使用onAttach(Activity)。Fragment自身的Bug，v4的没有此问题
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
+        //LogUtil.printSS("        onAttach  ");
         if(context instanceof OnListFragmentInteractionListenner){
             mListenner = (OnListFragmentInteractionListenner)context;
         }else {

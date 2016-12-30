@@ -22,6 +22,8 @@
     <string name="exec_stop_ok">关闭脚本 成功</string>
     <string name="exec_stop_error">关闭脚本 失败</string>
 
+    //选择配置文件dialog
+    <string name="not_select_config">(当前未选择模式)</string>
 
 
 
