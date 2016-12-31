@@ -250,10 +250,6 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                     list.add(EnumAssetsConfig.ChongQing_YiDong_2);
                     list.add(EnumAssetsConfig.ChongQing_LianTong_1);
                 }
-
-
-
-
                 handler.sendEmptyMessage(1000);
 
             }
