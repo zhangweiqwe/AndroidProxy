@@ -7,7 +7,7 @@ android {
         applicationId "cn.wsgwz.gravity"
         minSdkVersion 17
         targetSdkVersion 25
-        versionCode 12301629
+        versionCode 12311258
         versionName "gravity 2.60"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {

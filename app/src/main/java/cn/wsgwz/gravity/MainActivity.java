@@ -44,6 +44,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
 
 
 import cn.wsgwz.gravity.activity.ConfigEditActivity;
@@ -58,6 +59,7 @@ import cn.wsgwz.gravity.helper.FirstUseInitHelper;
 import cn.wsgwz.gravity.helper.PermissionHelper;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
+import cn.wsgwz.gravity.util.OnExecResultListenner;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
 
@@ -122,6 +124,8 @@ n. 装饰，布置
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         Window window = getWindow();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.setStatusBarColor(Color.TRANSPARENT);
@@ -181,7 +185,6 @@ n. 装饰，布置
                 });
 
         //overridePendingTransition(R.anim.main_start_animation, R.anim.main_exit_animation);
-
     }
 
 
@@ -196,6 +199,9 @@ n. 装饰，布置
     @Override
     protected void onStart() {
         super.onStart();
+
+
+
         boolean isInitSystem = sharedPreferences.getBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,false);
         if(!isInitSystem){
             if(Build.VERSION.SDK_INT>=23){

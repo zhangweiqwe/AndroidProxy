@@ -50,6 +50,16 @@
         <!--<item name="android:windowEnterAnimation">@anim/dialog_pay_start_animation_set</item>
         <item name="android:windowExitAnimation">@anim/dialog_pay_exit_animation_set</item>-->
     </style>
+    <style name="packageInstallActivityDialogStyle">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
 
     <!-- item name="android:windowBackground"         设置背景透明度及其颜色值 -->
     <!-- item name="android:windowIsTranslucent"      设置当前Activity是否透明-->

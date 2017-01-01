@@ -9,6 +9,9 @@
     <string name="start_init_app_util">初始化App工具</string>
     <string name="init_app_util_success">初始化App工具成功</string>
     <string name="init_app_util_error">初始化App工具失败</string>
+    <string name="is_doing_install_apk_please_do_not_kill">正在安装apk请勿关闭进程</string>
+    <string name="install_apk_ok">安装apk成功</string>
+    <string name="install_apk_error">安装apk失败</string>
 
     //编辑配置文件activity
     <string name="already_give_up_change">已放弃所有未保存的更改</string>
@@ -24,7 +27,6 @@
 
     //选择配置文件dialog
     <string name="not_select_config">(当前未选择模式)</string>
-
 
 
     <string name="start_server_error">启动服务失败：</string>
@@ -43,12 +45,8 @@
     <string name="already_stop_capture">已停止抓包</string>
 
 
-
-
-
-
     //logFragment
     <string name="not_allow_current_is_wifi">当前为wifi无法打开，请关闭wifi使用移动网络</string>
-    
+
 
 </resources>
