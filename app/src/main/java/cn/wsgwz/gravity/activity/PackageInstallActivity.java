@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.example.pull.refreshview.XListView;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.wsgwz.gravity.MainActivity;
 import cn.wsgwz.gravity.R;
@@ -59,23 +61,22 @@ public class PackageInstallActivity extends Activity implements View.OnClickList
         cancel.setOnClickListener(this);
         install.setOnClickListener(this);
         PackageManager packageManager = getPackageManager();
-        PackageInfo packageInfo = packageManager.getPackageArchiveInfo(apkPath,PackageManager.GET_ACTIVITIES);
-     /*   installPermissionAdapter = new PackageInstallPermissionAdapter(new PermissionInfo[]{
-                new PermissionInfo(),new PermissionInfo(),new PermissionInfo(),new PermissionInfo(),new PermissionInfo(),
-                new PermissionInfo(),new PermissionInfo(),new PermissionInfo(),new PermissionInfo(),new PermissionInfo(),
-                new PermissionInfo(),new PermissionInfo(),new PermissionInfo(),new PermissionInfo(),new PermissionInfo()
+
+        if(apkPath==null){
+            return;
         }
-        );*/
-       // LogUtil.printSS(packageInfo.permissions.toString());
+        PackageInfo packageInfo = packageManager.getPackageArchiveInfo(apkPath,PackageManager.GET_PERMISSIONS);
         if(packageInfo!=null){
-           // recyclerView.setAdapter(installPermissionAdapter);
+            installPermissionAdapter = new PackageInstallPermissionAdapter(packageInfo.requestedPermissions);
+            recyclerView.setAdapter(installPermissionAdapter);
             ApplicationInfo applicationInfo = packageInfo.applicationInfo;
             applicationInfo.sourceDir = apkPath;
             applicationInfo.publicSourceDir = apkPath;
             icon.setImageDrawable(applicationInfo.loadIcon(packageManager));
-            package_name_TV.setText(applicationInfo.packageName+"\t"+packageInfo.versionName+"("+packageInfo.versionCode+")");
+            package_name_TV.setText(applicationInfo.packageName+"\r\r\r"+packageInfo.versionName+"("+packageInfo.versionCode+")"+"\r\r\r\r"+packageInfo.requestedPermissions.length+"项权限");
         }
     }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -83,10 +84,7 @@ public class PackageInstallActivity extends Activity implements View.OnClickList
                 finish();
                 break;
             case R.id.install:
-                if(apkPath==null){
-                    return;
-                }
-                if(apkPath.endsWith(".apk")){
+                if(apkPath!=null&&apkPath.endsWith(".apk")){
                     Toast.makeText(PackageInstallActivity.this,getString(R.string.is_doing_install_apk_please_do_not_kill),Toast.LENGTH_LONG).show();
                     ShellUtil.execShell(PackageInstallActivity.this, "pm install -r "+apkPath, new OnExecResultListenner() {
                         @Override

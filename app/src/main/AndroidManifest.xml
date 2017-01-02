@@ -105,7 +105,7 @@
             android:name="com.qq.e.ads.ADActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
         <activity android:name=".activity.PackageInstallActivity"
-            android:theme="@style/packageInstallActivityDialogStyle">
+            android:theme="@style/GraspPreViewTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />

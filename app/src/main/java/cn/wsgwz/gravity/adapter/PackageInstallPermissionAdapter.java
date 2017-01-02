@@ -15,10 +15,10 @@ import cn.wsgwz.gravity.util.LogUtil;
  */
 
 public class PackageInstallPermissionAdapter extends RecyclerView.Adapter<PackageInstallPermissionAdapter.ViewHolder>{
-    private PermissionInfo[] permissionInfos;
+    private String[] permissions;
 
-    public PackageInstallPermissionAdapter(PermissionInfo[] permissionInfos) {
-        this.permissionInfos = permissionInfos;
+    public PackageInstallPermissionAdapter(String[] permissions) {
+        this.permissions = permissions;
     }
 
     @Override
@@ -29,12 +29,13 @@ public class PackageInstallPermissionAdapter extends RecyclerView.Adapter<Packag
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.aSwitch.setText(permissionInfos[position].toString());
+        //  PermissionInfo permissionInfo = pm.getPermissionInfo(permName, 0);
+        holder.aSwitch.setText(permissions[position].toString());
     }
 
     @Override
     public int getItemCount() {
-        return permissionInfos==null?0:permissionInfos.length;
+        return permissions==null?0:permissions.length;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
