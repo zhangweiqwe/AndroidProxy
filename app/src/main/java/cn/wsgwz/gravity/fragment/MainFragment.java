@@ -43,19 +43,6 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.example.pull.refreshview.XListView;
-import com.example.pull.refreshview.XScrollView;
-import com.qq.e.ads.banner.ADSize;
-import com.qq.e.ads.banner.AbstractBannerADListener;
-import com.qq.e.ads.banner.BannerView;
-
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import cn.wsgwz.gravity.MainActivity;
 import cn.wsgwz.gravity.R;
 import cn.wsgwz.gravity.activity.ConfigEditActivity;
@@ -149,7 +136,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
     private void initView(final View view){
 
 
-    /*    ViewGroup bannerContainer = (ViewGroup) view.findViewById(R.id.bannerContainer);
+        /*ViewGroup bannerContainer = (ViewGroup) view.findViewById(R.id.bannerContainer);
 
         // appId : 在 http://e.qq.com/dev/ 能看到的app唯一字符串
         // posId : 在 http://e.qq.com/dev/ 生成的数字串，并非 appid 或者 appkey
@@ -157,7 +144,6 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         //设置广告轮播时间，为0或30~120之间的数字，单位为s,0标识不自动轮播
         banner.setRefresh(30);
         banner.setADListener(new AbstractBannerADListener() {
-
             @Override
             public void onNoAD(int arg0) {
                 Log.i("AD_DEMO", "BannerNoAD，eCode=" + arg0);
@@ -167,9 +153,10 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
             public void onADReceiv() {
                 Log.i("AD_DEMO", "ONBannerReceive");
             }
+
         });
         bannerContainer.addView(banner);
-        *//* 发起广告请求，收到广告数据后会展示数据   *//*
+         //发起广告请求，收到广告数据后会展示数据
         banner.loadAD();*/
 
 
