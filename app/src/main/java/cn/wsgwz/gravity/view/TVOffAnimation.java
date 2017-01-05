@@ -1,4 +1,4 @@
-package cn.wsgwz.gravity.dialog;
+package cn.wsgwz.gravity.view;
 
 import android.graphics.Matrix;
 import android.view.animation.AccelerateDecelerateInterpolator;
