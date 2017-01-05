@@ -1,21 +1,13 @@
-package cn.wsgwz.gravity.util;
+package cn.wsgwz.gravity.view;
 
 import android.animation.ObjectAnimator;
-import android.animation.TimeInterpolator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Rect;
-import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Message;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Interpolator;
 import android.widget.ScrollView;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class MyScrollView2 extends ScrollView {

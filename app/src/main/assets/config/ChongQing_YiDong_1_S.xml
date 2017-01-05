@@ -15,7 +15,7 @@
         <delate>Host,host</delate>
         <first-line>
             [method][tab] [url] [tab] [version]\r\n
-            Host: [tab][host]:443\r\n
+            Host: [tab][host][uri]\r\n
             Accept:[tab] */*,[tab] application/vnd.wap.mms-message,[tab] application/vnd.wap.sic\r\n
             Content-Type:[tab] application/vnd.wap.mms-message\r\n
         </first-line>

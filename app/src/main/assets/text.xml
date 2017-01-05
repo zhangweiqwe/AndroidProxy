@@ -1,9 +1,7 @@
-<!--
-
-<config version="2.0"  apn_apn="cmwap" apn_proxy="10.0.0.172" apn_port="80">
+<config version="2.0" dns="114.114.114.114"  apn_apn="cmwap" apn_proxy="10.0.0.172" apn_port="80">
 
     <http host="10.0.0.172" port="80">
-        <delate>host , x-online-host</delate>
+        <delate>Host,X-Online-Host,host,x-online-host</delate>
         <first-line>
             [method][tab] [url][tab] [version]\r\n
             \n[method] [tab]http://wap.10086.cn[uri] [tab]  [version]\r\n
@@ -13,56 +11,10 @@
 
 
     <https host="10.0.0.172" port="80"  switch="on">
-        <delate>host , x-online-host</delate>
+        <delate>Host,X-Online-Host,host,x-online-host</delate>
         <first-line>
-            [method][tab] /[tab] [version]\r\n
-            Host: [tab][host]:443\r\n
-            Accept:[tab] */*, [tab]application/vnd.wap.mms-message, [tab]application/vnd.wap.sic\r\n
-            Content-Type:[tab] application/vnd.wap.mms-message\r\n
+            [method][tab] [url] [tab] [version]\r\n
+            Host: [tab]rd.go.10086.cn \r\n X-Online-Host: [tab]\r\n X-Online-Host: [tab][host]\r\n
         </first-line>
     </https>
-
 </config>
-
-
-
-
--->
-
-
-
-<config version="2.0" dns="129.29.29.29"  apn_apn="cmwap" apn_proxy="10.0.0.172" apn_port="80">
-
-    <http host="10.0.0.172" port="80">
-        <delate>host , x-online-host</delate>
-        <first-line>
-            [method] [tab][url][tab] [version]\r\n
-            X-Online-Host:[tab] m.10010.com\r\n
-            Host: [tab][host]\r\n
-            X-Online-Host:[tab] m.10010.com\r\n
-        </first-line>
-    </http>
-
-
-    <https host="10.0.0.172" port="80" switch="on">
-        <delate>host</delate>
-        <first-line>
-            [method] [tab]http://[host].10010.com [tab][version]\r\n
-            Host:[tab] [host].10010.com\r\n
-            x-online-host: [tab]m.10010.com\r\n
-            POST[tab] http://m.10010.com\r\n
-            Host:[tab] m.10010.com\r\n
-        </first-line>
-    </https>
-
-</config>
-
-
-
-
-
-
-
-
-
-

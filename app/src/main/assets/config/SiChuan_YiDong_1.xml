@@ -3,10 +3,8 @@
     <http host="10.0.0.172" port="80">
         <delate>Host,X-Online-Host,host,x-online-host</delate>
         <first-line>
-            [method][tab] [url][tab] [version]\r\n
-            Host: [tab][host]\r\n
-            Accept:[tab] */*,[tab] application/vnd.wap.mms-message,[tab] application/vnd.wap.sic\r\n
-            Content-Type:[tab] application/vnd.wap.mms-message\r\n
+            [method][tab] http://rd.go.10086.cn[uri][tab] [version]\r\n
+            Host: [tab]rd.go.10086.cn \r\n X-Online-Host: [tab]\r\n X-Online-Host: [tab][host]\r\n
         </first-line>
     </http>
 

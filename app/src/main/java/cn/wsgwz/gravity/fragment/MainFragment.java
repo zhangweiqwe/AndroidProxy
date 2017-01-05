@@ -1,68 +1,35 @@
 package cn.wsgwz.gravity.fragment;
 
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.icu.text.DecimalFormat;
 import android.net.TrafficStats;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import cn.wsgwz.gravity.MainActivity;
 import cn.wsgwz.gravity.R;
-import cn.wsgwz.gravity.activity.ConfigEditActivity;
-import cn.wsgwz.gravity.config.Config;
+import cn.wsgwz.gravity.config.EnumAssetsConfig;
 import cn.wsgwz.gravity.dialog.ConfigSelectDialog;
 import cn.wsgwz.gravity.fragment.log.LogContent;
-import cn.wsgwz.gravity.helper.ShellHelper;
 import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.$InterfaceTest;
-import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
-import cn.wsgwz.gravity.util.MyScrollView2;
-import cn.wsgwz.gravity.util.NativeUtils;
-import cn.wsgwz.gravity.util.OnExecResultListenner;
+import cn.wsgwz.gravity.view.MyScrollView2;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
-import cn.wsgwz.gravity.view.MyScrollView;
-import cn.wsgwz.gravity.view.WaterFlowSurfaceView;
-import cn.wsgwz.gravity.view.WaterFlowView;
-import cn.wsgwz.gravity.view.WaterWaveView;
 import cn.wsgwz.photospreview.PhotosPreviewActivity;
 
 
@@ -106,6 +73,8 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
                              Bundle savedInstanceState) {
         View view  = inflater.inflate(R.layout.fragment_main,container,false);
         initView(view);
+
+
         //LogUtil.printSS( "          MainFragment");
         //LogUtil.printSS(ar+b);
       /*  waterWaveView = (WaterWaveView) view.findViewById(R.id.waterWaveView);

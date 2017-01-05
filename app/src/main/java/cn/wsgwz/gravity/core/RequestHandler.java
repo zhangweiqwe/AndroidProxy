@@ -89,8 +89,8 @@ public class RequestHandler implements Runnable{
             {
                 remoteOutputStream.write(clientInputStream.read());
             }
-            byte[] bytes = paramsHelper.endOfLine.getBytes();
-            remoteOutputStream.write(bytes);
+            //byte[] bytes = paramsHelper.endOfLine.getBytes();
+            //remoteOutputStream.write(bytes);
             remoteOutputStream.flush();
         }
     }

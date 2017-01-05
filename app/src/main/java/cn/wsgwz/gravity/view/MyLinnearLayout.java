@@ -1,25 +1,18 @@
 package cn.wsgwz.gravity.view;
 
 import android.animation.ObjectAnimator;
-import android.animation.TimeInterpolator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Build;
-import android.os.CountDownTimer;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import cn.wsgwz.gravity.R;
-import cn.wsgwz.gravity.util.LogUtil;
-import cn.wsgwz.gravity.util.MyScrollView2;
 
 /**
  * Created by Jeremy Wang on 2016/12/15.

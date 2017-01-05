@@ -1,4 +1,4 @@
-<cn.wsgwz.gravity.util.MyScrollView2
+<cn.wsgwz.gravity.view.MyScrollView2
     xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/myScrollView"
         android:layout_width="match_parent"
@@ -60,6 +60,6 @@
 
 
         </LinearLayout>
-    </cn.wsgwz.gravity.util.MyScrollView2>
+    </cn.wsgwz.gravity.view.MyScrollView2>
 
 

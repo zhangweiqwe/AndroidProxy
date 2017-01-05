@@ -245,10 +245,15 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                 }*/
 
                 if(!LogUtil.IS_RELEASE){
-                    list.add(EnumAssetsConfig.ChongQing_YiDong_1);
+                    Class clz = EnumAssetsConfig.class;
+                    for (Object obj: clz.getEnumConstants()) {
+                        list.add((EnumAssetsConfig)obj);
+                    }
+                  /*  list.add(EnumAssetsConfig.ChongQing_YiDong_1);
                     list.add(EnumAssetsConfig.ChongQing_YiDong_1_S);
                     list.add(EnumAssetsConfig.ChongQing_YiDong_2);
                     list.add(EnumAssetsConfig.ChongQing_LianTong_1);
+                    list.add(EnumAssetsConfig.SiChuan_YiDong_1);*/
                 }
                 handler.sendEmptyMessage(1000);
 
