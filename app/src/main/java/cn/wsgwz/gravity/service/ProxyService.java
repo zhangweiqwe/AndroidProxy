@@ -47,7 +47,7 @@ public class ProxyService extends Service {
     }
     @Override
     public void onCreate() {
-        LogUtil.printSS("   onCreate");
+        //LogUtil.printSS("   onCreate");
         super.onCreate();
         try {
             socketServer = new SocketServer(ProxyService.this);
@@ -65,7 +65,7 @@ public class ProxyService extends Service {
 
     @Override
     public void onDestroy() {
-        LogUtil.printSS("     onDestroy ");
+        //LogUtil.printSS("     onDestroy ");
         super.onDestroy();
         if(socketServer!=null){
             socketServer.interrupt();

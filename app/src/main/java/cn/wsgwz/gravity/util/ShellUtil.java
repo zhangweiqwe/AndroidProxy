@@ -320,7 +320,7 @@ public class ShellUtil {
             File file = new File(currentConfigPath);
             if(file.getPath().startsWith("/"+FileUtil.ASSETS_CONFIG_PATH)){
                 config = ConfigXml.read(context.getAssets().open( file.getAbsolutePath().replaceFirst("/","")));
-                LogUtil.printSS("   "+file.getAbsolutePath().replaceFirst("/",""));
+                //LogUtil.printSS("   "+file.getAbsolutePath().replaceFirst("/",""));
             }else if(file.exists()){
                 FileInputStream fileInputStream = new FileInputStream(file);
                 config = ConfigXml.read(fileInputStream);
