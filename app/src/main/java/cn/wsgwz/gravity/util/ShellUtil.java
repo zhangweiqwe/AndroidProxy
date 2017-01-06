@@ -1,6 +1,7 @@
 package cn.wsgwz.gravity.util;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
@@ -285,9 +286,28 @@ public class ShellUtil {
     public static void setIsProgressListenner(IsProgressListenner isProgressListenner){
         ShellUtil.isProgressListenner = isProgressListenner;
     }
+    private static String getCurProcessName(Context context) {
+        int pid = android.os.Process.myPid();
+        ActivityManager mActivityManager = (ActivityManager) context
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningAppProcessInfo appProcess : mActivityManager
+                .getRunningAppProcesses()) {
+            if (appProcess.pid == pid) {
+                return appProcess.processName;
+            }
 
+        }
+        return null;
+    }
     public static final Config getConfig(Context context,boolean isRemote) throws IOException, DocumentException {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(SharedPreferenceMy.CONFIG,Context.MODE_PRIVATE);
+        String packageName = "cn.wsgwz.gravity";
+        SharedPreferences sharedPreferences = null;
+        if(getCurProcessName(context).equals(packageName)){
+            sharedPreferences = context.getSharedPreferences(SharedPreferenceMy.CONFIG,Context.MODE_PRIVATE);
+        }else {
+            sharedPreferences = context.getSharedPreferences(SharedPreferenceMy.CONFIG,Context.MODE_WORLD_READABLE | Context.MODE_MULTI_PROCESS);
+        }
+
         Config config = null;
         if(true){
             String currentConfigPath = sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null);
@@ -300,6 +320,7 @@ public class ShellUtil {
             File file = new File(currentConfigPath);
             if(file.getPath().startsWith("/"+FileUtil.ASSETS_CONFIG_PATH)){
                 config = ConfigXml.read(context.getAssets().open( file.getAbsolutePath().replaceFirst("/","")));
+                LogUtil.printSS("   "+file.getAbsolutePath().replaceFirst("/",""));
             }else if(file.exists()){
                 FileInputStream fileInputStream = new FileInputStream(file);
                 config = ConfigXml.read(fileInputStream);

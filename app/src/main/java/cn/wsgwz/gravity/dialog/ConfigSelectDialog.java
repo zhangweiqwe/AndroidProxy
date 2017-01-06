@@ -100,7 +100,7 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
         list =  new ArrayList<>();
         configSelectAdapter = new ConfigSelectAdapter(getContext(),list);
         list_view.setOnItemClickListener(this);
-
+        list_view.setAdapter(configSelectAdapter);
         initListView();
     }
 
@@ -192,7 +192,7 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                 super.handleMessage(msg);
                 switch (msg.what){
                     case 1000:
-                        list_view.setAdapter(configSelectAdapter);
+                        configSelectAdapter.notifyDataSetChanged();
                         //configSelectAdapter.notifyDataSetChanged();
                         //setListViewHeight(list_view);
                         break;

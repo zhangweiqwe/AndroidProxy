@@ -19,6 +19,7 @@ import cn.wsgwz.gravity.MainActivity;
 import cn.wsgwz.gravity.R;
 import cn.wsgwz.gravity.core.SocketServer;
 import cn.wsgwz.gravity.util.FileUtil;
+import cn.wsgwz.gravity.util.LogUtil;
 
 
 /**
@@ -46,6 +47,7 @@ public class ProxyService extends Service {
     }
     @Override
     public void onCreate() {
+        LogUtil.printSS("   onCreate");
         super.onCreate();
         try {
             socketServer = new SocketServer(ProxyService.this);
@@ -63,6 +65,7 @@ public class ProxyService extends Service {
 
     @Override
     public void onDestroy() {
+        LogUtil.printSS("     onDestroy ");
         super.onDestroy();
         if(socketServer!=null){
             socketServer.interrupt();

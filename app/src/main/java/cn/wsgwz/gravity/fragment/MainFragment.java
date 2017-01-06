@@ -8,6 +8,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.TrafficStats;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.GestureDetector;
@@ -273,7 +274,6 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
                             service_Switch.setChecked(true);
                                 fllowServer(true);
                             service_Switch.setOnCheckedChangeListener(onCheckedChangeListener);
-
                         }
                     });
                     configSelectDialog.show();
