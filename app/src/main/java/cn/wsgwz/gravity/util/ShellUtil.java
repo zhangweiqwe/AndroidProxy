@@ -309,7 +309,7 @@ public class ShellUtil {
         }
 
         Config config = null;
-        if(true){
+        if(false){
             String currentConfigPath = sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null);
             /*if(!isRemote){
                 LogContent.addItemAndNotify(currentConfigPath);

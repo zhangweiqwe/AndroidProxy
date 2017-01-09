@@ -1,6 +1,8 @@
 package cn.wsgwz.gravity.core;
 
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -53,7 +55,7 @@ public class ParamsHelper {
             tokenizer = new StringTokenizer(line);
             key = tokenizer.nextToken(":");
             value = line.replaceAll(key, "").replace(": ", "");
-            paramsHelper.hashMap.put(key.toLowerCase(), value);
+            paramsHelper.hashMap.put(key, value);
         }
         getUri(paramsHelper);
         return paramsHelper;
@@ -119,6 +121,7 @@ public class ParamsHelper {
     @Override
     public String toString(){
         StringBuffer sb = Matching.match(ParamsHelper.this, config);
+        if(!sb.toString().startsWith("CONNECT"))
         LogUtil.printSS("--->"+sb+"<----------");
         return sb.toString();
     }
