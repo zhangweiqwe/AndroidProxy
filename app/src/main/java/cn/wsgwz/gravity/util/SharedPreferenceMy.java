@@ -23,7 +23,7 @@ public class SharedPreferenceMy {
 
 
     //当前使用的配置文件路径
-    public static final String CURRENT_CONFIG_PATH = "CURRENT_CONFIG_PATH";
+    //public static final String CURRENT_CONFIG_PATH = "CURRENT_CONFIG_PATH";
     //是否存在shell脚本
     public static final String HAS_SHELL = "HAS_SHELL";
     public static final String START_SH = "START_SH";

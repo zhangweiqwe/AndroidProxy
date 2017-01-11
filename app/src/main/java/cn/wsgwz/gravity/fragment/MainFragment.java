@@ -25,6 +25,7 @@ import cn.wsgwz.gravity.R;
 import cn.wsgwz.gravity.config.EnumAssetsConfig;
 import cn.wsgwz.gravity.dialog.ConfigSelectDialog;
 import cn.wsgwz.gravity.fragment.log.LogContent;
+import cn.wsgwz.gravity.helper.SettingHelper;
 import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.$InterfaceTest;
 import cn.wsgwz.gravity.util.LogUtil;
@@ -37,6 +38,7 @@ import cn.wsgwz.photospreview.PhotosPreviewActivity;
 public class MainFragment extends Fragment implements View.OnClickListener,ShellUtil.IsProgressListenner,GestureDetector.OnGestureListener{
 
 
+    private SettingHelper settingHelper = SettingHelper.getInstance();
 
     private GestureDetector detector;
     private MyScrollView2 myScrollView;
@@ -99,7 +101,8 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
     @Override
     public void onResume() {
         super.onResume();
-        boolean serviceIsStart =  sharedPreferences.getBoolean(SharedPreferenceMy.SERVICE_IS_START,false);
+        //boolean serviceIsStart =  sharedPreferences.getBoolean(SharedPreferenceMy.SERVICE_IS_START,false);
+        boolean serviceIsStart =  settingHelper.isStart(getContext());
         service_Switch.setChecked(serviceIsStart);
     }
 
@@ -147,9 +150,11 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         intentServer = new Intent(getActivity(), ProxyService.class);
 
         service_Switch = (Switch) view.findViewById(R.id.service_Switch);
-        /*boolean isStart = sharedPreferences.getBoolean(SharedPreferenceMy.SERVICE_IS_START,false);
-        service_Switch.setChecked(isStart);*/
-        boolean serviceIsStart =  sharedPreferences.getBoolean(SharedPreferenceMy.SERVICE_IS_START,false);
+
+
+
+        //boolean serviceIsStart =  sharedPreferences.getBoolean(SharedPreferenceMy.SERVICE_IS_START,false);
+        boolean serviceIsStart =  settingHelper.isStart(getContext());
         service_Switch.setChecked(serviceIsStart);
         service_Switch.setOnCheckedChangeListener(onCheckedChangeListener);
 
@@ -231,13 +236,16 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-            if( sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null)!=null){
+            //if( sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null)!=null){
+            if(settingHelper.getConfigPath(getContext()) !=null){
                 if(b){
-                    sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,true).commit();
+                    //sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,true).commit();
+                    settingHelper.setIsStart(getContext(),true);
                     getActivity().startService(intentServer);
                     fllowServer(true);
                 } else {
-                    sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,false).commit();
+                    //sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,false).commit();
+                    settingHelper.setIsStart(getContext(),false);
                     getActivity().stopService(intentServer);
                     fllowServer(false);
                     flowStatistics();
@@ -269,7 +277,8 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
                         public void onChange(boolean isStart) {
                             service_Switch.setOnCheckedChangeListener(null);
                                 getActivity().stopService(intentServer);
-                                sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,true).commit();
+                                //sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,true).commit();
+                            settingHelper.setIsStart(getContext(),true);
                                 getActivity().startService(intentServer);
                             service_Switch.setChecked(true);
                                 fllowServer(true);

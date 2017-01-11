@@ -121,8 +121,8 @@ public class ParamsHelper {
     @Override
     public String toString(){
         StringBuffer sb = Matching.match(ParamsHelper.this, config);
-        if(!sb.toString().startsWith("CONNECT"))
-        LogUtil.printSS("--->"+sb+"<----------");
+        //if(!sb.toString().startsWith("CONNECT"))
+        //LogUtil.printSS("--->"+sb+"<----------");
         return sb.toString();
     }
 

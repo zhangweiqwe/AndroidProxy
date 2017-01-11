@@ -1,13 +1,11 @@
 
-<config version="2.0" dns="129.29.29.29"  apn_apn="cmwap" apn_proxy="10.0.0.172" apn_port="80">
+<config version="2.0" dns="114.114.114.114"  apn_apn="cmwap" apn_proxy="10.0.0.172" apn_port="80">
 
-    <http host="10.0.0.172" port="80">
+    <http host="www.chinamobile.com" port="80">
         <delate>Host,X-Online-Host,host,x-online-host</delate>
         <first-line>
-            [method][tab] [url][tab] [version]\r\n
-            Host: [tab]rd.go.10086.cn\r\n
-            X-Online-Host: [tab]\r\n
-            X-Online-Host: [tab]rd.go.10086.cn  \r\n
+            [method][tab] http://www.chinamobile.com[uri][tab] [version]\r\n
+            Host: [tab][host]\r\n
         </first-line>
     </http>
 

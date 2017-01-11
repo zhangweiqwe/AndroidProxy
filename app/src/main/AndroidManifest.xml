@@ -28,6 +28,11 @@
         android:largeHeap="true"
         android:supportsRtl="true">
 
+        <provider
+            android:name=".contentProvider.MyAppContentProvider"
+            android:authorities="cn.wsgwz.gravity"
+            android:process=":provider"
+            android:multiprocess="true"></provider>
         <!-- android:theme="@style/AppTheme" -->
         <!-- android:configChanges="orientation|keyboardHidden" -->
         <!-- android:windowSoftInputMode="adjustUnspecified|stateHidden" -->
@@ -91,7 +96,8 @@
 
         <activity
             android:name=".activity.ConfigEditActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden|stateUnchanged"/>
         <activity android:name=".demo.Main2Activity" />
         <activity
             android:name=".demo.Main3Activity"

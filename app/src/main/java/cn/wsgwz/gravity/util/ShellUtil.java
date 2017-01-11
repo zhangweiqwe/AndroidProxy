@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -44,12 +45,13 @@ import cn.wsgwz.gravity.fragment.MainFragment;
 import cn.wsgwz.gravity.fragment.log.LogContent;
 import cn.wsgwz.gravity.helper.ApnDbHelper;
 import cn.wsgwz.gravity.helper.DemoGetInstance;
+import cn.wsgwz.gravity.helper.SettingHelper;
 import cn.wsgwz.gravity.helper.ShellHelper;
 import cn.wsgwz.gravity.service.ProxyService;
 
 public class ShellUtil {
 
-
+    private static SettingHelper settingHelper = SettingHelper.getInstance();
 
     public static final void execShell(final Context context, final String shellStr, final OnExecResultListenner onExecResultListenner) {
         if (context == null || shellStr == null) {
@@ -300,17 +302,19 @@ public class ShellUtil {
         return null;
     }
     public static final Config getConfig(Context context,boolean isRemote) throws IOException, DocumentException {
-        String packageName = "cn.wsgwz.gravity";
+       /* String packageName = "cn.wsgwz.gravity";
         SharedPreferences sharedPreferences = null;
         if(getCurProcessName(context).equals(packageName)){
             sharedPreferences = context.getSharedPreferences(SharedPreferenceMy.CONFIG,Context.MODE_PRIVATE);
         }else {
             sharedPreferences = context.getSharedPreferences(SharedPreferenceMy.CONFIG,Context.MODE_WORLD_READABLE | Context.MODE_MULTI_PROCESS);
-        }
-
+        }*/
         Config config = null;
-        if(false){
-            String currentConfigPath = sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null);
+        if(true){
+            //String currentConfigPath = sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null);
+            String currentConfigPath = settingHelper.getConfigPath(context);
+            //Toast.makeText(context,currentConfigPath+"<-",Toast.LENGTH_SHORT).show();
+           //Log.d("ssssssssssss",currentConfigPath+"---"+getCurProcessName(context));
             /*if(!isRemote){
                 LogContent.addItemAndNotify(currentConfigPath);
             }*/

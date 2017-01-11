@@ -20,8 +20,9 @@
 
                 <EditText
                     android:id="@+id/edit_ET"
+                    android:padding="20dp"
                     android:gravity="top"
-                    android:textSize="14sp"
+                    android:textSize="15sp"
                     android:background="@null"
                     android:textCursorDrawable="@drawable/edit_config_textcursor"
                     android:layout_width="match_parent"

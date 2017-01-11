@@ -3,4 +3,25 @@
     <item android:id="@+id/save_change_exit" android:title="保存并退出"></item>
     <item android:id="@+id/give_up_change" android:title="放弃修改"></item>
     <item android:id="@+id/exit" android:title="退出"></item>
+
+    <item android:id="@+id/insert_method" android:title="[method]"></item>
+    <item android:id="@+id/insert_url" android:title="[url]"></item>
+    <item android:id="@+id/insert_uri" android:title="[uri]"></item>
+    <item android:id="@+id/insert_version" android:title="[version]"></item>
+    <item android:id="@+id/insert_host" android:title="[host]"></item>
+    <item android:id="@+id/insert_blank" android:title="[tab]"></item>
+
+    <item android:id="@+id/insert_r" android:title="\\r"></item>
+    <item android:id="@+id/insert_n" android:title="\\n"></item>
+    <item android:id="@+id/insert_r_n" android:title="\\r\\n"></item>
+    <item android:id="@+id/insert_t" android:title="\\t"></item>
+    <item android:id="@+id/insert_http_" android:title="http://"></item>
+
+
+    <item android:id="@+id/insert_host_str" android:title="Host:"></item>
+    <item android:id="@+id/insert_x_online_host_str" android:title="X-Online-Host:"></item>
+
+
+
+
 </menu>

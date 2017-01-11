@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -43,6 +44,8 @@ import cn.wsgwz.gravity.adapter.MyFragmentPagerAdapter;
 import cn.wsgwz.gravity.config.EnumAssetsConfig;
 import cn.wsgwz.gravity.config.EnumMyConfig;
 import cn.wsgwz.gravity.fragment.MainFragment;
+import cn.wsgwz.gravity.helper.SettingHelper;
+import cn.wsgwz.gravity.helper.ShellHelper;
 import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
@@ -56,6 +59,7 @@ import cn.wsgwz.gravity.view.slidingTabLayout.ScreenSlidePagerAdapter;
  */
 
 public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClickListener{
+    private SettingHelper settingHelper = SettingHelper.getInstance();
     private Context context;
     public ConfigSelectDialog(Context context) {
         super(context, R.style.payDialogStyle);
@@ -93,7 +97,8 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
         sharedPreferences  = getContext().getSharedPreferences(SharedPreferenceMy.CONFIG,Context.MODE_PRIVATE);
         hint_TV = (TextView)findViewById(R.id.hint_TV);
         currentConfig_TV = (TextView) findViewById(R.id.currentConfig_TV);
-        currentConfig_TV.setText(sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,getContext().getString(R.string.not_select_config)));
+        currentConfig_TV.setText(settingHelper.getConfigPath(context));
+        //currentConfig_TV.setText(sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,getContext().getString(R.string.not_select_config)));
         list_view = (XListView)findViewById(R.id.list_view);
         list_view.setPullLoadEnable(false);
         list_view.setPullRefreshEnable(false);
@@ -146,7 +151,8 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
         builder.setPositiveButton("确定", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                sharedPreferences.edit().putString(SharedPreferenceMy.CURRENT_CONFIG_PATH,file.getAbsolutePath()).commit();
+                //sharedPreferences.edit().putString(SharedPreferenceMy.CURRENT_CONFIG_PATH,file.getAbsolutePath()).commit();
+                settingHelper.setConfigPath(context,file.getAbsolutePath());
                 currentConfig_TV.setText(file.getAbsolutePath());
                 ConfigSelectDialog.this.getWindow().getDecorView().postDelayed(new Runnable() {
                     @Override
@@ -186,23 +192,25 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
     }
 
     private void initListView(){
-        final Handler handler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                switch (msg.what){
-                    case 1000:
-                        configSelectAdapter.notifyDataSetChanged();
-                        //configSelectAdapter.notifyDataSetChanged();
-                        //setListViewHeight(list_view);
-                        break;
-                }
-            }
-        };
+
 
         new Thread(new Runnable() {
             @Override
             public void run() {
+                Looper.prepare();
+                final Handler handler = new Handler(){
+                    @Override
+                    public void handleMessage(Message msg) {
+                        super.handleMessage(msg);
+                        switch (msg.what){
+                            case 1000:
+                                configSelectAdapter.notifyDataSetChanged();
+                                //configSelectAdapter.notifyDataSetChanged();
+                                //setListViewHeight(list_view);
+                                break;
+                        }
+                    }
+                };
 
                 File file = new File(FileUtil.SD_APTH_QQ);
                 if(file.exists()){
@@ -256,30 +264,13 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                     list.add(EnumAssetsConfig.SiChuan_YiDong_1);*/
                 }
                 handler.sendEmptyMessage(1000);
+                Looper.loop();
 
             }
         }).start();
     }
 
 
-    public    void setListViewHeight(ListView listView) {
-        Adapter adapter = listView.getAdapter();
-        if (adapter == null) {
-            return;
-        }
-        int totalHeight = 0;
-        for (int i = 0; i < adapter.getCount(); i++) {
-            View listItem = adapter.getView(i, null, listView);
-            listItem.measure(0, 0);
-            totalHeight += listItem.getMeasuredHeight();
-            //android:minHeight="?android:attr/listPreferredItemHeight"
-
-        }
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight +
-                (listView.getDividerHeight() * (adapter.getCount() - 1));
-        listView.setLayoutParams(params);
-    }
     //当服务状态发生改变
     public interface OnServerStateChangeListenner{
         void onChange(boolean isStart);

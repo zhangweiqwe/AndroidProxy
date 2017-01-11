@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -66,6 +67,18 @@ public class ConfigEditActivity extends Activity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    private void insertStr(String str){
+        if(str==null){
+            return;
+        }
+        int index = edit_ET.getSelectionStart();
+        Editable editable = edit_ET.getEditableText();
+        if(index<0||index>=editable.length()){
+            editable.append(str);
+        }else {
+            editable.insert(index,str);
+        }
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -97,6 +110,46 @@ public class ConfigEditActivity extends Activity {
                 break;
             case R.id.exit:
                 finish();
+                break;
+            case R.id.insert_method:
+                insertStr("[method]");
+                break;
+            case R.id.insert_url:
+                insertStr("[url]");
+                break;
+            case R.id.insert_uri:
+                insertStr("[uri]");
+                break;
+            case R.id.insert_version:
+                insertStr("[version]");
+                break;
+            case R.id.insert_host:
+                insertStr("[host]");
+                break;
+            case R.id.insert_blank:
+                insertStr("[tab]");
+                break;
+
+            case R.id.insert_r:
+                insertStr("\\r");
+                break;
+            case R.id.insert_n:
+                insertStr("\\n");
+                break;
+            case R.id.insert_r_n:
+                insertStr("\\r\\n");
+                break;
+            case R.id.insert_t:
+                insertStr("\\t");
+                break;
+            case R.id.insert_http_:
+                insertStr("http://");
+                break;
+            case R.id.insert_host_str:
+                insertStr("Host:");
+                break;
+            case R.id.insert_x_online_host_str:
+                insertStr("X-Online-Host:");
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -133,7 +186,7 @@ public class ConfigEditActivity extends Activity {
             "    <delate>Host,X-Online-Host,host,x-online-host</delate>\n" +
             "    <first-line>\n" +
             "        [method][tab] / [tab] [version]\\r\\n\n" +
-            "        Host: [tab][host]:443\\r\\n\n" +
+            "        Host: [tab][host]\\r\\n\n" +
             "    </first-line>\n" +
             "</https>\n" +
             "\n" +

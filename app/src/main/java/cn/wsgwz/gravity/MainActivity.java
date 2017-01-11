@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -50,6 +51,7 @@ import java.net.URI;
 import cn.wsgwz.gravity.activity.ConfigEditActivity;
 import cn.wsgwz.gravity.activity.DefinedShellActivity;
 import cn.wsgwz.gravity.adapter.MyFragmentPagerAdapter;
+import cn.wsgwz.gravity.contentProvider.MyAppContentProvider;
 import cn.wsgwz.gravity.fragment.GraspDataFragment;
 import cn.wsgwz.gravity.fragment.MainFragment;
 import cn.wsgwz.gravity.fragment.ExplainFragment;
@@ -57,6 +59,8 @@ import cn.wsgwz.gravity.fragment.log.LogContent;
 import cn.wsgwz.gravity.fragment.log.LogFragment;
 import cn.wsgwz.gravity.helper.FirstUseInitHelper;
 import cn.wsgwz.gravity.helper.PermissionHelper;
+import cn.wsgwz.gravity.helper.SettingHelper;
+import cn.wsgwz.gravity.helper.ShellHelper;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
 import cn.wsgwz.gravity.util.OnExecResultListenner;
@@ -126,6 +130,7 @@ n. 装饰，布置
         super.onCreate(savedInstanceState);
 
 
+
         Window window = getWindow();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.setStatusBarColor(Color.TRANSPARENT);
@@ -134,9 +139,11 @@ n. 装饰，布置
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         }
         setContentView(R.layout.activity_main);
+        /*SettingHelper settingHelper = SettingHelper.getInstance();
+        settingHelper.setIsStart(this,false);
+        settingHelper.isStart(this);*/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getResources().getString(R.string.app_name));
-
         sharedPreferences = getSharedPreferences(SharedPreferenceMy.CONFIG,MODE_PRIVATE);
                 setBackground();
                 addFragment();

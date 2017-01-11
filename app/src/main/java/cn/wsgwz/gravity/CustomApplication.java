@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cn.wsgwz.gravity.helper.SettingHelper;
 import cn.wsgwz.gravity.helper.ShellHelper;
 import cn.wsgwz.gravity.util.LogUtil;
 import cn.wsgwz.gravity.util.NativeUtils;
@@ -24,13 +25,16 @@ import android.util.Log;
  */
 
 public class CustomApplication extends Application {
+    public static final String PACKAGE_NAME = "cn.wsgwz.gravity";
+    private SettingHelper settingHelper = SettingHelper.getInstance();
     @Override
     public void onCreate() {
         super.onCreate();
         if(getCurProcessName(this).equals("cn.wsgwz.gravity")){
             ShellHelper.init(this);
-            SharedPreferences sharedPreferences = getSharedPreferences(SharedPreferenceMy.CONFIG, Context.MODE_PRIVATE);
-            sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,false).commit();
+            /*SharedPreferences sharedPreferences = getSharedPreferences(SharedPreferenceMy.CONFIG, Context.MODE_PRIVATE);
+            sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,false).commit();*/
+            settingHelper.setIsStart(this,false);
         }
     }
 
