@@ -18,15 +18,15 @@ import java.io.IOException;
 import cn.wsgwz.gravity.MainActivity;
 import cn.wsgwz.gravity.R;
 import cn.wsgwz.gravity.core.SocketServer;
+import cn.wsgwz.gravity.helper.SettingHelper;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
-
 
 /**
  * Created by Administrator on 2016/10/24.
  */
-
 public class ProxyService extends Service {
+    private SettingHelper settingHelper = SettingHelper.getInstance();
     private SocketServer socketServer;
     public static final short NOTIFY_SERVER_ID = 123;
     private  NotificationManager notificationManager;
@@ -47,12 +47,12 @@ public class ProxyService extends Service {
     }
     @Override
     public void onCreate() {
-        //LogUtil.printSS("   onCreate");
         super.onCreate();
         try {
             socketServer = new SocketServer(ProxyService.this);
             socketServer.start();
             showNotification();
+            settingHelper.setIsStart(this,true);
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(this,getString(R.string.start_server_error)+e.getMessage().toString(),Toast.LENGTH_LONG).show();
@@ -65,7 +65,6 @@ public class ProxyService extends Service {
 
     @Override
     public void onDestroy() {
-        //LogUtil.printSS("     onDestroy ");
         super.onDestroy();
         if(socketServer!=null){
             socketServer.interrupt();
@@ -74,6 +73,7 @@ public class ProxyService extends Service {
         if(notificationManager!=null){
             notificationManager.cancel(NOTIFY_SERVER_ID);
         }
+        settingHelper.setIsStart(this,false);
     }
 
     @Nullable

@@ -237,15 +237,14 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
             //if( sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null)!=null){
-            if(settingHelper.getConfigPath(getContext()) !=null){
+            String configPath = settingHelper.getConfigPath(getContext());
+            if(configPath !=null&&!configPath.equals("未选择")){
                 if(b){
                     //sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,true).commit();
-                    settingHelper.setIsStart(getContext(),true);
                     getActivity().startService(intentServer);
                     fllowServer(true);
                 } else {
                     //sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,false).commit();
-                    settingHelper.setIsStart(getContext(),false);
                     getActivity().stopService(intentServer);
                     fllowServer(false);
                     flowStatistics();

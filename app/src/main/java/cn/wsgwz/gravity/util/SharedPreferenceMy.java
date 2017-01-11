@@ -30,8 +30,8 @@ public class SharedPreferenceMy {
     public static final String STOP_SH = "STOP_SH";
 
 
-    //是否已经启动服务
-    public static final String SERVICE_IS_START = "SERVICE_IS_START";
+    ////是否已经启动服务
+    //public static final String SERVICE_IS_START = "SERVICE_IS_START";
 
     //保存上一次的流量'
     public static final String LAST_UID_TXBYTES = "LAST_UID_TXBYTES";
