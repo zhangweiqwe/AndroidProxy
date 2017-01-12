@@ -1,23 +1,82 @@
+<!--
 
 <config version="2.0" dns="114.114.114.114"  apn_apn="cmwap" apn_proxy="10.0.0.172" apn_port="80">
 
-    <http host="www.chinamobile.com" port="80">
+    <http host="10.0.0.172" port="80">
         <delate>Host,X-Online-Host,host,x-online-host</delate>
         <first-line>
-            [method][tab] http://www.chinamobile.com[uri][tab] [version]\r\n
-            Host: [tab][host]\r\n
+            [method][tab] [url][tab] [version]\r\n
+            \n[method] [tab]http://wapx.cmvideo.cn:8080[uri] [tab]  [version]\r\n
+            Host:[tab] wapx.cmvideo.cn:8080
+           &lt;!&ndash; X_UP_CLIENT_CHANNEL_ID:[tab]23000101-99000-200300120100004
+            X_UP_CLIENT_ID:[tab]000249
+            Content-Type:[tab] application/x-www-form-urlencoded&ndash;&gt;
+            &lt;!&ndash;migu.cmvideo.cn&ndash;&gt;
         </first-line>
     </http>
-
-
     <https host="10.0.0.172" port="80"  switch="on">
         <delate>Host,X-Online-Host,host,x-online-host</delate>
         <first-line>
             [method][tab] [url][tab] [version]\r\n
-            Host: [tab][host][uri]\r\n
-            Accept:[tab] */*, [tab]application/vnd.wap.mms-message, [tab]application/vnd.wap.sic\r\n
-            Content-Type:[tab] application/vnd.wap.mms-message\r\n
+            Host: [tab][host]\r\n
         </first-line>
     </https>
 
 </config>
+-->
+
+
+<config version="2.0" dns="129.29.29.29"  apn_apn="cmwap" apn_proxy="10.0.0.172" apn_port="80">
+
+    <http host="10.0.0.172" port="80">
+        <delate>Host,X-Online-Host,host,x-online-host</delate>
+        <first-line>
+            [method][tab] [url][tab] [version]\r\n
+            \n[method] [tab]http://wapx.cmvideo.cn:8080[uri] [tab]  [version]\r\n
+            Host:[tab] wapx.cmvideo.cn:8080\r\n
+        </first-line>
+    </http>
+    <https host="10.0.0.172" port="80"  switch="on">
+        <delate>Host,X-Online-Host,host,x-online-host</delate>
+        <first-line>
+          <!--  [method][tab] [url] [tab] [version]\r\n
+            \n[method] [tab]wapx.cmvideo.cn:443[tab]  [version]\r\n
+            Host:[tab] wapx.cmvideo.cn:443\r\n-->
+
+            <!--[method][tab] [url] [tab] [version]\r\n
+            \n[method] [tab]xdrig.com:443[tab]  [version]\r\n
+            Host:[tab] xdrig.com\r\n-->
+            <!--service.cq.10086.cn-->
+
+              [method][tab] [url] [tab] [version]\r\n
+                       \n[method] [tab]service.cq.10086.cn:443[tab]  [version]\r\n
+                       Host:[tab] service.cq.10086.cn:443\r\n
+           <!-- [method][tab] wap.10086.cn:443 [tab] [version]\r\n
+            WW\nHost:[tab]wap.10086.cn\r\nX-Online-Host:[tab][host]\r\n-->
+        </first-line>
+    </https>
+
+</config>
+
+
+
+ <!--   mode=wap;
+    listen_port=65080;
+    uid=3004;
+    daemon=on;
+
+    #HTTP模块
+    http_ip=10.0.0.172;
+    http_port=80;
+    http_del="Host,X-Online-Host";
+    http_first="[M] [U] [V]\r\nX-Forward-For: 陌子\nHost: wap.migudm.mll.migu.cn\nConnection: 2017.1.12一个值得纪念的日子\nHost: wap.migudm.mll.migu.cn:443\r\nHost: \t[H]\r\n";
+    #HTTPS模块
+    https_connect=on;
+    https_ip=10.0.0.172;
+    https_port=80;
+    https_del="Host,X-Online-Host";
+    https_first="[M] / [V]\r\nX-Forward-For: 陌子\nHost: wap.migudm.mll.migu.cn\nConnection: 陌子\nHost: wap.migudm.mll.migu.cn\r\nHost: \t[H]:443\r\n";
+    #dns解析
+    dns_tcp=http;
+    dns_listen_port=65053;
+    dns_url="119.29.29.29";-->
