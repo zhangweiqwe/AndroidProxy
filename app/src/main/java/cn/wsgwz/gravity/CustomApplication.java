@@ -31,6 +31,7 @@ public class CustomApplication extends Application {
     public void onCreate() {
         super.onCreate();
         if(getCurProcessName(this).equals("cn.wsgwz.gravity")){
+           // LogUtil.printSS("CustomApplication  a");
             ShellHelper.init(this);
             /*SharedPreferences sharedPreferences = getSharedPreferences(SharedPreferenceMy.CONFIG, Context.MODE_PRIVATE);
             sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,false).commit();*/

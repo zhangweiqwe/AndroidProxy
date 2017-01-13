@@ -73,6 +73,7 @@ public class ProxyService extends Service {
         if(notificationManager!=null){
             notificationManager.cancel(NOTIFY_SERVER_ID);
         }
+        //LogUtil.printSS("   ProxyService  onDestroy");
         settingHelper.setIsStart(this,false);
     }
 

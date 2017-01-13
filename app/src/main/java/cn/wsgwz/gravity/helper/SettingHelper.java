@@ -50,6 +50,7 @@ public class SettingHelper {
 
 
     public void setIsStart( Context context,boolean isStart){
+        //LogUtil.printSS("    setIsStart"+isStart);
         int i = isStart?0:1;
         ContentResolver contentResolver = context.getContentResolver();
         ContentValues contentValues = new ContentValues();
@@ -74,6 +75,8 @@ public class SettingHelper {
         if (b){
             i  = cursor.getInt(cursor.getColumnIndex(MyAppContentProvider.DbHelper._IS_START));
         }
+        cursor.close();
+       // LogUtil.printSS("    isStart"+i);
         return i==0?true:false;
     }
 }
