@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
+import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -23,14 +24,19 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ClickableSpan;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +45,8 @@ import android.view.Window;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -61,6 +69,8 @@ import cn.wsgwz.gravity.helper.FirstUseInitHelper;
 import cn.wsgwz.gravity.helper.PermissionHelper;
 import cn.wsgwz.gravity.helper.SettingHelper;
 import cn.wsgwz.gravity.helper.ShellHelper;
+import cn.wsgwz.gravity.service.SpeedStatisticsService;
+import cn.wsgwz.gravity.util.DensityUtil;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
 import cn.wsgwz.gravity.util.OnExecResultListenner;
@@ -94,8 +104,10 @@ public class MainActivity extends AppCompatActivity implements LogFragment.OnLis
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS
-
     };
+
+    public static final  int OVERLAY_PERMISSION_REQ_CODE = 5;
+    //suspension
    // private Intent intentServer;
 
 
@@ -124,6 +136,8 @@ n. 装饰，布置
             setMarginStatusBar();
         }
     }
+    private Intent intentSpeedStatistics;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,12 +153,18 @@ n. 装饰，布置
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         }
         setContentView(R.layout.activity_main);
+
+
+        sharedPreferences = getSharedPreferences(SharedPreferenceMy.CONFIG,MODE_PRIVATE);
+        intentSpeedStatistics = new Intent(this,SpeedStatisticsService.class);
+        boolean showSpeedStatistics = sharedPreferences.getBoolean(SharedPreferenceMy.SPEED_STATISTICS,true);
+        setSuspensionState(showSpeedStatistics);
         /*SettingHelper settingHelper = SettingHelper.getInstance();
         settingHelper.setIsStart(this,false);
         settingHelper.isStart(this);*/
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getResources().getString(R.string.app_name));
-        sharedPreferences = getSharedPreferences(SharedPreferenceMy.CONFIG,MODE_PRIVATE);
+
                 setBackground();
                 addFragment();
                 setSupportActionBar(toolbar);
@@ -166,6 +186,13 @@ n. 装饰，布置
                                 boolean b = !item.isChecked();
                                 item.setChecked(b);
                                 sharedPreferences.edit().putBoolean(SharedPreferenceMy.SHELL_IS_FLLOW_MENU,b).commit();
+                                break;
+                            case R.id.speedStatistics:
+                               //LogUtil.printSS("---sss"+item.isChecked());
+                                boolean c = !item.isChecked();
+                                item.setChecked(c);
+                                sharedPreferences.edit().putBoolean(SharedPreferenceMy.SPEED_STATISTICS,c).commit();
+                                setSuspensionState(c);
                                 break;
                             case R.id.defined_shell:
                                 startActivity(new Intent(MainActivity.this,DefinedShellActivity.class));
@@ -198,7 +225,9 @@ n. 装饰，布置
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         boolean isFllowProxySercer = sharedPreferences.getBoolean(SharedPreferenceMy.SHELL_IS_FLLOW_MENU,true);
+        boolean showSpeedStatistics = sharedPreferences.getBoolean(SharedPreferenceMy.SPEED_STATISTICS,true);
         menu.findItem(R.id.fllow_shell).setChecked(isFllowProxySercer);
+        menu.findItem(R.id.speedStatistics).setChecked(showSpeedStatistics);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -211,11 +240,11 @@ n. 装饰，布置
 
         boolean isInitSystem = sharedPreferences.getBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,false);
         if(!isInitSystem){
+            new PermissionHelper(MainActivity.this).requestPermissionsForMainActiivty();
             if(Build.VERSION.SDK_INT>=23){
                 if(ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
-                    new PermissionHelper(MainActivity.this).requestPermissionsForMainActiivty();
-                    new FirstUseInitHelper(MainActivity.this,sharedPreferences).initFileToSdcard();
-                    //ActivityCompat.requestPermissions(this,REQUEST_WRITE_READ_EXTERNALPERMISSION,REQUEST_WRITE_READ_EXTERNAL_CODE);
+                   // new FirstUseInitHelper(MainActivity.this,sharedPreferences).initFileToSdcard();
+                    ActivityCompat.requestPermissions(this,REQUEST_WRITE_READ_EXTERNALPERMISSION,REQUEST_WRITE_READ_EXTERNAL_CODE);
                 }else {
                     new FirstUseInitHelper(MainActivity.this,sharedPreferences).initFileToSdcard();
                 }
@@ -239,6 +268,13 @@ n. 装饰，布置
                     finish();
                 }
                 break;
+            case OVERLAY_PERMISSION_REQ_CODE:
+                if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    startService(intentSpeedStatistics);
+                }else {
+                    //finish();
+                }
+                break;
         }
     }
 
@@ -257,7 +293,24 @@ n. 装饰，布置
         return super.onCreateOptionsMenu(menu);
     }
 
-
+    private void setSuspensionState(boolean state){
+        if(state){
+            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(getApplicationContext())) {
+            if (false) {
+                //Toast.makeText(getApplicationContext(), getResources().getString(R.string.permission_alert), Toast.LENGTH_LONG).show();
+                Intent permissionIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + getPackageName()));
+                startActivityForResult(permissionIntent, OVERLAY_PERMISSION_REQ_CODE);
+               // ActivityCompat.requestPermissions(this,new String[]{Settings.ACTION_MANAGE_OVERLAY_PERMISSION},REQUEST_WRITE_READ_EXTERNAL_CODE);
+            } else {
+                startService(intentSpeedStatistics);
+            }
+            //LogUtil.printSS("  "+showSpeedStatistics);
+            //startService(intentSpeedStatistics);
+        }else {
+            stopService(intentSpeedStatistics);
+        }
+    }
 
     private void addFragment(){
         tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -359,27 +412,47 @@ n. 装饰，布置
         return super.onKeyDown(keyCode, event);
     }
     private void aboutDialogShow(){
-        final String qq = "857899299";
+        final String qq = "580466685";
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("关于");
         String aboutStr = "作者：我思故我在\r\n" +
                 "版本："+FileUtil.VERSION_NUMBER+"\r\n"+
-                "联系方式：QQ"+qq;
+                "讨论群："+qq;
 
-        Spannable spannable = new SpannableString(aboutStr);
+        SpannableString spannable = new SpannableString(aboutStr);
         spannable.setSpan(new AbsoluteSizeSpan(15,true), 0, spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
+                String urlQQ = "mqqwpa://im/chat?chat_type=group&uin=580466685&version=1";
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(urlQQ)));
+                }catch (ActivityNotFoundException e){
+
+                }
             }
         };
-        spannable.setSpan(clickableSpan, spannable.length()-qq.length(), spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        builder.setMessage(spannable);
-        builder.setNeutralButton("联系", new DialogInterface.OnClickListener() {
+        spannable.setSpan(clickableSpan, spannable.length()-qq.length(), spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);//SPAN_EXCLUSIVE_EXCLUSIVE
+
+        RelativeLayout relativeLayout = new RelativeLayout(this);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(DensityUtil.dip2px(this,120),DensityUtil.dip2px(this,30),0,0);
+        layoutParams.setMarginStart(DensityUtil.dip2px(this,30));
+        TextView textView = new TextView(this);
+        textView.setLayoutParams(layoutParams);
+        textView.setText(spannable);
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+        textView.setTextColor(Color.parseColor("#ffffff"));
+        textView.setTextSize(16, TypedValue.COMPLEX_UNIT_SP);
+        relativeLayout.addView(textView);
+
+        builder.setView(relativeLayout);
+        //builder.setMessage(spannable);
+        builder.setNeutralButton("错误反馈", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                startQQTalk(qq);
+                startQQTalk("857899299");
             }
         });
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {

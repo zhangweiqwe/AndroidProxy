@@ -101,7 +101,7 @@ public class ShellHelper {
     public String getInitStartStr(Context context){
         int uid = 8888;
         try {
-          uid =  context.getPackageManager().getApplicationInfo(context.getPackageName(),0).uid;
+          uid =  context.getPackageManager().getApplicationInfo("cn.wsgwz.gravity",0).uid;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

@@ -8,6 +8,7 @@ import android.net.Uri;
 
 import cn.wsgwz.gravity.CustomApplication;
 import cn.wsgwz.gravity.contentProvider.MyAppContentProvider;
+import cn.wsgwz.gravity.util.FloatBytesConvertUtil;
 import cn.wsgwz.gravity.util.LogUtil;
 
 /**
@@ -17,6 +18,9 @@ import cn.wsgwz.gravity.util.LogUtil;
 public class SettingHelper {
     private static final Uri settingUriConfigPath = Uri.parse("content://"+ CustomApplication.PACKAGE_NAME+"/"+MyAppContentProvider.PATH_SETTING_CONFIG_PATH);
     private static final Uri settingUriIsStart = Uri.parse("content://"+ CustomApplication.PACKAGE_NAME+"/"+MyAppContentProvider.PATH_SETTING_IS_START);
+    private static final Uri settingUriSuspensioColor = Uri.parse("content://"+ CustomApplication.PACKAGE_NAME+"/"+MyAppContentProvider.PATH_SETTING_SUSPENSION_COLOR);
+    private static final Uri settingUriSpeedSuspensionX = Uri.parse("content://"+ CustomApplication.PACKAGE_NAME+"/"+MyAppContentProvider.PATH_SETTING_SEED_X_LOCATION);
+    private static final Uri settingUriSpeedSuspensionY = Uri.parse("content://"+ CustomApplication.PACKAGE_NAME+"/"+MyAppContentProvider.PATH_SETTING_SEED_Y_LOCATION);
     private SettingHelper(){}
     private static final SettingHelper settingHelper = new SettingHelper();
     public static final SettingHelper getInstance(){
@@ -49,6 +53,9 @@ public class SettingHelper {
     }
 
 
+
+
+
     public void setIsStart( Context context,boolean isStart){
         //LogUtil.printSS("    setIsStart"+isStart);
         int i = isStart?0:1;
@@ -75,8 +82,59 @@ public class SettingHelper {
         if (b){
             i  = cursor.getInt(cursor.getColumnIndex(MyAppContentProvider.DbHelper._IS_START));
         }
-        cursor.close();
        // LogUtil.printSS("    isStart"+i);
         return i==0?true:false;
     }
+
+    public void setSuspensionColor( Context context,String color){
+        ContentResolver contentResolver = context.getContentResolver();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MyAppContentProvider.DbHelper._SUSPENSION_COLOR,color);
+        contentResolver.update(settingUriSuspensioColor,contentValues,MyAppContentProvider.DbHelper._ID+"=?",new String[]{"1"});
+    }
+    public String getSuspensionColor(Context context){
+        ContentResolver contentResolver = context.getContentResolver();
+        String color = null;
+        Cursor cursor = contentResolver.query(settingUriSuspensioColor,null,MyAppContentProvider.DbHelper._ID+"=?",new String[]{"1"}, null,null);
+        boolean b = cursor.moveToFirst();
+        if (b){
+            color  = cursor.getString(cursor.getColumnIndex(MyAppContentProvider.DbHelper._SUSPENSION_COLOR));
+        }
+        return color;
+    }
+
+    public void setSpeedSuspensionX( Context context,float f){
+        ContentResolver contentResolver = context.getContentResolver();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MyAppContentProvider.DbHelper._SPEED_VIEW_X_LOCATION,f);
+        contentResolver.update(settingUriSpeedSuspensionX,contentValues,MyAppContentProvider.DbHelper._ID+"=?",new String[]{"1"});
+    }
+    public float getSpeedSuspensionX(Context context){
+        ContentResolver contentResolver = context.getContentResolver();
+        float x = 0;
+        Cursor cursor = contentResolver.query(settingUriSpeedSuspensionX,null,MyAppContentProvider.DbHelper._ID+"=?",new String[]{"1"}, null,null);
+        boolean b = cursor.moveToFirst();
+        if (b){
+            x  = cursor.getFloat(cursor.getColumnIndex(MyAppContentProvider.DbHelper._SPEED_VIEW_X_LOCATION));
+        }
+        return x;
+    }
+
+    public void setSpeedSuspensionY( Context context,float f){
+        ContentResolver contentResolver = context.getContentResolver();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MyAppContentProvider.DbHelper._SPEED_VIEW_Y_LOCATION,f);
+        contentResolver.update(settingUriSpeedSuspensionY,contentValues,MyAppContentProvider.DbHelper._ID+"=?",new String[]{"1"});
+    }
+    public float getSpeedSuspensionY(Context context){
+        ContentResolver contentResolver = context.getContentResolver();
+        float x = 0;
+        Cursor cursor = contentResolver.query(settingUriSpeedSuspensionY,null,MyAppContentProvider.DbHelper._ID+"=?",new String[]{"1"}, null,null);
+        boolean b = cursor.moveToFirst();
+        if (b){
+            x  = cursor.getFloat(cursor.getColumnIndex(MyAppContentProvider.DbHelper._SPEED_VIEW_Y_LOCATION));
+        }
+        return x;
+    }
+
 }

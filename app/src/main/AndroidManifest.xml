@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="cn.wsgwz.gravity">
+
+
 
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -27,11 +29,10 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true">
-
         <provider
             android:name=".contentProvider.MyAppContentProvider"
             android:authorities="cn.wsgwz.gravity"
-            android:multiprocess="false"></provider>
+            android:multiprocess="false" />
         <!-- android:theme="@style/AppTheme" -->
         <!-- android:configChanges="orientation|keyboardHidden" -->
         <!-- android:windowSoftInputMode="adjustUnspecified|stateHidden" -->
@@ -43,8 +44,6 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-
-
                 //安装apk
                 <!--
                 <action android:name="android.intent.action.VIEW" />
@@ -96,21 +95,29 @@
         <activity
             android:name=".activity.ConfigEditActivity"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateHidden|stateUnchanged"/>
+            android:windowSoftInputMode="stateHidden|stateUnchanged" />
         <activity android:name=".demo.Main2Activity" />
         <activity
             android:name=".demo.Main3Activity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
-        <activity android:name=".activity.PackageInstallActivity"
+        <activity
+            android:name=".activity.PackageInstallActivity"
             android:theme="@style/GraspPreViewTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="content" />
                 <data android:scheme="file" />
                 <data android:mimeType="application/vnd.android.package-archive" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".service.SpeedStatisticsService"
+            android:process=":speedStatisticsService"
+            ></service>
     </application>
 
 </manifest>

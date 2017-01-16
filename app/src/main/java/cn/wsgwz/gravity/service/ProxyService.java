@@ -49,10 +49,10 @@ public class ProxyService extends Service {
     public void onCreate() {
         super.onCreate();
         try {
+            settingHelper.setIsStart(this,true);
             socketServer = new SocketServer(ProxyService.this);
             socketServer.start();
             showNotification();
-            settingHelper.setIsStart(this,true);
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(this,getString(R.string.start_server_error)+e.getMessage().toString(),Toast.LENGTH_LONG).show();

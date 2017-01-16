@@ -186,7 +186,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         int numM = 1048576;
         //1.获取一个包管理器。
         PackageManager pm = getActivity().getPackageManager();
-//2.遍历手机操作系统 获取所有的应用程序的uid
+        //2.遍历手机操作系统 获取所有的应用程序的uid
         ApplicationInfo appcationInfo = null;
         try {
             appcationInfo = pm.getApplicationInfo(getActivity().getPackageName(),0);

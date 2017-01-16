@@ -7,6 +7,8 @@
     <item android:id="@+id/exec_stop" android:title="关闭脚本"></item>
     <item android:id="@+id/fllow_shell" android:title="脚本跟随随服务" android:checkable="true" android:enabled="true"
         ></item>
+    <item android:id="@+id/speedStatistics" android:title="网速" android:checkable="true" android:enabled="true"
+        ></item>
     <item android:id="@+id/defined_shell" android:title="定义脚本"></item>
     <item android:id="@+id/create_config" android:title="创建"></item>
     <item android:id="@+id/wallpaper" android:title="壁纸"></item>

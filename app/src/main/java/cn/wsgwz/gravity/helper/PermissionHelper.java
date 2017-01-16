@@ -38,6 +38,20 @@ public class PermissionHelper {
             e.printStackTrace();
         }
     }
+    public void requestPermissionsForSuspensionWindow(){
+        //PackageManager packageManager = context.getPackageManager();
+        //PackageInfo packageInfo;
+        Runtime runtime =Runtime.getRuntime();
+        try {
+            //android.settings.action.MANAGE_OVERLAY_PERMISSION
+            runtime.exec(" pm grant cn.wsgwz.gravity  android.permission.READ_EXTERNAL_STORAGE android.permission.WRITE_EXTERNAL_STORAGE\n"+
+                    "exit\n").waitFor();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
    /* private void permissionRequestDemo()  {
         PackageManager packageManager = getPackageManager();
         PackageInfo packageInfo = null;

@@ -16,6 +16,8 @@ public class SharedPreferenceMy {
 
     public static final String SHELL_IS_FLLOW_MENU = "SHELL_IS_FLLOW_MENU";
 
+    public static final String SPEED_STATISTICS = "SPEED_STATISTICS";
+
 
     //当前壁纸 路径
      public static final String WALLPAPER_PATH = "WALLPAPER_PATH";

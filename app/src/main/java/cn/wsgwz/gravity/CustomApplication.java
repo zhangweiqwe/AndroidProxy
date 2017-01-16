@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.os.Environment;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -19,6 +21,7 @@ import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
 import android.app.ActivityManager;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Created by Jeremy Wang on 2016/10/26.
@@ -30,13 +33,14 @@ public class CustomApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        if(getCurProcessName(this).equals("cn.wsgwz.gravity")){
-           // LogUtil.printSS("CustomApplication  a");
+        ObjTemp objTemp = getCurProcessName(this);
+        if(objTemp.getCurrentProgressName().equals("cn.wsgwz.gravity")){
             ShellHelper.init(this);
-            /*SharedPreferences sharedPreferences = getSharedPreferences(SharedPreferenceMy.CONFIG, Context.MODE_PRIVATE);
-            sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,false).commit();*/
-            settingHelper.setIsStart(this,false);
+            if(!objTemp.isStartProxyService()){
+                settingHelper.setIsStart(this,false);
+            }
         }
+        //Toast.makeText(this,getCurProcessName(this)+"\n"+objTemp+"",Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -54,17 +58,48 @@ public class CustomApplication extends Application {
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
     }
-    private String getCurProcessName(Context context) {
+    private  ObjTemp getCurProcessName(Context context) {
+        ObjTemp objTemp = new ObjTemp();
+        //List<Object> list = new ArrayList<>();
         int pid = android.os.Process.myPid();
         ActivityManager mActivityManager = (ActivityManager) context
                 .getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningAppProcessInfo appProcess : mActivityManager
                 .getRunningAppProcesses()) {
             if (appProcess.pid == pid) {
-                return appProcess.processName;
+                 objTemp.setCurrentProgressName((appProcess.processName));
+            }else if(appProcess.processName.equals("cn.wsgwz.gravity:remoteProxy")){
+                objTemp.setStartProxyService(true);
             }
-
         }
-        return null;
+        return objTemp;
+    }
+    private final class ObjTemp{
+        private boolean isStartProxyService;
+        private String currentProgressName;
+
+        public boolean isStartProxyService() {
+            return isStartProxyService;
+        }
+
+        public void setStartProxyService(boolean startProxyService) {
+            isStartProxyService = startProxyService;
+        }
+
+        public String getCurrentProgressName() {
+            return currentProgressName;
+        }
+
+        public void setCurrentProgressName(String currentProgressName) {
+            this.currentProgressName = currentProgressName;
+        }
+
+        @Override
+        public String toString() {
+            return "ObjTemp{" +
+                    "isStartProxyService=" + isStartProxyService +
+                    ", currentProgressName='" + currentProgressName + '\'' +
+                    '}';
+        }
     }
 }
