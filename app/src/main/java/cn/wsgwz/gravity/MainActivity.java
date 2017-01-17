@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -96,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements LogFragment.OnLis
    // private   ScreenSlidePagerAdapter screenSlidePagerAdapter;
     private MyFragmentPagerAdapter fragmentPagerAdapter;
 
+    private SettingHelper settingHelper = SettingHelper.getInstance();
 
 
     private SharedPreferences sharedPreferences;
@@ -157,8 +159,9 @@ n. 装饰，布置
 
         sharedPreferences = getSharedPreferences(SharedPreferenceMy.CONFIG,MODE_PRIVATE);
         intentSpeedStatistics = new Intent(this,SpeedStatisticsService.class);
-        boolean showSpeedStatistics = sharedPreferences.getBoolean(SharedPreferenceMy.SPEED_STATISTICS,true);
-        setSuspensionState(showSpeedStatistics);
+        boolean showSpeedSuspension = sharedPreferences.getBoolean(SharedPreferenceMy.SPEED_STATISTICS,true);
+        setSuspensionState(showSpeedSuspension);
+
         /*SettingHelper settingHelper = SettingHelper.getInstance();
         settingHelper.setIsStart(this,false);
         settingHelper.isStart(this);*/
@@ -189,10 +192,18 @@ n. 装饰，布置
                                 break;
                             case R.id.speedStatistics:
                                //LogUtil.printSS("---sss"+item.isChecked());
-                                boolean c = !item.isChecked();
-                                item.setChecked(c);
-                                sharedPreferences.edit().putBoolean(SharedPreferenceMy.SPEED_STATISTICS,c).commit();
-                                setSuspensionState(c);
+                                boolean c2 = !item.isChecked();
+                                item.setChecked(c2);
+                                //vt. 拿，取；采取；接受（礼物等）；买，花费；耗费（时间等）
+                                /* 英 [ɪ'fekt]   美 [ɪ'fɛkt]   全球发音 跟读 口语练习
+                                    n. 影响；效果；作用*/
+                                sharedPreferences.edit().putBoolean(SharedPreferenceMy.SPEED_STATISTICS,c2).commit();
+                                setSuspensionState(c2);
+                                break;
+                            case R.id.isCapture:
+                                boolean c1 = !item.isChecked();
+                                settingHelper.setIsCapture(MainActivity.this,c1);
+                                Snackbar.make(toolbar,getString(R.string.restart_service_take_effect),Snackbar.LENGTH_SHORT).show();
                                 break;
                             case R.id.defined_shell:
                                 startActivity(new Intent(MainActivity.this,DefinedShellActivity.class));
@@ -228,6 +239,7 @@ n. 装饰，布置
         boolean showSpeedStatistics = sharedPreferences.getBoolean(SharedPreferenceMy.SPEED_STATISTICS,true);
         menu.findItem(R.id.fllow_shell).setChecked(isFllowProxySercer);
         menu.findItem(R.id.speedStatistics).setChecked(showSpeedStatistics);
+        menu.findItem(R.id.isCapture).setChecked(settingHelper.isCaptrue(this));
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -243,8 +255,9 @@ n. 装饰，布置
             new PermissionHelper(MainActivity.this).requestPermissionsForMainActiivty();
             if(Build.VERSION.SDK_INT>=23){
                 if(ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
-                   // new FirstUseInitHelper(MainActivity.this,sharedPreferences).initFileToSdcard();
-                    ActivityCompat.requestPermissions(this,REQUEST_WRITE_READ_EXTERNALPERMISSION,REQUEST_WRITE_READ_EXTERNAL_CODE);
+                    new PermissionHelper(this).requestPermissionsForMainActiivty();
+                    new FirstUseInitHelper(MainActivity.this,sharedPreferences).initFileToSdcard();
+                    //ActivityCompat.requestPermissions(this,REQUEST_WRITE_READ_EXTERNALPERMISSION,REQUEST_WRITE_READ_EXTERNAL_CODE);
                 }else {
                     new FirstUseInitHelper(MainActivity.this,sharedPreferences).initFileToSdcard();
                 }
@@ -253,6 +266,8 @@ n. 装饰，布置
             }
         }
     }
+
+
 
 
 
@@ -292,9 +307,10 @@ n. 装饰，布置
 
         return super.onCreateOptionsMenu(menu);
     }
-
-    private void setSuspensionState(boolean state){
+    public void setSuspensionState(boolean state){
         if(state){
+            ConnectivityManager mConnectivityManager = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo netInfo = mConnectivityManager.getActiveNetworkInfo();
             //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(getApplicationContext())) {
             if (false) {
                 //Toast.makeText(getApplicationContext(), getResources().getString(R.string.permission_alert), Toast.LENGTH_LONG).show();
@@ -647,5 +663,11 @@ n. 装饰，布置
         return toolbar;
     }
 
+    public Intent getIntentSpeedStatistics() {
+        return intentSpeedStatistics;
+    }
 
+    public void setIntentSpeedStatistics(Intent intentSpeedStatistics) {
+        this.intentSpeedStatistics = intentSpeedStatistics;
+    }
 }

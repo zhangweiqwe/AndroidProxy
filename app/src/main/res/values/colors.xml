@@ -6,4 +6,7 @@
     <color name="transparent">#00000000</color>
 
     <color name="speedTv">#88dcdf14</color>
+
+    <color name="capture_tv_droup"> #c1c914f2</color>
+    <color name="capture_tv_child">#c114a1f2</color>
 </resources>

@@ -91,7 +91,7 @@ public class PackageInfoActivity extends FragmentActivity {
                 ClipData myClip;
                 myClip = ClipData.newPlainText("uid", UID_STR);
                 myClipboard.setPrimaryClip(myClip);
-                Toast.makeText(this,"已复制",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,getResources().getString(R.string.already_copy),Toast.LENGTH_SHORT).show();
                 break;
         }
         return super.onOptionsItemSelected(item);

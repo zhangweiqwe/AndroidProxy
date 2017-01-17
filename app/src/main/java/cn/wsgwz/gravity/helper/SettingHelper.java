@@ -21,6 +21,7 @@ public class SettingHelper {
     private static final Uri settingUriSuspensioColor = Uri.parse("content://"+ CustomApplication.PACKAGE_NAME+"/"+MyAppContentProvider.PATH_SETTING_SUSPENSION_COLOR);
     private static final Uri settingUriSpeedSuspensionX = Uri.parse("content://"+ CustomApplication.PACKAGE_NAME+"/"+MyAppContentProvider.PATH_SETTING_SEED_X_LOCATION);
     private static final Uri settingUriSpeedSuspensionY = Uri.parse("content://"+ CustomApplication.PACKAGE_NAME+"/"+MyAppContentProvider.PATH_SETTING_SEED_Y_LOCATION);
+    private static final Uri settingUriIsCapture = Uri.parse("content://"+ CustomApplication.PACKAGE_NAME+"/"+MyAppContentProvider.PATH_SETTING_IS_CAPTURE);
     private SettingHelper(){}
     private static final SettingHelper settingHelper = new SettingHelper();
     public static final SettingHelper getInstance(){
@@ -57,21 +58,11 @@ public class SettingHelper {
 
 
     public void setIsStart( Context context,boolean isStart){
-        //LogUtil.printSS("    setIsStart"+isStart);
         int i = isStart?0:1;
         ContentResolver contentResolver = context.getContentResolver();
         ContentValues contentValues = new ContentValues();
         contentValues.put(MyAppContentProvider.DbHelper._IS_START,i);
         contentResolver.update(settingUriIsStart,contentValues,MyAppContentProvider.DbHelper._ID+"=?",new String[]{"1"});
-       /* if(isStart(context)!=true){
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(MyAppContentProvider.DbHelper._IS_START,i);
-            contentResolver.update(settingUriIsStart,contentValues,MyAppContentProvider.DbHelper._ID+"=?",new String[]{"1"});
-        }else {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(MyAppContentProvider.DbHelper._IS_START,i);
-            contentResolver.insert(settingUriIsStart,contentValues);
-        }*/
     }
     public boolean isStart(Context context){
         ContentResolver contentResolver = context.getContentResolver();
@@ -82,9 +73,29 @@ public class SettingHelper {
         if (b){
             i  = cursor.getInt(cursor.getColumnIndex(MyAppContentProvider.DbHelper._IS_START));
         }
-       // LogUtil.printSS("    isStart"+i);
         return i==0?true:false;
     }
+
+    public void setIsCapture( Context context,boolean isCapture){
+        int i = isCapture?0:1;
+        ContentResolver contentResolver = context.getContentResolver();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MyAppContentProvider.DbHelper._IS_CAPTURE,i);
+        contentResolver.update(settingUriIsCapture,contentValues,MyAppContentProvider.DbHelper._ID+"=?",new String[]{"1"});
+    }
+    public boolean isCaptrue(Context context){
+        ContentResolver contentResolver = context.getContentResolver();
+        int i = 0;
+        Cursor cursor = contentResolver.query(settingUriIsCapture,null,MyAppContentProvider.DbHelper._ID+"=?",new String[]{"1"},
+                null,null);
+        boolean b = cursor.moveToFirst();
+        if (b){
+            i  = cursor.getInt(cursor.getColumnIndex(MyAppContentProvider.DbHelper._IS_CAPTURE));
+        }
+        return i==0?true:false;
+    }
+
+
 
     public void setSuspensionColor( Context context,String color){
         ContentResolver contentResolver = context.getContentResolver();

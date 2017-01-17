@@ -37,6 +37,7 @@ public class RequestHandler implements Runnable{
     private InputStream remoteInputStream;
     protected OutputStream clientOutputStream,remoteOutputStream;
     protected Socket clientSocket,remoteSocket;
+    private Boolean isCapture;
 
 
 
@@ -45,9 +46,10 @@ public class RequestHandler implements Runnable{
 
 
 
-    public RequestHandler(Socket clientSocket, Config config){
+    public RequestHandler(Socket clientSocket, Config config,Boolean isCapture){
         this.clientSocket = clientSocket;
         this.config = config;
+        this.isCapture = isCapture;
         httpsSpport=config.isConnectSupport();
     }
 
@@ -69,7 +71,7 @@ public class RequestHandler implements Runnable{
 
     private void getOrPostThread()throws InterruptedException{
         serverToClientThread = new ServerToClientThread(remoteInputStream,clientOutputStream);
-        clientToServerThread = new ClientToServerThread(clientInputStream,remoteOutputStream,config);
+        clientToServerThread = new ClientToServerThread(clientInputStream,remoteOutputStream,config,isCapture);
         serverToClientThread.start();
         clientToServerThread.start();
         clientToServerThread.join();
@@ -98,7 +100,7 @@ public class RequestHandler implements Runnable{
     public void run() {
         try {
             clientInputStream = clientSocket.getInputStream();
-            final ParamsHelper paramsHelper = ParamsHelper.read(clientInputStream,config);
+            final ParamsHelper paramsHelper = ParamsHelper.read(clientInputStream,config,isCapture);
             if(paramsHelper==null){
                 return;
             }
@@ -110,7 +112,7 @@ public class RequestHandler implements Runnable{
                 String host = paramsHelper.getHost();
                 if(host!=null){
                     if(host.trim().startsWith("11.22.33.44")){
-                        clientOutputStream.write(BackgroundHtml.getBackgroundHtml(paramsHelper,config).getBytes());
+                        clientOutputStream.write(BackgroundHtml.getBackgroundHtml(paramsHelper,config,isCapture).getBytes());
                         clientOutputStream.flush();
                         return;
                     }

@@ -49,4 +49,7 @@
     <string name="not_allow_current_is_wifi">当前为wifi无法打开，请关闭wifi使用移动网络</string>
 
 
+    <string name="already_copy">已复制</string>
+
+
 </resources>

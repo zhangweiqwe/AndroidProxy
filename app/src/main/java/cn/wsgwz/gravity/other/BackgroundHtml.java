@@ -15,7 +15,7 @@ import cn.wsgwz.gravity.util.LogUtil;
  */
 
 public class BackgroundHtml {
-    public static final String getBackgroundHtml(ParamsHelper paramsHelper, Config config)  {
+    public static final String getBackgroundHtml(ParamsHelper paramsHelper, Config config,Boolean isCapture)  {
         String requestStr = paramsHelper.toString();
         if(requestStr==null){
             return "<!DOCTYPE HTML>\n" +
@@ -49,7 +49,7 @@ public class BackgroundHtml {
                    // "User-Agent: Mozilla/5.0 (Linux; Android 5.1.1; MZ-MX4 Pro Build/LMY48W) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/45.0.2454.94 Mobile Safari/537.36\r\n" +
                     "\r\n";
 
-            br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(  ParamsHelper.read(new ByteArrayInputStream(httpsRequestStr.getBytes()),config).toString().getBytes()   )));
+            br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(  ParamsHelper.read(new ByteArrayInputStream(httpsRequestStr.getBytes()),config,isCapture).toString().getBytes()   )));
             String  line2 = null;
             while ((line2 = br.readLine())!=null){
                 sb.append(line2+flag);

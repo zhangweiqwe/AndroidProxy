@@ -42,6 +42,9 @@ public final class MyAppContentProvider extends ContentProvider {;
     private static final int CODE_SETTING_SEED_Y_LOCATION = 7;
     public static final String PATH_SETTING_SEED_Y_LOCATION= "path_y_location";
 
+    private static final int CODE_SETTING_IS_CAPTURE = 8;
+    public static final String PATH_SETTING_IS_CAPTURE = "path_is_capture";
+
 
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -52,6 +55,7 @@ public final class MyAppContentProvider extends ContentProvider {;
         uriMatcher.addURI(CustomApplication.PACKAGE_NAME,PATH_SETTING_SUSPENSION_COLOR,CODE_SETTING_SUSPENSION_COLOR);
         uriMatcher.addURI(CustomApplication.PACKAGE_NAME,PATH_SETTING_SEED_X_LOCATION,CODE_SETTING_SEED_X_LOCATION);
         uriMatcher.addURI(CustomApplication.PACKAGE_NAME,PATH_SETTING_SEED_Y_LOCATION,CODE_SETTING_SEED_Y_LOCATION);
+        uriMatcher.addURI(CustomApplication.PACKAGE_NAME,PATH_SETTING_IS_CAPTURE,CODE_SETTING_IS_CAPTURE);
         //LogUtil.printSS("MyAppContentProvider static 块" );
     }
     private ContentResolver contentResolver;
@@ -59,6 +63,25 @@ public final class MyAppContentProvider extends ContentProvider {;
     //构造器不能私有
     public MyAppContentProvider(){
         //LogUtil.printSS("  MyAppContentProvider()");
+    }
+    @Nullable
+    @Override
+    public String getType(Uri uri) {
+        switch (uriMatcher.match(uri)){
+            case CODE_SETTING_CONFIG_PATH:
+                return PATH_SETTING_CONFIG_PATH;
+            case CODE_SETTING_IS_START:
+                return PATH_SETTING_IS_START;
+            case CODE_SETTING_SUSPENSION_COLOR:
+                return PATH_SETTING_SUSPENSION_COLOR;
+            case CODE_SETTING_SEED_X_LOCATION:
+                return PATH_SETTING_SEED_X_LOCATION;
+            case CODE_SETTING_SEED_Y_LOCATION:
+                return PATH_SETTING_SEED_Y_LOCATION;
+            case CODE_SETTING_IS_CAPTURE:
+                return PATH_SETTING_IS_CAPTURE;
+        }
+        return null;
     }
     @Override
     public boolean onCreate() {
@@ -83,6 +106,7 @@ public final class MyAppContentProvider extends ContentProvider {;
             case PATH_SETTING_SUSPENSION_COLOR:
             case PATH_SETTING_SEED_X_LOCATION:
             case PATH_SETTING_SEED_Y_LOCATION:
+            case PATH_SETTING_IS_CAPTURE:
                 SQLiteDatabase sqLiteDatabase = dbHelper.getReadableDatabase();
             /*table:表名，不能为null
             columns:要查询的列名，可以是多个，可以为null，表示查询所有列
@@ -97,23 +121,7 @@ public final class MyAppContentProvider extends ContentProvider {;
         return cursor;
     }
 
-    @Nullable
-    @Override
-    public String getType(Uri uri) {
-        switch (uriMatcher.match(uri)){
-            case CODE_SETTING_CONFIG_PATH:
-                return PATH_SETTING_CONFIG_PATH;
-            case CODE_SETTING_IS_START:
-                return PATH_SETTING_IS_START;
-            case CODE_SETTING_SUSPENSION_COLOR:
-                return PATH_SETTING_SUSPENSION_COLOR;
-            case CODE_SETTING_SEED_X_LOCATION:
-                return PATH_SETTING_SEED_X_LOCATION;
-            case CODE_SETTING_SEED_Y_LOCATION:
-                return PATH_SETTING_SEED_Y_LOCATION;
-        }
-        return null;
-    }
+
 
     @Nullable
     @Override
@@ -126,6 +134,7 @@ public final class MyAppContentProvider extends ContentProvider {;
             case PATH_SETTING_SUSPENSION_COLOR:
             case PATH_SETTING_SEED_X_LOCATION:
             case PATH_SETTING_SEED_Y_LOCATION:
+            case PATH_SETTING_IS_CAPTURE:
                 SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
                 long l = sqLiteDatabase.insert(DbHelper.TABLE_NAME,DbHelper._ID,contentValues);
                 uri1 = ContentUris.withAppendedId(uri,l);
@@ -144,6 +153,7 @@ public final class MyAppContentProvider extends ContentProvider {;
             case PATH_SETTING_SUSPENSION_COLOR:
             case PATH_SETTING_SEED_X_LOCATION:
             case PATH_SETTING_SEED_Y_LOCATION:
+            case PATH_SETTING_IS_CAPTURE:
                 SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
                 id= sqLiteDatabase.delete(DbHelper.TABLE_NAME, s, strings);
                 contentResolver.notifyChange(uri,null);
@@ -162,6 +172,7 @@ public final class MyAppContentProvider extends ContentProvider {;
             case PATH_SETTING_SUSPENSION_COLOR:
             case PATH_SETTING_SEED_X_LOCATION:
             case PATH_SETTING_SEED_Y_LOCATION:
+            case PATH_SETTING_IS_CAPTURE:
                 SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
                 id= sqLiteDatabase.update(DbHelper.TABLE_NAME, contentValues, s,strings);
                 contentResolver.notifyChange(uri,null);
@@ -189,6 +200,7 @@ public final class MyAppContentProvider extends ContentProvider {;
         public static final String _SUSPENSION_COLOR = "_suspension_color";
         public static final String _SPEED_VIEW_X_LOCATION = "_speed_view_x_location";
         public static final String _SPEED_VIEW_Y_LOCATION = "_speed_view_y_location";
+        public static final String _IS_CAPTURE = "_is_capture";
         public DbHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
             super(context, DB_NAME, factory,getVersionCode(context) );
         }
@@ -200,8 +212,8 @@ public final class MyAppContentProvider extends ContentProvider {;
         @Override
         public void onCreate(SQLiteDatabase sqLiteDatabase) {
             String sql = "create table "+TABLE_NAME+"("+_ID+" integer primary key autoincrement,"+ _CONFIG_PATH+" varchar(16),"+_IS_START+" integer,"+_SUSPENSION_COLOR+" varchar(16),"
-                    +_SPEED_VIEW_X_LOCATION+" real,"+_SPEED_VIEW_Y_LOCATION+" real"+");";
-            String sql2 = "insert into "+TABLE_NAME+"("+_CONFIG_PATH+","+_IS_START+","+_SPEED_VIEW_X_LOCATION+","+_SPEED_VIEW_Y_LOCATION+") "+"values("+"'未选择',1,100,314"+")";
+                    +_SPEED_VIEW_X_LOCATION+" real,"+_SPEED_VIEW_Y_LOCATION+" real,"+_IS_CAPTURE+" integer"+");";
+            String sql2 = "insert into "+TABLE_NAME+"("+_CONFIG_PATH+","+_IS_START+","+_IS_CAPTURE+","+_SPEED_VIEW_X_LOCATION+","+_SPEED_VIEW_Y_LOCATION+") "+"values("+"'未选择',1,1,100,314"+")";
             sqLiteDatabase.execSQL(sql);
             sqLiteDatabase.execSQL(sql2);
         }

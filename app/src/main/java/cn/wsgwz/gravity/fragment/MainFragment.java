@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.TrafficStats;
 import android.os.Bundle;
 import android.os.Handler;
@@ -233,6 +235,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
        // TrafficStats.getTotalTxBytes();//手机全部网络接口 包括wifi，3g、2g上传的总流量
         //TrafficStats.getTotalRxBytes();//手机全部网络接口 包括wifi，3g、2g下载的总流量</applicationinfo>
     }
+
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -289,7 +292,6 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
 
         }
     }
-
     @Override
     public void doingSomeThing(final IsProgressEnum isProgressEnum) {
         isStartOrStopDoing = true;

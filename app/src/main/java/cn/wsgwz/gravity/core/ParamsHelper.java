@@ -32,9 +32,15 @@ public class ParamsHelper {
     private  Map<String, String> hashMap;
     private Config config;
 
-    public  static final ParamsHelper read(InputStream  clientInputStream ,Config config) throws IOException {
-        ParamsHelper paramsHelper=null;
-        String line = ParamsHelper.readLine(clientInputStream).toString();
+    private StringBuffer sbOriginal;
+    private boolean isCapture;
+
+    public  static final ParamsHelper read(InputStream  clientInputStream ,Config config,Boolean isCapture) throws IOException {
+        ParamsHelper paramsHelper = null;
+
+
+
+        String line = ParamsHelper.readLine(clientInputStream,paramsHelper).toString();
         StringTokenizer tokenizer;
         if(!checkFirstLine(line)){
             return null;
@@ -47,10 +53,15 @@ public class ParamsHelper {
             paramsHelper.url = tokenizer.nextToken();
             paramsHelper.httpVersion = tokenizer.nextToken();
             paramsHelper.hashMap =  Collections.synchronizedMap(new HashMap<String, String>());
+            if(isCapture){
+                paramsHelper.sbOriginal = new StringBuffer();
+                paramsHelper.isCapture = isCapture;
+                paramsHelper.sbOriginal.append(paramsHelper.firstline+paramsHelper.endOfLine);
+            }
         }
 
         String key, value = null;
-        while ((line = paramsHelper.readLine(clientInputStream).toString()) != null) {
+        while ((line = paramsHelper.readLine(clientInputStream,paramsHelper).toString()) != null) {
             if (line.trim().length() == 0) break;
             tokenizer = new StringTokenizer(line);
             key = tokenizer.nextToken(":");
@@ -61,7 +72,7 @@ public class ParamsHelper {
         return paramsHelper;
     }
 
-    private static final StringBuffer readLine(InputStream in) throws IOException {
+    private static final StringBuffer readLine(InputStream in,ParamsHelper paramsHelper) throws IOException {
         StringBuffer sb= new StringBuffer();
             int c;
             loop:      while (true){
@@ -85,7 +96,9 @@ public class ParamsHelper {
                         break ;
                 }
             }
-        //LogUtil.printSS("。"+sb+"<---");
+        if(paramsHelper!=null&&paramsHelper.isCapture&&sb.length()>0){
+            paramsHelper.sbOriginal.append(sb+paramsHelper.endOfLine);
+        }
         return sb;
     }
     public  static final boolean checkFirstLine(String firstline){
@@ -122,6 +135,12 @@ public class ParamsHelper {
     @Override
     public String toString(){
         StringBuffer sb = Matching.match(ParamsHelper.this, config);
+
+        if(ParamsHelper.this.isCapture){
+            if(onRequestBeginningListenner!=null){
+                onRequestBeginningListenner.requestBegin(sbOriginal,sb);
+            }
+        }
         //if(!sb.toString().startsWith("CONNECT"))
         //LogUtil.printSS("--->"+sb+"<----------");
         return sb.toString();
@@ -163,5 +182,14 @@ public class ParamsHelper {
     }
     public String getHost() {
         return host;
+    }
+
+    //当数据开始请求时调用的接口()
+    public static interface OnRequestBeginningListenner{
+        void requestBegin(StringBuffer sb_Original,StringBuffer sb_Changed);
+    }
+    private static OnRequestBeginningListenner onRequestBeginningListenner;
+    public static void setOnRequestBeginningListenner(OnRequestBeginningListenner onRequestBeginningListenner){
+        ParamsHelper.onRequestBeginningListenner = onRequestBeginningListenner;
     }
 }

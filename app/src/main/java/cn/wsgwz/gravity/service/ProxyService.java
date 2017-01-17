@@ -18,6 +18,7 @@ import java.io.IOException;
 import cn.wsgwz.gravity.MainActivity;
 import cn.wsgwz.gravity.R;
 import cn.wsgwz.gravity.core.SocketServer;
+import cn.wsgwz.gravity.helper.CapturePackageHelper;
 import cn.wsgwz.gravity.helper.SettingHelper;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
@@ -45,12 +46,22 @@ public class ProxyService extends Service {
         notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(NOTIFY_SERVER_ID,notification);
     }
+
+
+
+    private CapturePackageHelper capturePackageHelper;
+    private boolean isCapture = true;
     @Override
     public void onCreate() {
         super.onCreate();
         try {
+            isCapture = settingHelper.isCaptrue(this);
+            if(isCapture){
+                capturePackageHelper = CapturePackageHelper.getInstance();
+                capturePackageHelper.show(this);
+            }
             settingHelper.setIsStart(this,true);
-            socketServer = new SocketServer(ProxyService.this);
+            socketServer = new SocketServer(ProxyService.this,isCapture);
             socketServer.start();
             showNotification();
         } catch (IOException e) {
@@ -75,6 +86,9 @@ public class ProxyService extends Service {
         }
         //LogUtil.printSS("   ProxyService  onDestroy");
         settingHelper.setIsStart(this,false);
+        if(isCapture){
+            capturePackageHelper.destroy();
+        }
     }
 
     @Nullable

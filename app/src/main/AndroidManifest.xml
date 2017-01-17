@@ -89,6 +89,7 @@
         <receiver android:name=".receiver.SelfStartingReceiver">
             <intent-filter>
                 <action android:name="cn.wsgwz.gravity.Restart" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
         </receiver>
 

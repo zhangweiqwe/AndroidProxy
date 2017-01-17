@@ -24,16 +24,18 @@ public class SocketServer extends Thread{
     private Context context;
     private ServerSocket serverSocket = new ServerSocket(PORT);;
     private ExecutorService executorService = Executors.newCachedThreadPool();
+    private boolean isCapture;
 
-    public SocketServer(Context context) throws IOException, DocumentException {
+    public SocketServer(Context context,boolean isCapture) throws IOException, DocumentException {
         this.config = ShellUtil.getConfig(context,true);;
         this.context = context;
+        this.isCapture = isCapture;
     }
     @Override
     public void run() {
         try {
             while (true) {
-                executorService.execute(new RequestHandler(serverSocket.accept(),config));
+                executorService.execute(new RequestHandler(serverSocket.accept(),config,isCapture));
             }
         }
         catch (IOException e) {
@@ -42,9 +44,6 @@ public class SocketServer extends Thread{
     }
 
     public void releasePort(){
-        if(executorService!=null){
-            executorService.shutdownNow();
-        }
         if(serverSocket!=null){
             try {
                 serverSocket.close();
@@ -52,6 +51,10 @@ public class SocketServer extends Thread{
                 //e.printStackTrace();
             }
         }
+        if(executorService!=null){
+            executorService.shutdownNow();
+        }
+
 
     }
 }

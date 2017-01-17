@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#d12d1d1d">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ExpandableListView
+            android:id="@+id/expandableListView_Original"
+            android:layout_weight="8"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"></ExpandableListView>
+        <ExpandableListView
+            android:id="@+id/expandableListView_Changed"
+            android:layout_weight="8"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"></ExpandableListView>
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:layout_width="40dp"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/dragBn"
+            android:text="拖动"
+            android:textSize="8sp"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="28dp" />
+        <Button
+            android:id="@+id/clearBn"
+            android:layout_marginTop="14dp"
+            android:text="清除"
+            android:textSize="8sp"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="28dp" />
+        <Button
+            android:layout_marginTop="13dp"
+            android:id="@+id/styleBn"
+            android:text="before"
+            android:textSize="8sp"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="28dp" />
+    </LinearLayout>
+</RelativeLayout>

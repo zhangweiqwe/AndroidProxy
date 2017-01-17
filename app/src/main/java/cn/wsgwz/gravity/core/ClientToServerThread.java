@@ -24,17 +24,19 @@ public class ClientToServerThread extends Thread {
     private InputStream clientInputStream;
     private OutputStream remoteOutputStream;
     private  Config config;
-    public ClientToServerThread(InputStream clientInputStream, OutputStream remoteOutputStream, Config config){
+    private Boolean isCapture;
+    public ClientToServerThread(InputStream clientInputStream, OutputStream remoteOutputStream, Config config,Boolean isCapture){
         this.clientInputStream = clientInputStream;
         this.remoteOutputStream = remoteOutputStream;
         this.config = config;
+        this.isCapture = isCapture;
     }
     @Override
     public void run() {
         super.run();
         ParamsHelper paramsHelper = null;
         try {
-            paramsHelper = ParamsHelper.read(clientInputStream,config);
+            paramsHelper = ParamsHelper.read(clientInputStream,config,isCapture);
             if(paramsHelper==null){
                 return;
             }
