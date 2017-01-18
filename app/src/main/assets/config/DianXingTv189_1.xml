@@ -1,0 +1,31 @@
+<config version="2.0" dns="129.29.29.29"  apn_apn="ctwap" apn_proxy="10.0.0.200" apn_port="80">
+
+    <http host="10.0.0.200" port="80">
+        <delate>Host,X-Online-Host</delate>
+        <first-line>
+            [method][] [url][] [version]\r\n
+            X-Online-Host:[][host]\r\n
+            Host:ltetp.tv189.com\r\n
+        </first-line>
+    </http>
+
+
+    <https host="10.0.0.200" port="80" switch="on">
+        <delate>Host,X-Online-Host</delate>
+        <first-line>
+            CONNECT [][url][] [version]\r\n
+            Host:[] [host]\r\n
+            X-Online-Host:ltetp.tv189.com\r\n
+        </first-line>
+    </https>
+
+</config>
+
+
+
+
+
+
+
+
+

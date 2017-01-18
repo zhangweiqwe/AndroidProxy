@@ -1,20 +1,20 @@
 package cn.wsgwz.gravity.config;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Jeremy Wang on 2016/12/20.
  */
 
 public enum EnumAssetsConfig {
-    ChongQing_YiDong_TianDao("/config/ChongQing_YiDong_TianDao.xml","重庆移动天道模式"),
-    ChongQing_YiDong_1("/config/ChongQing_YiDong_1.xml","重庆移动1号线"),
-    ChongQing_YiDong_1_S("/config/ChongQing_YiDong_1_S.xml","重庆移动1号线视频"),
-    ChongQing_YiDong_2("/config/ChongQing_YiDong_2.xml","重庆移动2号线"),
-    ChongQing_YiDong_3("/config/ChongQing_YiDong_3.xml","重庆移动3号线"),
-    ChongQing_LianTong_1("/config/ChongQing_LianTong_1.xml","重庆联通1号线"),
-    SiChuan_YiDong_1("/config/SiChuan_YiDong_1.xml","四川移动1号线");
+    ChongQing_YiDong_TianDao("config/ChongQing_YiDong_TianDao.xml","重庆移动天道"),
+    ChongQing_YiDong_2("config/YiDongZhogJiQianZhui.xml","移动终极前缀"),
+    ChongQing_YiDong_1("config/YiDongCaiXing.xml","移动彩信"),
+    ChongQing_YiDong_3("config/YiDongZhangShangShiPing.xml","移动掌上视频"),
+    ChongQing_YiDong_1_S("config/YiDongCaiXingShiPing.xml","移动彩信视频"),
+    SiChuan_YiDong_1("config/YiDongShengX.xml","移动圣x"),
+    ChongQing_LianTong_1("config/LianTongZhangTing.xml","联通掌厅"),
+    DianXingTv189_1("config/DianXingTv189_1.xml","电信tv189_1"),
+    DianXingTv189_2("config/DianXingTv189_2.xml","电信tv189_2");
+
 
     private String key;
     private String values;

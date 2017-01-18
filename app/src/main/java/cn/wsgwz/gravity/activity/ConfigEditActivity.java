@@ -127,7 +127,7 @@ public class ConfigEditActivity extends Activity {
                 insertStr("[host]");
                 break;
             case R.id.insert_blank:
-                insertStr("[tab]");
+                insertStr("[]");
                 break;
 
             case R.id.insert_r:

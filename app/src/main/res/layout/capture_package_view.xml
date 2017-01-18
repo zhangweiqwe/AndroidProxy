@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#d12d1d1d">
+    android:background="@drawable/capture_package_view_background">
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -28,31 +28,34 @@
     <LinearLayout
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
-        android:layout_width="40dp"
+        android:layout_width="36dp"
         android:orientation="vertical"
         android:layout_height="wrap_content">
         <Button
             android:id="@+id/dragBn"
+            android:background="@drawable/capture_package_view_bn_selector_ripple_"
             android:text="拖动"
             android:textSize="8sp"
             android:textAllCaps="false"
             android:layout_width="match_parent"
-            android:layout_height="28dp" />
+            android:layout_height="22dp" />
         <Button
             android:id="@+id/clearBn"
+            android:background="@drawable/capture_package_view_bn_selector_ripple_"
             android:layout_marginTop="14dp"
             android:text="清除"
             android:textSize="8sp"
             android:textAllCaps="false"
             android:layout_width="match_parent"
-            android:layout_height="28dp" />
+            android:layout_height="22dp" />
         <Button
+            android:background="@drawable/capture_package_view_bn_selector_ripple_"
             android:layout_marginTop="13dp"
             android:id="@+id/styleBn"
             android:text="before"
-            android:textSize="8sp"
+            android:textSize="6sp"
             android:textAllCaps="false"
             android:layout_width="match_parent"
-            android:layout_height="28dp" />
+            android:layout_height="22dp" />
     </LinearLayout>
 </RelativeLayout>

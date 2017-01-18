@@ -16,10 +16,13 @@
 #   public *;
 #}
 
--keepattributes EnclosingMethod
--keep class com.qq.e.** {
-    public protected *;
-}
--keep class android.support.v4.app.NotificationCompat**{
-    public *;
-}
+#-keepattributes EnclosingMethod
+#-keep class com.qq.e.** {
+#    public protected *;
+#}
+#-keep class android.support.v4.app.NotificationCompat**{
+#    public *;
+#}
+
+-keep class org.dom4j.** { *; }
+-keep class com.squareup.** { *; }

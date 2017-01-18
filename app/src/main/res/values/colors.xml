@@ -7,6 +7,6 @@
 
     <color name="speedTv">#88dcdf14</color>
 
-    <color name="capture_tv_droup"> #c1c914f2</color>
-    <color name="capture_tv_child">#c114a1f2</color>
+    <color name="capture_tv_droup"> #c614f2b7</color>
+    <color name="capture_tv_child">#c114e3f2</color>
 </resources>

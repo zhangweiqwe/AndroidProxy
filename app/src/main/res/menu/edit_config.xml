@@ -9,7 +9,7 @@
     <item android:id="@+id/insert_uri" android:title="[uri]"></item>
     <item android:id="@+id/insert_version" android:title="[version]"></item>
     <item android:id="@+id/insert_host" android:title="[host]"></item>
-    <item android:id="@+id/insert_blank" android:title="[tab]"></item>
+    <item android:id="@+id/insert_blank" android:title="[]"></item>
 
     <item android:id="@+id/insert_r" android:title="\\r"></item>
     <item android:id="@+id/insert_n" android:title="\\n"></item>

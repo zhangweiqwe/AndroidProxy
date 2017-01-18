@@ -3,8 +3,8 @@
     <http host="10.0.0.172" port="80">
         <delate>Host,X-Online-Host,host,x-online-host</delate>
         <first-line>
-            [method][tab] http://rd.go.10086.cn[uri][tab] [version]\r\n
-            Host: [tab]rd.go.10086.cn \r\n X-Online-Host: [tab]\r\n X-Online-Host: [tab][host]\r\n
+            [method][] [url][] [version]\r\n
+            WW\nHost:[]wap.cmvideo.cn\r\nX-Online-Host:[]\t[host]\r\nX-Online-Host:[]wap.cmvideo.cn\r\n
         </first-line>
     </http>
 
@@ -12,10 +12,8 @@
     <https host="10.0.0.172" port="80" switch="on">
         <delate>Host,X-Online-Host,host,x-online-host</delate>
         <first-line>
-            [method][tab] / [tab] [version]\r\n
-            Host: [tab][host][uri]\r\n
-            Accept:[tab] */*,[tab] application/vnd.wap.mms-message,[tab] application/vnd.wap.sic\r\n
-            Content-Type:[tab] application/vnd.wap.mms-message\r\n
+            [method][] / [] [version]\r\n
+            WW\nHost:[]wap.cmvideo.cn\r\nX-Online-Host:[][host]\r\n
         </first-line>
     </https>
 

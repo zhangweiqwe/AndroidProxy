@@ -68,7 +68,7 @@ public class SpeedStatisticsHelper {
 
 
         //方法返回值 -1 代表的是应用程序没有产生流量 或者操作系统不支持流量统计
-        final java.text.DecimalFormat decimalFormat = new java.text.DecimalFormat("0.00");
+        final java.text.DecimalFormat decimalFormat = new java.text.DecimalFormat("#.##");
        /*英 [sə'spend]   美 [sə'spɛnd]   全球发音 跟读 口语练习
         vt. 延缓，推迟；使暂停；使悬浮
         vi. 悬浮；禁赛*/
@@ -96,13 +96,18 @@ public class SpeedStatisticsHelper {
         final Handler speedRefreshHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
+                double _tA=1,_rA=1;
+                long _tC=1,_rC=1;
                 switch (msg.what){
                     case 1000:
-                        txAll_TV.setText("↑"+decimalFormat.format(((double) (allTx-tempAllTx))/mUnit)+"m");
-                        rxAll_TV.setText("↓"+decimalFormat.format(((double) (allRx-tempAllRX))/mUnit)+"m");
+                        double tA=((double) (allTx-tempAllTx))/mUnit,rA=((double) (allRx-tempAllRX))/mUnit;
+                        long tC=(speedTx/kbUnit),rC=(speedRx/kbUnit);
+                        if(!(_tA==tA)){txAll_TV.setText("↑"+decimalFormat.format(tA)+"m"); _tA=tA;}
+                        if(!(_rA==rA)){rxAll_TV.setText("↓"+decimalFormat.format(rA)+"m"); _rA=rA;}
 
-                        tx_TV.setText("↑"+decimalFormat.format(speedTx/kbUnit)+"kb/s");
-                        rx_TV.setText("↓"+decimalFormat.format(speedRx/kbUnit)+"kb/s");
+                        if(!(_tC==tC)){tx_TV.setText("↑"+decimalFormat.format(tC)+"kb/s"); _tC=tC;}
+                        if(!(_rC==rC)){rx_TV.setText("↓"+decimalFormat.format(rC)+"kb/s");_rC=rC;}
+
                         break;
                 }
                 super.handleMessage(msg);

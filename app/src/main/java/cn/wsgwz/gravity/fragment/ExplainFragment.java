@@ -25,7 +25,7 @@ public class ExplainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_explain, container, false);
         webView = (WebView) view.findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.setWebViewClient(new WebViewClient());
+        //webView.setWebViewClient(new WebViewClient());
         webView.loadUrl("file:///android_asset/explain.html");
         webView.setBackgroundColor(0);
         //LogUtil.printSS("  ExplainFragment ");

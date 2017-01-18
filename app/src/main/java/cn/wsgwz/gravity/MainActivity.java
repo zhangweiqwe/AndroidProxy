@@ -10,6 +10,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -55,6 +56,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
 
 import cn.wsgwz.gravity.activity.ConfigEditActivity;
@@ -70,6 +72,7 @@ import cn.wsgwz.gravity.helper.FirstUseInitHelper;
 import cn.wsgwz.gravity.helper.PermissionHelper;
 import cn.wsgwz.gravity.helper.SettingHelper;
 import cn.wsgwz.gravity.helper.ShellHelper;
+import cn.wsgwz.gravity.receiver.SMSBroadcastReceiver;
 import cn.wsgwz.gravity.service.SpeedStatisticsService;
 import cn.wsgwz.gravity.util.DensityUtil;
 import cn.wsgwz.gravity.util.FileUtil;
@@ -129,11 +132,20 @@ decor
  英 ['deɪkɔː; 'de-]   美 [de'kɔr]   全球发音 跟读 口语练习
 n. 装饰，布置
      */
-
-
+   /* public void sendSMS(String phoneNumber,String message){
+        //获取短信管理器
+        android.telephony.SmsManager smsManager = android.telephony.SmsManager.getDefault();
+        //拆分短信内容（手机短信长度限制）
+        List<String> divideContents = smsManager.divideMessage(message);
+        for (String text : divideContents) {
+            smsManager.sendTextMessage(phoneNumber, null, text, null, null);
+        }
+    }
+*/
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
+        //sendSMS("10086","流量");
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             setMarginStatusBar();
         }
@@ -161,6 +173,14 @@ n. 装饰，布置
         intentSpeedStatistics = new Intent(this,SpeedStatisticsService.class);
         boolean showSpeedSuspension = sharedPreferences.getBoolean(SharedPreferenceMy.SPEED_STATISTICS,true);
         setSuspensionState(showSpeedSuspension);
+
+
+       /* IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
+        intentFilter.setPriority(1000);
+        //注册广播
+        SMSBroadcastReceiver smsBroadcastReceiver = new SMSBroadcastReceiver();
+        this.registerReceiver(smsBroadcastReceiver, intentFilter);*/
+
 
         /*SettingHelper settingHelper = SettingHelper.getInstance();
         settingHelper.setIsStart(this,false);
@@ -248,7 +268,8 @@ n. 装饰，布置
     protected void onStart() {
         super.onStart();
 
-
+     /* boolean b =  ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED;
+        ActivityCompat.requestPermissions(this,REQUEST_WRITE_READ_EXTERNALPERMISSION,REQUEST_WRITE_READ_EXTERNAL_CODE);*/
 
         boolean isInitSystem = sharedPreferences.getBoolean(SharedPreferenceMy.IS_INIT_SYSTEM,false);
         if(!isInitSystem){
@@ -334,7 +355,7 @@ n. 装饰，布置
         fragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         fragmentPagerAdapter.addFragment(new MainFragment(),"控制台");
         fragmentPagerAdapter.addFragment(new LogFragment(),"日志");
-        fragmentPagerAdapter.addFragment(new GraspDataFragment(),"抓包");
+        //fragmentPagerAdapter.addFragment(new GraspDataFragment(),"抓包");
         fragmentPagerAdapter.addFragment(new ExplainFragment(),"说明");
         my_viewPager_V4.setOffscreenPageLimit(1);
         my_viewPager_V4.setAdapter(fragmentPagerAdapter);

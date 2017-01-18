@@ -28,8 +28,10 @@ import com.example.pull.refreshview.XFooterView;
 import com.example.pull.refreshview.XListView;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,6 +45,7 @@ import cn.wsgwz.gravity.adapter.ConfigSelectAdapter;
 import cn.wsgwz.gravity.adapter.MyFragmentPagerAdapter;
 import cn.wsgwz.gravity.config.EnumAssetsConfig;
 import cn.wsgwz.gravity.config.EnumMyConfig;
+import cn.wsgwz.gravity.config.xml.ConfigXml;
 import cn.wsgwz.gravity.fragment.MainFragment;
 import cn.wsgwz.gravity.helper.SettingHelper;
 import cn.wsgwz.gravity.helper.ShellHelper;
@@ -124,11 +127,39 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
         if(obj instanceof File){
             file = (File) obj;
         }else if(obj instanceof EnumAssetsConfig){
-            EnumAssetsConfig enumAssetsConfig = (EnumAssetsConfig) obj;
+            final EnumAssetsConfig enumAssetsConfig = (EnumAssetsConfig) obj;
             file = new File(enumAssetsConfig.getKey());
+            builder.setNeutralButton("复制到列表", new OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    File tempFile = new File(FileUtil.APP_APTH_CONFIG+"/复制-"+enumAssetsConfig.getValues()+FileUtil.CONFIG_END_NAME);
+                    if(tempFile.exists()){
+                        return;
+                    }
+                    InputStream in = null;
+                    try {
+                        in = context.getAssets().open(enumAssetsConfig.getKey());
+                        int len = 0;
+                        byte[] buffer = new byte[1024];
+                        FileOutputStream fileOutputStream = new FileOutputStream(tempFile);
+                        while ((len=in.read(buffer))!=-1){
+                            fileOutputStream.write(buffer,0,len);
+                            fileOutputStream.flush();
+                        }
+                        in.close();
+                        fileOutputStream.close();
+                        list.add(0,tempFile);
+                        configSelectAdapter.notifyDataSetChanged();
+                        Snackbar.make(view,getContext().getString(R.string.copy_file_foredit_succeed),Snackbar.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
         }
 
-        if(file.exists()&&!file.getPath().contains("android_asset")){
+        if(file.exists()){
             builder.setNegativeButton("编辑", new OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -252,7 +283,7 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                     }
                 }*/
 
-                if(!LogUtil.IS_RELEASE){
+
                     Class clz = EnumAssetsConfig.class;
                     for (Object obj: clz.getEnumConstants()) {
                         list.add((EnumAssetsConfig)obj);
@@ -262,7 +293,7 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                     list.add(EnumAssetsConfig.ChongQing_YiDong_2);
                     list.add(EnumAssetsConfig.ChongQing_LianTong_1);
                     list.add(EnumAssetsConfig.SiChuan_YiDong_1);*/
-                }
+
                 handler.sendEmptyMessage(1000);
                 Looper.loop();
 

@@ -19,13 +19,13 @@
                 ></FrameLayout>
             <LinearLayout
                 android:id="@+id/other_ll_00"
-                android:background="@drawable/main_fragment_switch_bn_parent_background"
-                android:paddingLeft="12dp"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <Switch
                     android:id="@+id/service_Switch"
+                    android:paddingLeft="12dp"
+                    android:background="@drawable/grash_data_bn_selector"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
                     android:text="服务"

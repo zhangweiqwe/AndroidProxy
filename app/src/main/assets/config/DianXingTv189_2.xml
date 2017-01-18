@@ -1,0 +1,37 @@
+<config version="2.0" dns="129.29.29.29"  apn_apn="ctwap" apn_proxy="10.0.0.200" apn_port="80">
+
+    <http host="10.0.0.200" port="80">
+        <delate>Host,X-Online-Host</delate>
+        <first-line>
+            [method][][uri][]HTTP/1.1\r\n念梦\r\n
+            Host:dl.music.189.cn\r\n
+            connection:\r小生
+            \rkeep-alive:[]\r伴她\t小生\rdl.music.189.cn\r\n
+            http://connection:[]沉心\t\t
+            keep-alive:[]\r小生\t[]dl.music.189.cn\r\n小生\r\n
+            X-\rOnline-Host:\r[][host]\r\n
+        </first-line>
+    </http>
+
+
+    <https host="10.0.0.200" port="80" switch="on">
+        <delate>Host,X-Online-Host</delate>
+        <first-line>
+            CONNECT[][url]/ltetp.tv189.com/[][version]\r\n很想你
+            \rHost:[][]\n
+            Host:[]\t[]ltetp.tv189.com\r\n
+            X-Online\r-Host:ltetp.tv189.com[]\r\n
+            POST:http://ltetp.tv189.com\r\n
+        </first-line>
+    </https>
+
+</config>
+
+
+
+
+
+
+
+
+

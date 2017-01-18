@@ -46,7 +46,7 @@ public enum  ModuleEnum {
         }
 
         str = str.replace(" ","")
-       .replace("[tab]"," ")
+       .replace("[]"," ")
        .replace("\\r","\r")
        .replace("\\n","\n")
        .replace("\\t","\t");

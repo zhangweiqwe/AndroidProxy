@@ -32,6 +32,7 @@
     <string name="start_server_error">启动服务失败：</string>
     <string name="restart_server_ok">重启服务成功</string>
     <string name="delate_file_succeed">删除文件成功</string>
+    <string name="copy_file_foredit_succeed">复制文件成功，现在可手动编辑</string>
 
     <string name="auto_setting_apn_error">自动设置apn失败请尝试手动设置</string>
 

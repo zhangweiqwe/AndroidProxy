@@ -1,0 +1,33 @@
+<config version="2.0"  dns="114.114.114.114"   apn_apn="cmwap" apn_proxy="10.0.0.172" apn_port="80">
+
+    <http host="10.0.0.172" port="80">
+        <delate>Host,host</delate>
+        <first-line>
+            [method][] [url][] [version]\r\n
+            Host: [][host]\r\n
+            Accept:[] */*,[] application/vnd.wap.mms-message,[] application/vnd.wap.sic\r\n
+            Content-Type:[] application/vnd.wap.mms-message\r\n
+        </first-line>
+    </http>
+
+
+    <https host="10.0.0.172" port="80" switch="on">
+        <delate>Host,host</delate>
+        <first-line>
+            [method][] [url] [] [version]\r\n
+            Host: [][host][uri]\r\n
+            Accept:[] */*,[] application/vnd.wap.mms-message,[] application/vnd.wap.sic\r\n
+            Content-Type:[] application/vnd.wap.mms-message\r\n
+        </first-line>
+    </https>
+
+</config>
+
+
+
+
+
+
+
+
+

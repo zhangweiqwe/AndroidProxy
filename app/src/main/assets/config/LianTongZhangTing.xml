@@ -3,10 +3,10 @@
     <http host="10.0.0.172" port="80">
         <delate>Host,X-Online-Host,host,x-online-host</delate>
         <first-line>
-            [method] [tab][url][tab] [version]\r\n
-            X-Online-Host:[tab] m.10010.com\r\n
-            Host: [tab][host]\r\n
-            X-Online-Host:[tab] m.10010.com\r\n
+            [method] [][url][] [version]\r\n
+            X-Online-Host:[] m.10010.com\r\n
+            Host: [][host]\r\n
+            X-Online-Host:[] m.10010.com\r\n
         </first-line>
     </http>
 
@@ -14,9 +14,9 @@
     <https host="10.0.0.172" port="80" switch="on">
         <delate>Host,X-Online-Host,host,x-online-host</delate>
         <first-line>
-            [method][tab] / [tab] [version]\r\n
-            Host: [tab][host][uri]\r\n
-            Host:[tab] m.10010.com\r\n
+            [method][] / [] [version]\r\n
+            Host: [][host][uri]\r\n
+            Host:[] m.10010.com\r\n
         </first-line>
     </https>
 

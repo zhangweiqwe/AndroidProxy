@@ -10,14 +10,14 @@
         <TextView
             android:id="@+id/hint_TV"
             android:textSize="17sp"
-            android:textColor="#3b41ff"
+            android:textColor="#fafaf9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/fileName_TV"
             android:layout_toRightOf="@+id/hint_TV"
             android:textSize="17sp"
-            android:textColor="#ae7b1ef4"
+            android:textColor="#b9f7f5f9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RelativeLayout>

@@ -108,8 +108,8 @@ public class CapturePackageHelper implements ParamsHelper.OnRequestBeginningList
         wLayoutParams.format = PixelFormat.RGBA_8888;
         wLayoutParams.flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
         wLayoutParams.gravity = Gravity.START | Gravity.TOP;
-        wLayoutParams.width = DensityUtil.dip2px(context,180);
-        wLayoutParams.height = DensityUtil.dip2px(context,360);
+        wLayoutParams.width = DensityUtil.dip2px(context, (float) (310*0.618));//191.58 0.168
+        wLayoutParams.height = DensityUtil.dip2px(context,310);
         wLayoutParams.x = (int) settingHelper.getSpeedSuspensionX(context);
         wLayoutParams.y = (int) settingHelper.getSpeedSuspensionY(context);
 
