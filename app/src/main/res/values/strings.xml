@@ -24,6 +24,7 @@
     <string name="exec_start_error">开启脚本 失败</string>
     <string name="exec_stop_ok">关闭脚本 成功</string>
     <string name="exec_stop_error">关闭脚本 失败</string>
+    <string name="busy_is_doing_some_thing">忙碌中，请稍后</string>
 
     //选择配置文件dialog
     <string name="not_select_config">(当前未选择模式)</string>
@@ -39,6 +40,7 @@
     <string name="new_file_name_illegality">文件名不合法!</string>
 
     <string name="donot_have_root_permission_">没有root权限</string>
+    <string name="donot_have_root_permission_if_need_start_please_close_flow_service">需要root,您没有权限\n如果需要启动，请关闭 脚本跟随服务!!</string>
     <string name="get_root_permission_error">获取root权限失败!!!</string>
 
 

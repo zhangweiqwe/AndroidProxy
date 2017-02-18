@@ -5,15 +5,24 @@
     <item android:id="@+id/apn_setting" android:title="APN设置"></item>
     <item android:id="@+id/exec_start" android:title="执行脚本"></item>
     <item android:id="@+id/exec_stop" android:title="关闭脚本"></item>
-    <item android:id="@+id/fllow_shell" android:title="脚本跟随随服务" android:checkable="true" android:enabled="true"
-        ></item>
-    <item android:id="@+id/speedStatistics" android:title="网速" android:checkable="true" android:enabled="true"
-        ></item>
-    <item android:id="@+id/isCapture" android:title="显示请求" android:checkable="true" android:enabled="true"></item>
-
     <item android:id="@+id/defined_shell" android:title="定义脚本"></item>
+
+    <item android:id="@+id/fllow_shell" android:title="脚本跟随服务" android:checkable="true" android:enabled="true"></item>
+    <item android:id="@+id/isCapture" android:title="显示请求" android:checkable="true" android:enabled="true"></item>
+    <item android:id="@+id/speedStatistics" android:title="网速" android:checkable="true" android:enabled="true"></item>
+
+
+
     <item android:id="@+id/create_config" android:title="创建"></item>
     <item android:id="@+id/wallpaper" android:title="壁纸"></item>
+    <item android:id="@+id/style" android:title="样式">
+        <menu>
+            <item android:id="@+id/style_transparent_dialog" android:checkable="true" android:title="透明对话框"></item>
+            <item android:id="@+id/style_dialog" android:checkable="true" android:title="对话框"></item>
+            <item android:id="@+id/style_fullscreen" android:checkable="true" android:title="全屏"></item>
+        </menu>
+    </item>
+    <item android:id="@+id/helper" android:title="help"></item>
     <item android:id="@+id/about_Appme" app:showAsAction="always" android:orderInCategory="90" android:title="关于" ></item>
     <item android:id="@+id/log_clear" app:showAsAction="always" android:orderInCategory="91" android:title="清除" ></item>
     <item android:id="@+id/log_share" app:showAsAction="always" android:orderInCategory="92" android:title="分享" ></item>

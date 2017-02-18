@@ -26,7 +26,7 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        LogUtil.printSS("----> SMSBroadcastReceiver onReceive");
+        //LogUtil.printSS("----> SMSBroadcastReceiver onReceive");
         if (intent.getAction().equals(SMS_RECEIVED_ACTION)) {
             Object[] pdus = (Object[]) intent.getExtras().get("pdus");
             for (Object pdu : pdus) {
@@ -40,7 +40,7 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
                 String time = simpleDateFormat.format(tiemDate);
 
 
-                LogUtil.printSS(sender+"\n"+content+"\n"+time);
+                //LogUtil.printSS(sender+"\n"+content+"\n"+time);
 
 
                 abortBroadcast();

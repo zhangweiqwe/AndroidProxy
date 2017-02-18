@@ -1,32 +1,20 @@
 package cn.wsgwz.gravity.util;
 
-import android.Manifest;
 import android.app.ActivityManager;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
-import org.dom4j.DocumentException;
+import org.json.JSONException;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,30 +27,22 @@ import cn.wsgwz.gravity.MainActivity;
 import cn.wsgwz.gravity.R;
 import cn.wsgwz.gravity.config.Config;
 import cn.wsgwz.gravity.config.EnumMyConfig;
-import cn.wsgwz.gravity.config.xml.ConfigXml;
+import cn.wsgwz.gravity.config.ConfigJson;
 import cn.wsgwz.gravity.fragment.IsProgressEnum;
 import cn.wsgwz.gravity.fragment.MainFragment;
 import cn.wsgwz.gravity.fragment.log.LogContent;
-import cn.wsgwz.gravity.helper.ApnDbHelper;
-import cn.wsgwz.gravity.helper.DemoGetInstance;
 import cn.wsgwz.gravity.helper.SettingHelper;
 import cn.wsgwz.gravity.helper.ShellHelper;
-import cn.wsgwz.gravity.service.ProxyService;
 
 public class ShellUtil {
 
     private static SettingHelper settingHelper = SettingHelper.getInstance();
 
-    public static final void execShell(final Context context, final String shellStr, final OnExecResultListenner onExecResultListenner) {
+    public static final synchronized void execShell(final Context context, final String shellStr, final OnExecResultListenner onExecResultListenner) {
         if (context == null || shellStr == null) {
             return;
         }
-        if (!isRoot()) {
-            if (onExecResultListenner != null) {
-                onExecResultListenner.onError(new StringBuffer().append(context.getString(R.string.donot_have_root_permission_)));
-            }
-            return;
-        }
+
         final Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -85,26 +65,29 @@ public class ShellUtil {
             }
         };
 
-
-        new Thread(new Runnable() {
+        checkRootPermission(new OnCheckRootStateChnageListenner() {
             @Override
-            public void run() {
+            public void haveRoot(boolean b) {
+                if(b){
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
 
-                StringBuffer sb = new StringBuffer();
-                String str1 = "#!/system/bin/sh\n" + shellStr + "\n";
-                Process process = null;
+                            StringBuffer sb = new StringBuffer();
+                            String str1 = "#! /system/bin/sh\n" + shellStr + "\n";
+                            Process process = null;
 
-                DataOutputStream localDataOutputStream = null;
-                BufferedReader errorBr = null;
-                try {
-                    process = Runtime.getRuntime().exec("su");
-                    localDataOutputStream = new DataOutputStream(process.getOutputStream());
-                    localDataOutputStream.writeUTF(str1);
-                    localDataOutputStream.writeBytes("exit\n");
-                    localDataOutputStream.flush();
-                    process.waitFor();
+                            DataOutputStream localDataOutputStream = null;
+                            BufferedReader errorBr = null;
+                            try {
+                                process = Runtime.getRuntime().exec("su");
+                                localDataOutputStream = new DataOutputStream(process.getOutputStream());
+                                localDataOutputStream.writeUTF(str1);
+                                localDataOutputStream.writeBytes("exit\n");
+                                localDataOutputStream.flush();
+                                process.waitFor();
 
-                   /* errorBr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                    /*errorBr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
                     String line = null;
                     while ((line=errorBr.readLine())!=null){
                         if(line.equals("[-] Unallowed user")){
@@ -116,56 +99,114 @@ public class ShellUtil {
                         }
                     }*/
 
-                    if (process.exitValue() == 0) {
-                        Message msg = new Message();
-                        msg.obj = new StringBuffer().append("0");
-                        msg.what = 1000;
-                        handler.sendMessage(msg);
-                    } else {
-                        Message msg = new Message();
-                        msg.obj =  new StringBuffer().append("!0");
-                        msg.what = 1001;
-                        handler.sendMessage(msg);
-                    }
+                                if (process.exitValue() == 0) {
+                                    Message msg = new Message();
+                                    msg.obj = new StringBuffer().append("0");
+                                    msg.what = 1000;
+                                    handler.sendMessage(msg);
+                                } else {
+                                    Message msg = new Message();
+                                    msg.obj =  new StringBuffer().append("!0");
+                                    msg.what = 1001;
+                                    handler.sendMessage(msg);
+                                }
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Message msg = Message.obtain();
-                    msg.what = 1001;
-                    msg.obj = new StringBuffer().append(e.getMessage().toString());
-                    handler.sendMessage(msg);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    Message msg = Message.obtain();
-                    msg.what = 1001;
-                    msg.obj = new StringBuffer().append(e.getMessage().toString()) ;
-                    handler.sendMessage(msg);
-                } finally {
-                    process.destroy();
-                    if(localDataOutputStream!=null){
-                        try {
-                            localDataOutputStream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                Message msg = Message.obtain();
+                                msg.what = 1001;
+                                msg.obj = new StringBuffer().append(e.getMessage().toString());
+                                handler.sendMessage(msg);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                                Message msg = Message.obtain();
+                                msg.what = 1001;
+                                msg.obj = new StringBuffer().append(e.getMessage().toString()) ;
+                                handler.sendMessage(msg);
+                            } finally {
+                                process.destroy();
+                                if(localDataOutputStream!=null){
+                                    try {
+                                        localDataOutputStream.close();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                if(errorBr!=null){
+                                    try {
+                                        errorBr.close();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+
+
                         }
-                    }
-                    if(errorBr!=null){
-                        try {
-                            errorBr.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                    }).start();
+                }else {
+                    if (onExecResultListenner != null) {
+                        onExecResultListenner.onError(new StringBuffer().append(context.getString(R.string.donot_have_root_permission_)));
+                        Toast.makeText(context,context.getString(R.string.donot_have_root_permission_),Toast.LENGTH_SHORT).show();
                     }
                 }
-
-
             }
-        }).start();
+        });
+
+
+
     }
 
 
+    public interface OnCheckRootStateChnageListenner{
+        void haveRoot(boolean b);
+    }
+    private OnCheckRootStateChnageListenner onCheckRootStateChnageListenner;
+    public void setOnCheckRootStateChnageListenner(OnCheckRootStateChnageListenner onCheckRootStateChnageListenner){
+        this.onCheckRootStateChnageListenner = onCheckRootStateChnageListenner;
+    }
+    public static final synchronized void checkRootPermission(OnCheckRootStateChnageListenner onCheckRootStateChnageListenner) {
+        if(onCheckRootStateChnageListenner==null){
+            return;
+        }
+        Process process = null;
+        DataOutputStream os = null;
+        try {
 
-    private static final boolean isRoot(){
+            String fileStr  = "/data/"+System.currentTimeMillis()+"gravityCheckRoot"+".txt";
+            String cmd = "touch "+fileStr;
+            process = Runtime.getRuntime().exec("su"); //切换到root帐号
+            os = new DataOutputStream(process.getOutputStream());
+            os.writeBytes(cmd + "\n");
+            os.writeBytes("exit\n");
+            os.flush();
+            process.waitFor();
+            File file = new File(fileStr);
+            if(file.exists()){
+                process = Runtime.getRuntime().exec("su");
+                os = new DataOutputStream(process.getOutputStream());
+                os.writeBytes("rm "+fileStr + "\n");
+                os.writeBytes("exit\n");
+                os.flush();
+                process.waitFor();
+                onCheckRootStateChnageListenner.haveRoot(true);
+            }else {
+                onCheckRootStateChnageListenner.haveRoot(false);
+            }
+        } catch (Exception e) {
+            onCheckRootStateChnageListenner.haveRoot(false);
+        } finally {
+            try {
+                if (os != null) {
+                    os.close();
+                }
+                process.destroy();
+            } catch (Exception e) {
+            }
+        }
+    }
+
+/*    private static final boolean isRoot(){
         boolean bool = false;
         try{
             if ((!new File("/system/bin/su").exists()) && (!new File("/system/xbin/su").exists())){
@@ -177,7 +218,7 @@ public class ShellUtil {
 
         }
         return bool;
-    }
+    }*/
 
 
 
@@ -189,9 +230,7 @@ public class ShellUtil {
     }
     //public static boolean isStartOrStopDoing;
     //是否是脚本更随服务
-    public static void  maybeExecShell(final boolean state, final MainActivity activity){
-
-
+    public static final synchronized void  maybeExecShell(final boolean state, final MainActivity activity){
         final ShellHelper shellHelper = ShellHelper.getInstance();
         String str = null;
         Config config;
@@ -205,7 +244,7 @@ public class ShellUtil {
                 configInitShell(shellHelper,config,activity);
             } catch (IOException e) {
                 e.printStackTrace();
-            } catch (DocumentException e) {
+            }  catch (JSONException e) {
                 e.printStackTrace();
             }
             str = shellHelper.getStartStr();
@@ -280,7 +319,7 @@ public class ShellUtil {
         });
     }
     //当正在执行开启或关闭
-    public static interface IsProgressListenner{
+    public interface IsProgressListenner{
         void doingSomeThing(IsProgressEnum isProgressEnum);
         void finallyThat();
     }
@@ -301,33 +340,19 @@ public class ShellUtil {
         }
         return null;
     }
-    public static final Config getConfig(Context context,boolean isRemote) throws IOException, DocumentException {
-       /* String packageName = "cn.wsgwz.gravity";
-        SharedPreferences sharedPreferences = null;
-        if(getCurProcessName(context).equals(packageName)){
-            sharedPreferences = context.getSharedPreferences(SharedPreferenceMy.CONFIG,Context.MODE_PRIVATE);
-        }else {
-            sharedPreferences = context.getSharedPreferences(SharedPreferenceMy.CONFIG,Context.MODE_WORLD_READABLE | Context.MODE_MULTI_PROCESS);
-        }*/
+    public static final synchronized Config getConfig(Context context,boolean isRemote) throws IOException, JSONException {
         Config config = null;
         if(true){
-            //String currentConfigPath = sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null);
             String currentConfigPath = settingHelper.getConfigPath(context);
-            //Toast.makeText(context,currentConfigPath+"<-",Toast.LENGTH_SHORT).show();
-           //Log.d("ssssssssssss",currentConfigPath+"---"+getCurProcessName(context));
-            /*if(!isRemote){
-                LogContent.addItemAndNotify(currentConfigPath);
-            }*/
             if(currentConfigPath==null){
                 return null;
             }
             File file = new File(currentConfigPath);
             if(file.getPath().startsWith("/"+FileUtil.ASSETS_CONFIG_PATH)){
-                config = ConfigXml.read(context.getAssets().open( file.getAbsolutePath().replaceFirst("/","")));
-                //LogUtil.printSS("   "+file.getAbsolutePath().replaceFirst("/",""));
+                config = ConfigJson.read(context.getAssets().open( file.getAbsolutePath().replaceFirst("/","")));
             }else if(file.exists()){
                 FileInputStream fileInputStream = new FileInputStream(file);
-                config = ConfigXml.read(fileInputStream);
+                config = ConfigJson.read(fileInputStream);
             }else {
                 List<EnumMyConfig> listEnum = EnumMyConfig.getMeConfig();
                 boolean b = false;
@@ -339,7 +364,7 @@ public class ShellUtil {
                         }
                         if(listEnum.get(i).getName().equals(pathName)){
                             String values = listEnum.get(i).getValues();
-                            config = ConfigXml.read(new ByteArrayInputStream(values.getBytes("utf-8")));
+                            config = ConfigJson.read(new ByteArrayInputStream(values.getBytes("utf-8")));
                             b = true;
                         };
                     }
@@ -353,17 +378,22 @@ public class ShellUtil {
 
             }
         }else {
-            InputStream in = context.getAssets().open("text.xml");
-            config = ConfigXml.read(in);
+            InputStream in = context.getAssets().open("text.a.txt");
+            config = ConfigJson.read(in);
         }
 
         if(!isRemote){
             if(config!=null){
-                //LogContent.addItemAndNotify("建议接入点：\t"+"\rAPN：\r"+config.getApn_apn()+"\t代理：\r"+config.getApn_proxy()+"\t端口：\r"+config.getApn_port());
-                LogContent.addItemAndNotify("建议接入点：\t"+"\rAPN：\r"+config.getApn_apn());
+
+                LogContent.addItemAndNotify("配置：\t"+"\r\r"+config.getConfigName());
+                LogContent.addItemAndNotify("作者：\t"+"\r\r"+config.getAuthor());
+                LogContent.addItemAndNotify("说明：\t"+"\r\r"+config.getExplain());
+                LogContent.addItemAndNotify("建议接入点：\t"+"\rAPN：\r"+config.getApn());
             }
 
         }
+
+        //LogUtil.printSS(config.toString());
         return  config;
     }
 

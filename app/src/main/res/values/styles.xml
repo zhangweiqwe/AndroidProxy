@@ -35,6 +35,7 @@
     <style name="ADTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <!-- API 14 theme customizations can go here. -->
     </style>
+   <!-- <style name="AppThemeMianAcivity" parent="Theme.AppCompat">-->
     <style name="AppThemeMianAcivity" parent="Theme.AppCompat">
      <!--   <item name="windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>-->
@@ -47,6 +48,21 @@
       <!--  <item name="android:textSize">17sp</item>
         <item name="android:textColor">#ffffff</item>-->
        <!-- <item name="android:windowBackground">@color/transparent</item>-->
+        <!--<item name="android:windowEnterAnimation">@anim/dialog_pay_start_animation_set</item>
+        <item name="android:windowExitAnimation">@anim/dialog_pay_exit_animation_set</item>-->
+    </style>
+    <style name="AppThemeMianAcivity2" parent="Theme.AppCompat.Dialog">
+        <!--   <item name="windowActionBar">false</item>
+           <item name="android:windowNoTitle">true</item>-->
+        <!--<item name="android:windowFullscreen">true</item>-->
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>-->
+        <!--<item name="android:textColor">#f6f6f6</item>-->
+        <!--  <item name="android:textSize">17sp</item>
+          <item name="android:textColor">#ffffff</item>-->
+        <!-- <item name="android:windowBackground">@color/transparent</item>-->
         <!--<item name="android:windowEnterAnimation">@anim/dialog_pay_start_animation_set</item>
         <item name="android:windowExitAnimation">@anim/dialog_pay_exit_animation_set</item>-->
     </style>
@@ -88,5 +104,10 @@
     <style name="payDialogStyleAnimation" parent="android:Theme.Dialog">
         <item name="android:windowEnterAnimation">@anim/dialog_pay_start_animation_set</item>
         <item name="android:windowExitAnimation">@anim/dialog_pay_exit_animation_set</item>
+    </style>
+
+    <style name="anim_menu_bottombar">
+        <item name="android:windowEnterAnimation">@anim/menu_bottombar_in</item>
+        <item name="android:windowExitAnimation">@anim/menu_bottombar_out</item>
     </style>
 </resources>

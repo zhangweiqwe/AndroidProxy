@@ -1,0 +1,18 @@
+<ripple xmlns:tools="http://schemas.android.com/tools"     android:color="@color/colorAccent2" xmlns:android="http://schemas.android.com/apk/res/android">   
+    <item >
+        <selector xmlns:android="http://schemas.android.com/apk/res/android">
+            <item android:state_enabled="true" android:state_pressed="true">
+               <!-- <ripple android:color="@color/colorAccent"></ripple>-->
+                <shape android:shape="rectangle">
+                    <corners android:radius="5dp"></corners>
+                    <solid android:color="@color/colorAccent"></solid>
+                </shape>
+            </item>
+            <item android:state_pressed="false">
+                <shape android:shape="rectangle">
+                    <corners android:radius="5dp"></corners>
+                    <solid android:color="#22ffffff"></solid>
+                </shape>
+            </item>
+        </selector></item>
+</ripple>

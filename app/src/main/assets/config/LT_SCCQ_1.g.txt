@@ -1,0 +1,17 @@
+#gravity 配置文件
+@名称 双host改(四川,重庆联通)
+@作者 我思故我在
+@说明 支持四川和重庆http，https自测
+
+"version":"1.0",
+"apn": "3gwap",
+"dns": "114.114.114.114,8.8.8.8,129.29.29.29",
+
+"http_proxy":"10.0.0.172:80",
+"http_delate":"Host,X-Online-Host",
+"http_first":"[M] [u] [V]\r\nHost  \r: uni3g.qq.com\r\nHost: [h]\r\n",
+
+"https_support":true,
+"https_proxy":"10.0.0.172:80",
+"https_delate":"Host,X-Online-Host",
+"https_first":"CONNECT [U] [V]\r\n \ \rHost:[h]\r\nHost:iread.wo.com.cn\r\nHost\r:X-Online-Host\r:host\r\n"

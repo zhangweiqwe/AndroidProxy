@@ -3,6 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent2">#f10857</color>
+    <color name="colorAccent3">#95ec3975</color>
     <color name="transparent">#00000000</color>
 
     <color name="speedTv">#88dcdf14</color>

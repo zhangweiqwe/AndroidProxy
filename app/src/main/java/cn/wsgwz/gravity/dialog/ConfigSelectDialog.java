@@ -2,11 +2,12 @@ package cn.wsgwz.gravity.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -14,17 +15,10 @@ import android.os.Message;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.ViewUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.pull.refreshview.XFooterView;
 import com.example.pull.refreshview.XListView;
 
 import java.io.File;
@@ -32,9 +26,7 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,24 +36,18 @@ import cn.wsgwz.gravity.activity.ConfigEditActivity;
 import cn.wsgwz.gravity.adapter.ConfigSelectAdapter;
 import cn.wsgwz.gravity.adapter.MyFragmentPagerAdapter;
 import cn.wsgwz.gravity.config.EnumAssetsConfig;
-import cn.wsgwz.gravity.config.EnumMyConfig;
-import cn.wsgwz.gravity.config.xml.ConfigXml;
 import cn.wsgwz.gravity.fragment.MainFragment;
 import cn.wsgwz.gravity.helper.SettingHelper;
-import cn.wsgwz.gravity.helper.ShellHelper;
 import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
-import cn.wsgwz.gravity.util.MyViewUtil;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
-import cn.wsgwz.gravity.util.ShellUtil;
-import cn.wsgwz.gravity.view.slidingTabLayout.ScreenSlidePagerAdapter;
 
 /**
  * Created by Jeremy Wang on 2016/11/7.
  */
 
-public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClickListener{
+public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClickListener,AdapterView.OnItemLongClickListener{
     private SettingHelper settingHelper = SettingHelper.getInstance();
     private Context context;
     public ConfigSelectDialog(Context context) {
@@ -108,10 +94,56 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
         list =  new ArrayList<>();
         configSelectAdapter = new ConfigSelectAdapter(getContext(),list);
         list_view.setOnItemClickListener(this);
+        list_view.setOnItemLongClickListener(this);
         list_view.setAdapter(configSelectAdapter);
         initListView();
+
     }
 
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+        LogUtil.printSS("---"+position);
+        if(position==0){
+            return false;
+        }
+        position = position - 1;
+        Object obj = list.get(position);
+
+        if(obj instanceof File){
+            file = (File) obj;
+        }else {
+            return false;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("分享");
+        builder.setMessage("是否分享？");
+        builder.setPositiveButton("分享", new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(file==null||!file.exists()){
+                    return ;
+                }
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.putExtra("subject", file.getName()); //
+                intent.putExtra("body", "来自gravity的配置文件分享"); //正文
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+                intent.setType("text/plain");
+
+                try {
+                    context.startActivity(intent);
+                }catch (ActivityNotFoundException e){
+
+                }
+            }
+        });
+        builder.setNegativeButton("取消", null);
+        builder.show();
+
+
+        return false;
+    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, final View view,  int position, long id) {
@@ -177,6 +209,7 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                     Snackbar.make(view, getContext().getString(R.string.delate_file_succeed), Snackbar.LENGTH_SHORT).show();
                 }
             });
+
         }
 
         builder.setPositiveButton("确定", new OnClickListener() {
@@ -185,12 +218,12 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                 //sharedPreferences.edit().putString(SharedPreferenceMy.CURRENT_CONFIG_PATH,file.getAbsolutePath()).commit();
                 settingHelper.setConfigPath(context,file.getAbsolutePath());
                 currentConfig_TV.setText(file.getAbsolutePath());
-                ConfigSelectDialog.this.getWindow().getDecorView().postDelayed(new Runnable() {
+               /* ConfigSelectDialog.this.getWindow().getDecorView().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         ConfigSelectDialog.this.dismiss();
                     }
-                },200);
+                },200);*/
                 if(context!=null){
                     if(context instanceof MainActivity){
                         MainActivity mainActivity = (MainActivity)context;
@@ -199,22 +232,12 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                        Fragment fragment =  myFragmentPagerAdapter.getItem(viewPager.getCurrentItem());
                         if(fragment instanceof MainFragment){
                             if(onServerStateChangeListenner!=null){
-                                onServerStateChangeListenner.onChange(true);
+                                onServerStateChangeListenner.onChange(ConfigSelectDialog.this);
                             }
                         }
 
                     }
                 }
-                dialog.dismiss();
-                //Snackbar.make(view, getContext().getString(R.string.restart_server_ok), Snackbar.LENGTH_SHORT).show();
-            /*    getContext().stopService(intentServer);
-                getContext().startService(intentServer);
-                //Snackbar.make(view, getContext().getString(R.string.restart_server_ok), Snackbar.LENGTH_SHORT).show();
-                ConfigSelectDialog.this.dismiss();
-                ShellUtil.maybeExecShell(true,(MainActivity) context);
-                if(onServerStateChangeListenner!=null){
-                    onServerStateChangeListenner.onChange(true);
-                }*/
             }
         });
 
@@ -304,7 +327,7 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
 
     //当服务状态发生改变
     public interface OnServerStateChangeListenner{
-        void onChange(boolean isStart);
+        void onChange(ConfigSelectDialog configSelectDialog);
     }
     private OnServerStateChangeListenner onServerStateChangeListenner;
     public void setOnServerStateChangeListenner(OnServerStateChangeListenner onServerStateChangeListenner){

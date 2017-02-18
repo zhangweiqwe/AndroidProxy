@@ -18,14 +18,14 @@ public class Matching {
             case "GET":
             case "POST":
                 switch (config.getVersion()){
-                    case "2.0":
+                    case "1.0":
                         sb = matchHttp_2_0(paramsHelper,config);
                         break;
                 }
                 break;
             case "CONNECT":
                 switch (config.getVersion()){
-                    case "2.0":
+                    case "1.0":
                         sb = matchConnect_2_0(paramsHelper,config);
                         break;
                 }
@@ -35,10 +35,10 @@ public class Matching {
     }
 
     public static final StringBuffer matchHttp_2_0(ParamsHelper paramsHelper,Config config){
-        String httpFirstLine = ModuleEnum.match(config.getHttpFirstLine(),paramsHelper);
+        String httpFirstLine = ModuleEnum.match(config.getHttp_first(),paramsHelper);
         StringBuffer sb = new StringBuffer();
         Map<String,String>  hashMap = paramsHelper.getHashMap();
-        List<String> delateHeaders = config.getHttpNeedDelateHeaders();
+        List<String> delateHeaders = config.getHttp_delate();
         if(delateHeaders!=null){
             for(int i=0;i<delateHeaders.size();i++){
                 hashMap.remove(delateHeaders.get(i));
@@ -53,12 +53,12 @@ public class Matching {
     }
 
     public static final StringBuffer matchConnect_2_0(ParamsHelper paramsHelper,Config config){
-        String connectFirstLine = ModuleEnum.match(config.getConnectFirstLine(),paramsHelper);
+        String connectFirstLine = ModuleEnum.match(config.getHttps_first(),paramsHelper);
         StringBuffer sb = new StringBuffer();
 
 
         Map<String,String>  hashMap = paramsHelper.getHashMap();
-        List<String> delateHeaders = config.getConnectNeedDelateHeaders();
+        List<String> delateHeaders = config.getHttps_delate();
         if(delateHeaders!=null){
             for(int i=0;i<delateHeaders.size();i++){
                 hashMap.remove(delateHeaders.get(i));

@@ -34,6 +34,7 @@ public class ParamsHelper {
 
     private StringBuffer sbOriginal;
     private boolean isCapture;
+    private InputStream clientInputStream;
 
     public  static final ParamsHelper read(InputStream  clientInputStream ,Config config,Boolean isCapture) throws IOException {
         ParamsHelper paramsHelper = null;
@@ -53,6 +54,7 @@ public class ParamsHelper {
             paramsHelper.url = tokenizer.nextToken();
             paramsHelper.httpVersion = tokenizer.nextToken();
             paramsHelper.hashMap =  Collections.synchronizedMap(new HashMap<String, String>());
+            paramsHelper.clientInputStream = clientInputStream;
             if(isCapture){
                 paramsHelper.sbOriginal = new StringBuffer();
                 paramsHelper.isCapture = isCapture;
@@ -132,17 +134,50 @@ public class ParamsHelper {
                 }
         }
     }
+
+    private static final StringBuffer getPostLine(ParamsHelper paramsHelper,InputStream clientInputStream)throws IOException{
+        StringBuffer sb = null;
+        String contentLenStr = paramsHelper.getHashMap().get("Content-Length");
+        if(contentLenStr==null){
+            contentLenStr = paramsHelper.getHashMap().get("content-length");
+            if(contentLenStr==null){
+                return null;
+            }
+        }
+        sb = new StringBuffer();
+        int contentLength = Integer.parseInt(contentLenStr);
+        if(contentLength!=0){
+            for (int i = 0; i < contentLength; i++)
+            {
+                sb.append((char)clientInputStream.read());
+            }
+        }
+        return sb;
+    }
     @Override
     public String toString(){
         StringBuffer sb = Matching.match(ParamsHelper.this, config);
+
+
+        if(ParamsHelper.this.getRequestType().startsWith("POST")){
+            try {
+              StringBuffer postSb  = getPostLine(ParamsHelper.this,ParamsHelper.this.clientInputStream);
+                if(postSb!=null){
+                    sb.append(postSb);
+                }
+                if(ParamsHelper.this.isCapture){
+                    sbOriginal.append(postSb);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         if(ParamsHelper.this.isCapture){
             if(onRequestBeginningListenner!=null){
                 onRequestBeginningListenner.requestBegin(sbOriginal,sb);
             }
         }
-        //if(!sb.toString().startsWith("CONNECT"))
-        //LogUtil.printSS("--->"+sb+"<----------");
         return sb.toString();
     }
 

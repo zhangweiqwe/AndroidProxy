@@ -50,7 +50,7 @@ public class RequestHandler implements Runnable{
         this.clientSocket = clientSocket;
         this.config = config;
         this.isCapture = isCapture;
-        httpsSpport=config.isConnectSupport();
+        httpsSpport=config.isHttpsSupport();
     }
 
     private ServerToClientThread serverToClientThread =null;
@@ -61,7 +61,7 @@ public class RequestHandler implements Runnable{
     private ClientToServerForConnectThread clientToServerForConnectThread = null;
 
     private void writeHeader(ParamsHelper paramsHelper)throws IOException{
-        remoteSocket = new Socket(config.getHttpHost(),config.getHttpPort());
+        remoteSocket = new Socket(config.getHttp_proxy(),config.getHttp_port());
         remoteInputStream = remoteSocket.getInputStream();
         remoteOutputStream = remoteSocket.getOutputStream();
         byte[] bytes = paramsHelper.toString().getBytes();
@@ -78,7 +78,7 @@ public class RequestHandler implements Runnable{
         serverToClientThread.join();
     }
     public static final void doPost(ParamsHelper paramsHelper,OutputStream remoteOutputStream,InputStream clientInputStream)throws IOException{
-        String contentLenStr = paramsHelper.getHashMap().get("Content-Length");
+       /* String contentLenStr = paramsHelper.getHashMap().get("Content-Length");
         if(contentLenStr==null){
             contentLenStr = paramsHelper.getHashMap().get("content-length");
             if(contentLenStr==null){
@@ -94,7 +94,7 @@ public class RequestHandler implements Runnable{
             //byte[] bytes = paramsHelper.endOfLine.getBytes();
             //remoteOutputStream.write(bytes);
             remoteOutputStream.flush();
-        }
+        }*/
     }
     @Override
     public void run() {
@@ -111,7 +111,7 @@ public class RequestHandler implements Runnable{
             if(requestType.startsWith(paramsHelper.GET)){
                 String host = paramsHelper.getHost();
                 if(host!=null){
-                    if(host.trim().startsWith("11.22.33.44")){
+                    if(host.startsWith("11.22.33.44")){
                         clientOutputStream.write(BackgroundHtml.getBackgroundHtml(paramsHelper,config,isCapture).getBytes());
                         clientOutputStream.flush();
                         return;
@@ -134,7 +134,7 @@ public class RequestHandler implements Runnable{
                 serverToClientForConnectThread.join();
             }else  if(requestType.startsWith(paramsHelper.POST)){
                 writeHeader(paramsHelper);
-                doPost(paramsHelper,remoteOutputStream,clientInputStream);
+                //doPost(paramsHelper,remoteOutputStream,clientInputStream);
                 getOrPostThread();
             }
 

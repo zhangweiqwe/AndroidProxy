@@ -1,0 +1,27 @@
+<config version="2.0" dns="129.29.29.29"  apn_apn="ctwap" apn_proxy="10.0.0.200" apn_port="80">
+
+    <http host="10.0.0.200" port="80">
+        <delate>Host,X-Online-Host</delate>
+        <first-line>
+            [method][]/[U][][version]\r\nHost:[]42.123.76.107\r\nX-Online-Host:[]\rX-Online-Host\t:[][host]\r\nX-Online-Host:42.123.76.107\r\n
+        </first-line>
+    </http>
+
+
+    <https host="10.0.0.200" port="80" switch="on">
+        <delate>Host,X-Online-Host</delate>
+        <first-line>
+            CONNECT[]/[]HTTP/1.1\r\n[]Host:[][host]\r\nHost:[]42.123.76.107\r\nX-Online-Host:[]42.123.76.107\r\n
+        </first-line>
+    </https>
+
+</config>
+
+
+
+
+
+
+
+
+

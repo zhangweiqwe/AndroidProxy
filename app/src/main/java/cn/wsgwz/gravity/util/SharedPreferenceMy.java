@@ -10,9 +10,7 @@ public class SharedPreferenceMy {
 
     public static final String CONFIG = "config";
     public static final String MAIN = "main";
-    //SharedPreferences
-    //是否已经初始化
-    public static final String IS_INIT_SYSTEM = "IS_INIT_SYSTEM";
+
 
     public static final String SHELL_IS_FLLOW_MENU = "SHELL_IS_FLLOW_MENU";
 

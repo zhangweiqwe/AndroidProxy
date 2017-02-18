@@ -4,15 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
-import org.dom4j.DocumentException;
-
-import java.io.IOException;
-
-import cn.wsgwz.gravity.config.Config;
 import cn.wsgwz.gravity.core.SocketServer;
-import cn.wsgwz.gravity.fragment.log.LogContent;
-import cn.wsgwz.gravity.service.ProxyService;
-import cn.wsgwz.gravity.util.LogUtil;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
 
 

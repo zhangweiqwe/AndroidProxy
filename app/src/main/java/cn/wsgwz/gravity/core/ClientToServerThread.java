@@ -43,9 +43,9 @@ public class ClientToServerThread extends Thread {
             byte[] bytes = paramsHelper.toString().getBytes();
             remoteOutputStream.write(bytes);
             remoteOutputStream.flush();
-            if(paramsHelper.getRequestType().startsWith("POST")){
+            /*if(paramsHelper.getRequestType().startsWith("POST")){
                 RequestHandler.doPost(paramsHelper,remoteOutputStream,clientInputStream);
-            }
+            }*/
         } catch (IOException e) {
             //e.printStackTrace();
         }finally {

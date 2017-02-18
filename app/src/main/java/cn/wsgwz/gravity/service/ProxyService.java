@@ -10,8 +10,7 @@ import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
-
-import org.dom4j.DocumentException;
+import org.json.JSONException;
 
 import java.io.IOException;
 
@@ -22,6 +21,7 @@ import cn.wsgwz.gravity.helper.CapturePackageHelper;
 import cn.wsgwz.gravity.helper.SettingHelper;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
+
 
 /**
  * Created by Administrator on 2016/10/24.
@@ -45,7 +45,10 @@ public class ProxyService extends Service {
         Notification  notification = builder.build();
         notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(NOTIFY_SERVER_ID,notification);
+
+
     }
+
 
 
 
@@ -62,12 +65,15 @@ public class ProxyService extends Service {
             }
             settingHelper.setIsStart(this,true);
             socketServer = new SocketServer(ProxyService.this,isCapture);
+            if(socketServer.getConfig()==null){
+                return;
+            }
             socketServer.start();
             showNotification();
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(this,getString(R.string.start_server_error)+e.getMessage().toString(),Toast.LENGTH_LONG).show();
-        } catch (DocumentException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(this,getString(R.string.start_server_error)+e.getMessage().toString(),Toast.LENGTH_LONG).show();
         }

@@ -1,10 +1,14 @@
-<ripple xmlns:tools="http://schemas.android.com/tools"
-android:color="@color/colorAccent" xmlns:android="http://schemas.android.com/apk/res/android"
-tools:targetApi="lollipop">
-<item>
-    <shape android:shape="rectangle">
-        <corners android:radius="4dp"></corners>
-        <solid android:color="#22ffffff"></solid>
-    </shape>
-</item>
-</ripple>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="4dp"></corners>
+            <solid android:color="#44ffffff"></solid>
+        </shape>
+    </item>
+    <item android:state_pressed="false">
+        <shape android:shape="rectangle">
+            <corners android:radius="4dp"></corners>
+            <solid android:color="#22ffffff"></solid>
+        </shape>
+    </item>
+</selector>

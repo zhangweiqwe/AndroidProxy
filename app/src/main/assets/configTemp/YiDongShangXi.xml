@@ -1,0 +1,29 @@
+<config version="2.0" dns="129.29.29.29"  apn_apn="cmwap" apn_proxy="10.0.0.172" apn_port="80">
+
+    <http host="10.0.0.172" port="80">
+        <delate>Host,X-Online-Host,host,x-online-host</delate>
+        <first-line>
+            [method][][uri][]HTTP/1.1\r\n天下带你飞:山西无敌\Host=wap.sx.10086.cn/\nHost[]:[]wap.sx.10086.cn\r\n\nHost[]:[]wap.sx.10086.cn\r\nHost:[][host]\r\nx-oline\Host[]:[]wap.sx.10086.cn\r\n
+        </first-line>
+    </http>
+
+
+    <https host="10.0.0.172" port="80" switch="on">
+        <delate>Host,X-Online-Host,host,x-online-host</delate>
+        <first-line>
+            CONNECT[]/[]HTTP/1.1\r\n天下带你飞\rHost=wap.sx.10086.cn/\r\nHost[]:[]wap.sx.10086.cn\r\n\nHost[]:[]wap.sx.10086.cn\r\nHost:[][host]\r\nx-oline\Host[]:[]wap.sx.10086.cn\r\n
+        </first-line>
+    </https>
+
+</config>
+
+
+
+
+
+
+
+
+
+
+

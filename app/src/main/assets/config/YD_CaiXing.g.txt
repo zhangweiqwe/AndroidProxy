@@ -1,0 +1,18 @@
+#gravity 配置文件
+@名称 彩信(移动)
+@作者 我思故我在（移植）
+@说明 这是移动彩信模式 之前重庆可以使用，现在不能了
+
+"version":"1.0",
+"apn": "cmwap",
+"dns": "114.114.114.114,8.8.8.8,129.29.29.29",
+
+"http_proxy":"10.0.0.172:80",
+"http_delate":"Host,X-Online-Host",
+"http_first":"[M] [U] [V]\r\nHost: [h]\r\nAccept: */*, application/vnd.wap.mms-message, application/vnd.wap.sic\r\nContent-Type: application/vnd.wap.mms-message\r\n",
+
+"https_proxy":"10.0.0.172:80",
+"https_delate":"Host,X-Online-Host",
+"https_first":"[M] [U] [V]\r\nHost: [h]\r\nAccept: */*, application/vnd.wap.mms-message, application/vnd.wap.sic\r\nContent-Type: application/vnd.wap.mms-message\r\n"
+
+

@@ -1,0 +1,18 @@
+#gravity 配置文件
+@名称 天道改(重庆移动)
+@作者 我思故我在（移植）
+@说明 重庆专用模式
+
+"version":"1.0",
+"apn": "cmwap",
+"dns": "114.114.114.114,8.8.8.8,129.29.29.29",
+
+"http_proxy":"10.0.0.172:80",
+"http_delate":"Host",
+"http_first":"[M] [u] [V]\r\nConnection: Keep-Alive\nHost: strms.free.migudm.cn\r\nHost: [h]\r\n",
+
+"https_proxy":"10.0.0.172:80",
+"https_delate":"Host",
+"https_first":"CONNECT \r\t[U]/strms.free.migudm.cn:443 HTTP/1.1\r\nPOST http://strms.free.migudm.cn/ HTTP/1.1\r\nHost: strms.free.migudm.cn\r\n"
+
+

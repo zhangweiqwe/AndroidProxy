@@ -6,14 +6,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import android.content.Context;
 
-import org.dom4j.DocumentException;
+import org.json.JSONException;
 
 import cn.wsgwz.gravity.config.Config;
-import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.ShellUtil;
-import java.util.concurrent.RecursiveTask;
-import java.util.concurrent.ForkJoinPool;
-import cn.wsgwz.gravity.util.LogUtil;
 
 /**
  * Created by Jeremy Wang on 2016/12/20.
@@ -26,7 +22,7 @@ public class SocketServer extends Thread{
     private ExecutorService executorService = Executors.newCachedThreadPool();
     private boolean isCapture;
 
-    public SocketServer(Context context,boolean isCapture) throws IOException, DocumentException {
+    public SocketServer(Context context,boolean isCapture) throws IOException, JSONException {
         this.config = ShellUtil.getConfig(context,true);;
         this.context = context;
         this.isCapture = isCapture;
@@ -56,5 +52,13 @@ public class SocketServer extends Thread{
         }
 
 
+    }
+
+    public Config getConfig() {
+        return config;
+    }
+
+    public void setConfig(Config config) {
+        this.config = config;
     }
 }

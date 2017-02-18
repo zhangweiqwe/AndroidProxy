@@ -8,22 +8,13 @@ import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Environment;
 
-import org.dom4j.Attribute;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-
-import cn.wsgwz.gravity.util.LogUtil;
 import cn.wsgwz.gravity.util.OnExecResultListenner;
 import cn.wsgwz.gravity.util.ShellUtil;
 
@@ -132,7 +123,7 @@ public class ApnDbHelper extends SQLiteOpenHelper {
 
 
     }
-
+/*
     //获取当前的 apn_id
     public void getCurrentApnID(Context context, final OnIDChnageListenner onIDChnageListenner) {
         String shellStr = "mount -o remount rw "+DB_SHARED_PREFS_PATH+"\n chmod 0666 "+DB_SHARED_PREFS_PATH_1;
@@ -173,7 +164,7 @@ public class ApnDbHelper extends SQLiteOpenHelper {
             }
         });
 
-    }
+    }*/
 
     //当查找到id
     public interface OnIDChnageListenner{

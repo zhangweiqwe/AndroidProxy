@@ -21,7 +21,7 @@ public class ClientToServerForConnectThread extends Thread {
 
     private InputStream isIn;
     private OutputStream osOut;
-    private  byte[] buffer = new byte[409600];
+    private  byte[] buffer = new byte[4096];
     public ClientToServerForConnectThread(InputStream isIn, OutputStream osOut){
         this.isIn = isIn;
         this.osOut = osOut;

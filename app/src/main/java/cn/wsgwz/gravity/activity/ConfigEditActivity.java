@@ -108,48 +108,12 @@ public class ConfigEditActivity extends Activity {
                 edit_ET.setText(bufferStr);
                 Toast.makeText(this,getString(R.string.already_give_up_change),Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.config_format_explain:
+                Intent intentConfigFormat =  new Intent(this,ConfigFormatExplainActivity.class);
+                startActivity(intentConfigFormat);
+                break;
             case R.id.exit:
                 finish();
-                break;
-            case R.id.insert_method:
-                insertStr("[method]");
-                break;
-            case R.id.insert_url:
-                insertStr("[url]");
-                break;
-            case R.id.insert_uri:
-                insertStr("[uri]");
-                break;
-            case R.id.insert_version:
-                insertStr("[version]");
-                break;
-            case R.id.insert_host:
-                insertStr("[host]");
-                break;
-            case R.id.insert_blank:
-                insertStr("[]");
-                break;
-
-            case R.id.insert_r:
-                insertStr("\\r");
-                break;
-            case R.id.insert_n:
-                insertStr("\\n");
-                break;
-            case R.id.insert_r_n:
-                insertStr("\\r\\n");
-                break;
-            case R.id.insert_t:
-                insertStr("\\t");
-                break;
-            case R.id.insert_http_:
-                insertStr("http://");
-                break;
-            case R.id.insert_host_str:
-                insertStr("Host:");
-                break;
-            case R.id.insert_x_online_host_str:
-                insertStr("X-Online-Host:");
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -171,24 +135,20 @@ public class ConfigEditActivity extends Activity {
             }
         }
     }
-    private static final String templateStr = "<config version=\"2.0\" dns=\"129.29.29.29\"  apn_apn=\"cmwap\" apn_proxy=\"10.0.0.172\" apn_port=\"80\">\n" +
+    private static final String templateStr = "#gravity 配置文件\n" +
+            "@名称 模板\n" +
+            "@作者 模板\n" +
+            "@说明 这是模板\n" +
             "\n" +
-            "<http host=\"10.0.0.172\" port=\"80\">\n" +
-            "    <delate>Host,X-Online-Host,host,x-online-host</delate>\n" +
-            "    <first-line>\n" +
-            "        [method][][url][][version]\\r\\n\n" +
-            "        Host:[][host]\\r\\n\n" +
-            "    </first-line>\n" +
-            "</http>\n" +
+            "\"version\":\"1.0\",\n" +
+            "\"apn\": \"cmwap\",\n" +
+            "\"dns\": \"129.29.29.29\",\n" +
             "\n" +
+            "\"http_proxy\":\"10.0.0.172:80\",\n" +
+            "\"http_delate\":\"Host,X-Online-Host\",\n" +
+            "\"http_first\":\"[M] [U] [V]\\r\\nHost: [h]\\r\\n\",\n" +
             "\n" +
-            "<https host=\"10.0.0.172\" port=\"80\" switch=\"on\">\n" +
-            "    <delate>Host,X-Online-Host,host,x-online-host</delate>\n" +
-            "    <first-line>\n" +
-            "        [method][][url][][version]\\r\\n\n" +
-            "        Host:[][host]\\r\\n\n" +
-            "    </first-line>\n" +
-            "</https>\n" +
-            "\n" +
-            "</config>";
+            "\"https_proxy\":\"10.0.0.172:80\",\n" +
+            "\"https_delate\":\"Host,X-Online-Host\",\n" +
+            "\"https_first\":\"[M] [U] [V]\\r\\nHost: [h]\\r\\n\"";
 }

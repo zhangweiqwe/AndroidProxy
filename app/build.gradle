@@ -7,8 +7,8 @@ android {
         applicationId "cn.wsgwz.gravity"
         minSdkVersion 17
         targetSdkVersion 25
-        versionCode 1181625
-        versionName "gravity 2.87"
+        versionCode 2182141
+        versionName "gravity 2.9201"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
@@ -41,7 +41,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile files('libs/dom4j-1.6.1.jar')
     compile project(':pull')
     //compile project(path: ':explain')
     compile 'com.android.support:appcompat-v7:25.0.1'

@@ -67,7 +67,7 @@ public class CapturePackageHelper implements ParamsHelper.OnRequestBeginningList
     private List<StringBuffer> list_Original,list_Changed;
 
     private short styleBnState;
-    private Button styleBn,clearBn,dragBn;
+    private Button styleBn,clearBn,dragBn,pauseBn;
     public void show(final Context context){
         cm = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
         windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -80,9 +80,11 @@ public class CapturePackageHelper implements ParamsHelper.OnRequestBeginningList
         expandableListView_Original = (ExpandableListView) capturePackageExplainView.findViewById(R.id.expandableListView_Original);
         expandableListView_Changed = (ExpandableListView) capturePackageExplainView.findViewById(R.id.expandableListView_Changed);
 
+        pauseBn = (Button) capturePackageExplainView.findViewById(R.id.pauseBn);
         styleBn = (Button) capturePackageExplainView.findViewById(R.id.styleBn);
         clearBn = (Button) capturePackageExplainView.findViewById(R.id.clearBn);
         dragBn = (Button) capturePackageExplainView.findViewById(R.id.dragBn);
+        pauseBn.setOnClickListener(this);
         styleBn.setOnClickListener(this);
         clearBn.setOnClickListener(this);
 
@@ -108,8 +110,9 @@ public class CapturePackageHelper implements ParamsHelper.OnRequestBeginningList
         wLayoutParams.format = PixelFormat.RGBA_8888;
         wLayoutParams.flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
         wLayoutParams.gravity = Gravity.START | Gravity.TOP;
-        wLayoutParams.width = DensityUtil.dip2px(context, (float) (310*0.618));//191.58 0.168
-        wLayoutParams.height = DensityUtil.dip2px(context,310);
+        int height = 220;
+        wLayoutParams.width = DensityUtil.dip2px(context, (float) (height*0.618));//191.58 0.168
+        wLayoutParams.height = DensityUtil.dip2px(context,height);
         wLayoutParams.x = (int) settingHelper.getSpeedSuspensionX(context);
         wLayoutParams.y = (int) settingHelper.getSpeedSuspensionY(context);
 
@@ -171,9 +174,18 @@ public class CapturePackageHelper implements ParamsHelper.OnRequestBeginningList
     }
 
 
+    private boolean isPause = false;
     @Override
     public void onClick(View view) {
         switch (view.getId()){
+            case R.id.pauseBn:
+                isPause = !isPause;
+                if(isPause){
+                    pauseBn.setText("开始");
+                }else {
+                    pauseBn.setText("暂停");
+                }
+                break;
             case R.id.styleBn:
                 styleBnState++;
                 switch (styleBnState%3){
@@ -190,6 +202,8 @@ public class CapturePackageHelper implements ParamsHelper.OnRequestBeginningList
                         styleBn.setText("all");
                         break;
                 }
+                capturePackageELVAdapter_Original.notifyDataSetChanged();
+                capturePackageELVAdapter_Changed.notifyDataSetChanged();
                 if(styleBnState==Short.MAX_VALUE){
                     styleBnState = 0;
                 }
@@ -209,8 +223,11 @@ public class CapturePackageHelper implements ParamsHelper.OnRequestBeginningList
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 1000:
-                    list_Original.add(sb_Original);
-                    list_Changed.add(sb_Changed);
+                    if(isPause){
+                        return;
+                    }
+                    list_Original.add(0,sb_Original);
+                    list_Changed.add(0,sb_Changed);
                     switch (anEnum){
                         case ORIGINAL:
                             expandableListView_Original.setVisibility(View.VISIBLE);

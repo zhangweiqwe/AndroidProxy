@@ -27,7 +27,9 @@ public class ExplainFragment extends Fragment {
         webView.getSettings().setJavaScriptEnabled(true);
         //webView.setWebViewClient(new WebViewClient());
         webView.loadUrl("file:///android_asset/explain.html");
+        webView.getSettings().setDefaultTextEncodingName("utf-8") ;
         webView.setBackgroundColor(0);
+
         //LogUtil.printSS("  ExplainFragment ");
         //webView.getBackground().setAlpha(0);
         return view;

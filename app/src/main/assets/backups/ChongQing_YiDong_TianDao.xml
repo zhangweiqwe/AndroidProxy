@@ -1,0 +1,30 @@
+<config version="2.0" dns="129.29.29.29"  apn_apn="cmwap" apn_proxy="10.0.0.172" apn_port="80">
+
+    <http host="10.0.0.172" port="80">
+        <delate>Host,Connection</delate>
+        <first-line>
+            [method] [] [uri] [] [version]\r\n
+            Connection: [] keep-alive\n
+            Host: []wap.migudm.mll.migu.cn\r\n
+            Host: [] [host]\r\n
+        </first-line>
+    </http>
+    <https host="10.0.0.172" port="80"  switch="on">
+        <delate>host</delate>
+        <first-line>
+            CONNECT[] \r\t[host]/a.mll.migu.cn:443 []HTTP/1.1\r\n
+            POST []http://a.mll.migu.cn/ [][version]\r\n
+            Host:[] a.mll.migu.cn\r\n
+        </first-line>
+    </https>
+
+</config>
+
+
+
+
+
+
+
+
+

@@ -12,151 +12,122 @@ import java.util.Map;
 
 public class Config {
     private String version;
-    String dns = null;
-    private String apn_apn;
-    private String apn_proxy;
-    private String apn_port;
+    private String apn;
+    private String dns;
 
+    private String http_proxy;
+    private int http_port;
+    private List<String> http_delate;
+    private String http_first;
 
-    private String httpHost;
-    private int httpPort;
-    private String httpFirstLine;
-    private List<String> httpNeedDelateHeaders;
+    private String https_proxy;
+    private int https_port;
+    private List<String> https_delate;
+    private String https_first;
 
+    private String author;
+    private String explain;
 
-    private boolean connectSupport;
-    private String connectHost;
-    private int connectPort;
-    private String connectFirstLine;
-    private List<String> connectNeedDelateHeaders;
+    private boolean httpsSupport;
 
-    public Config(String version, String apn_apn, String apn_proxy, String apn_port, String httpHost, int httpPort, String httpFirstLine, List<String> httpNeedDelateHeaders, boolean connectSupport, String connectHost, int connectPort, String connectFirstLine, List<String> connectNeedDelateHeaders) {
+    private String configName;
+
+    public Config(String version, String apn, String dns, String http_proxy, int http_port, List<String> http_delate, String http_first, String https_proxy, int https_port, List<String> https_delate, String https_first, String author, String explain, boolean httpsSupport, String configName) {
         this.version = version;
-        this.apn_apn = apn_apn;
-        this.apn_proxy = apn_proxy;
-        this.apn_port = apn_port;
-        this.httpHost = httpHost;
-        this.httpPort = httpPort;
-        this.httpFirstLine = httpFirstLine;
-        this.httpNeedDelateHeaders = httpNeedDelateHeaders;
-        this.connectSupport = connectSupport;
-        this.connectHost = connectHost;
-        this.connectPort = connectPort;
-        this.connectFirstLine = connectFirstLine;
-        this.connectNeedDelateHeaders = connectNeedDelateHeaders;
+        this.apn = apn;
+        this.dns = dns;
+        this.http_proxy = http_proxy;
+        this.http_port = http_port;
+        this.http_delate = http_delate;
+        this.http_first = http_first;
+        this.https_proxy = https_proxy;
+        this.https_port = https_port;
+        this.https_delate = https_delate;
+        this.https_first = https_first;
+        this.author = author;
+        this.explain = explain;
+        this.httpsSupport = httpsSupport;
+        this.configName = configName;
     }
 
     public String getVersion() {
         return version;
     }
 
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    public String getApn_apn() {
-        return apn_apn;
-    }
-
-    public void setApn_apn(String apn_apn) {
-        this.apn_apn = apn_apn;
-    }
-
-    public String getApn_proxy() {
-        return apn_proxy;
-    }
-
-    public void setApn_proxy(String apn_proxy) {
-        this.apn_proxy = apn_proxy;
-    }
-
-    public String getApn_port() {
-        return apn_port;
-    }
-
-    public void setApn_port(String apn_port) {
-        this.apn_port = apn_port;
-    }
-
-    public String getHttpHost() {
-        return httpHost;
-    }
-
-    public void setHttpHost(String httpHost) {
-        this.httpHost = httpHost;
-    }
-
-    public int getHttpPort() {
-        return httpPort;
-    }
-
-    public void setHttpPort(int httpPort) {
-        this.httpPort = httpPort;
-    }
-
-    public String getHttpFirstLine() {
-        return httpFirstLine;
-    }
-
-    public void setHttpFirstLine(String httpFirstLine) {
-        this.httpFirstLine = httpFirstLine;
-    }
-
-    public List<String> getHttpNeedDelateHeaders() {
-        return httpNeedDelateHeaders;
-    }
-
-    public void setHttpNeedDelateHeaders(List<String> httpNeedDelateHeaders) {
-        this.httpNeedDelateHeaders = httpNeedDelateHeaders;
-    }
-
-    public boolean isConnectSupport() {
-        return connectSupport;
-    }
-
-    public void setConnectSupport(boolean connectSupport) {
-        this.connectSupport = connectSupport;
-    }
-
-    public String getConnectHost() {
-        return connectHost;
-    }
-
-    public void setConnectHost(String connectHost) {
-        this.connectHost = connectHost;
-    }
-
-    public int getConnectPort() {
-        return connectPort;
-    }
-
-    public void setConnectPort(int connectPort) {
-        this.connectPort = connectPort;
-    }
-
-    public String getConnectFirstLine() {
-        return connectFirstLine;
-    }
-
-    public void setConnectFirstLine(String connectFirstLine) {
-        this.connectFirstLine = connectFirstLine;
+    public String getApn() {
+        return apn;
     }
 
     public String getDns() {
         return dns;
     }
 
-    public void setDns(String dns) {
-        this.dns = dns;
+    public String getHttp_proxy() {
+        return http_proxy;
     }
 
-    public List<String> getConnectNeedDelateHeaders() {
-        return connectNeedDelateHeaders;
+    public int getHttp_port() {
+        return http_port;
     }
 
-    public void setConnectNeedDelateHeaders(List<String> connectNeedDelateHeaders) {
-        this.connectNeedDelateHeaders = connectNeedDelateHeaders;
+    public List<String> getHttp_delate() {
+        return http_delate;
     }
 
+    public String getHttp_first() {
+        return http_first;
+    }
 
+    public String getHttps_proxy() {
+        return https_proxy;
+    }
+
+    public int getHttps_port() {
+        return https_port;
+    }
+
+    public List<String> getHttps_delate() {
+        return https_delate;
+    }
+
+    public String getHttps_first() {
+        return https_first;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getExplain() {
+        return explain;
+    }
+
+    public boolean isHttpsSupport() {
+        return httpsSupport;
+    }
+
+    public String getConfigName() {
+        return configName;
+    }
+
+    @Override
+    public String toString() {
+        return "Config{" +
+                "version='" + version + '\'' +
+                ", apn='" + apn + '\'' +
+                ", dns='" + dns + '\'' +
+                ", http_proxy='" + http_proxy + '\'' +
+                ", http_port=" + http_port +
+                ", http_delate=" + http_delate +
+                ", http_first='" + http_first + '\'' +
+                ", https_proxy='" + https_proxy + '\'' +
+                ", https_port=" + https_port +
+                ", https_delate=" + https_delate +
+                ", https_first='" + https_first + '\'' +
+                ", author='" + author + '\'' +
+                ", explain='" + explain + '\'' +
+                ", httpsSupport=" + httpsSupport +
+                ", configName='" + configName + '\'' +
+                '}';
+    }
 }

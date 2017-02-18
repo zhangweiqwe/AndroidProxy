@@ -32,8 +32,17 @@
         android:orientation="vertical"
         android:layout_height="wrap_content">
         <Button
+            android:id="@+id/pauseBn"
+            android:background="@drawable/capture_package_view_bn_selector_ripple_"
+            android:text="暂停"
+            android:textSize="8sp"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="22dp" />
+        <Button
             android:id="@+id/dragBn"
             android:background="@drawable/capture_package_view_bn_selector_ripple_"
+            android:layout_marginTop="14dp"
             android:text="拖动"
             android:textSize="8sp"
             android:textAllCaps="false"

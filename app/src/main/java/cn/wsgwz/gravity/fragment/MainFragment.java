@@ -21,15 +21,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.Toast;
+
+import java.io.File;
 
 import cn.wsgwz.gravity.MainActivity;
 import cn.wsgwz.gravity.R;
+import cn.wsgwz.gravity.config.Config;
 import cn.wsgwz.gravity.config.EnumAssetsConfig;
 import cn.wsgwz.gravity.dialog.ConfigSelectDialog;
 import cn.wsgwz.gravity.fragment.log.LogContent;
+import cn.wsgwz.gravity.helper.FirstUseInitHelper;
 import cn.wsgwz.gravity.helper.SettingHelper;
 import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.$InterfaceTest;
+import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
 import cn.wsgwz.gravity.view.MyScrollView2;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
@@ -57,10 +63,11 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
 
 
 
+    private  MainActivity mainActivity ;
     @$InterfaceTest("MainFragment")
     private String ar;
     @$InterfaceTest(getTestBoolean = true)
-    private boolean b;
+    private boolean b3;
     private void fllowServer(boolean isStart){
         boolean isExecShell = sharedPreferences.getBoolean(SharedPreferenceMy.SHELL_IS_FLLOW_MENU, true);
         if(isExecShell){
@@ -137,8 +144,8 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
 
 
 
-
-        sharedPreferences = getActivity().getSharedPreferences(SharedPreferenceMy.CONFIG, Context.MODE_PRIVATE);
+        mainActivity = (MainActivity) getActivity();
+        sharedPreferences = mainActivity.mainActivityHelper.getSharedPreferences();
 
 
         detector = new GestureDetector(getActivity(),this);
@@ -238,37 +245,77 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
 
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
-        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-            //if( sharedPreferences.getString(SharedPreferenceMy.CURRENT_CONFIG_PATH,null)!=null){
-            String configPath = settingHelper.getConfigPath(getContext());
-            if(configPath !=null&&!configPath.equals("未选择")){
-                if(b){
-                    //sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,true).commit();
-                    getActivity().startService(intentServer);
-                    fllowServer(true);
-                } else {
-                    //sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,false).commit();
-                    getActivity().stopService(intentServer);
-                    fllowServer(false);
-                    flowStatistics();
+        public void onCheckedChanged(CompoundButton compoundButton, final boolean b1) {
+            //LogUtil.printSS("---"+b1);
+            if(b1){
+                final boolean isFllowExecShell = sharedPreferences.getBoolean(SharedPreferenceMy.SHELL_IS_FLLOW_MENU, true);
+                final boolean isInitSystem = new File(FileUtil.FIRST_INIT_JUME_PATH).exists();
+                boolean isInitSdcard = new File(FileUtil.FIRST_INIT_SD_PATH).exists();
+                final FirstUseInitHelper firstUseInitHelper = new FirstUseInitHelper(mainActivity);
+                if(!isInitSdcard){
+                    firstUseInitHelper.initFileToSdcard();
                 }
-            }else {
-                Snackbar.make(service_Switch,getString(R.string.please_select_config), Snackbar.LENGTH_SHORT).show();
-                if(b){
-                    service_Switch.setChecked(false);
-                }
-                select_Bn.setClickable(false);
-                service_Switch.postDelayed(new Runnable() {
+                ShellUtil.checkRootPermission(new ShellUtil.OnCheckRootStateChnageListenner() {
                     @Override
-                    public void run() {
-                        onClick(select_Bn);
-                        select_Bn.setClickable(true);
+                    public void haveRoot(boolean b) {
+                        if(b){
+                            if(!isInitSystem){
+                                firstUseInitHelper.initFileToSystem();
+                                service_Switch.setChecked(false);
+                                return;
+                            }else {
+                                startService(b1);
+                            }
+                        }else{
+                            if(isFllowExecShell){
+                                Toast.makeText(getContext(),getString(R.string.donot_have_root_permission_if_need_start_please_close_flow_service),Toast.LENGTH_LONG).show();
+                                service_Switch.setChecked(false);
+                                return;
+                            }else {
+                                startService(b1);
+                            }
+                        }
+
+
                     }
-                },800);
+                });
+            }else {
+               // LogUtil.printSS(""+2);
+                startService(b1);
             }
+
 
         }
     };
+
+    private void startService(boolean b1){
+        String configPath = settingHelper.getConfigPath(getContext());
+        if(configPath !=null&&!configPath.equals("未选择")){
+            if(b1){
+                getActivity().startService(intentServer);
+                fllowServer(true);
+            } else {
+                getActivity().stopService(intentServer);
+                fllowServer(false);
+                flowStatistics();
+            }
+        }else {
+            Snackbar.make(service_Switch,getString(R.string.please_select_config), Snackbar.LENGTH_SHORT).show();
+            if(b1){
+                        service_Switch.setChecked(false);
+            }
+            select_Bn.setClickable(false);
+            service_Switch.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    onClick(select_Bn);
+                    select_Bn.setClickable(true);
+                }
+            },600);
+        }
+    }
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -276,15 +323,47 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
                     final ConfigSelectDialog configSelectDialog = new ConfigSelectDialog(getActivity());
                     configSelectDialog.setOnServerStateChangeListenner(new ConfigSelectDialog.OnServerStateChangeListenner() {
                         @Override
-                        public void onChange(boolean isStart) {
-                            service_Switch.setOnCheckedChangeListener(null);
-                                getActivity().stopService(intentServer);
-                                //sharedPreferences.edit().putBoolean(SharedPreferenceMy.SERVICE_IS_START,true).commit();
-                            settingHelper.setIsStart(getContext(),true);
-                                getActivity().startService(intentServer);
-                            service_Switch.setChecked(true);
-                                fllowServer(true);
-                            service_Switch.setOnCheckedChangeListener(onCheckedChangeListener);
+                        public void onChange(ConfigSelectDialog configSelectDialog1) {
+
+                            if(!MainFragment.isStartOrStopDoing){
+                                final boolean isFllowExecShell = sharedPreferences.getBoolean(SharedPreferenceMy.SHELL_IS_FLLOW_MENU, true);
+                                final boolean isInitSystem = new File(FileUtil.FIRST_INIT_JUME_PATH).exists();
+                                boolean isInitSdcard = new File(FileUtil.FIRST_INIT_SD_PATH).exists();
+                                final FirstUseInitHelper firstUseInitHelper = new FirstUseInitHelper(mainActivity);
+                                if(!isInitSdcard){
+                                    firstUseInitHelper.initFileToSdcard();
+                                }
+
+                                ShellUtil.checkRootPermission(new ShellUtil.OnCheckRootStateChnageListenner() {
+                                    @Override
+                                    public void haveRoot(boolean b) {
+                                        if(b){
+                                            if(!isInitSystem){
+                                                firstUseInitHelper.initFileToSystem();
+                                                service_Switch.setChecked(false);
+                                                return;
+                                            }else {
+                                                configDialogStartService(configSelectDialog);
+                                            }
+                                        }else{
+                                            if(isFllowExecShell){
+                                                Toast.makeText(getContext(),getString(R.string.donot_have_root_permission_if_need_start_please_close_flow_service),Toast.LENGTH_LONG).show();
+                                                service_Switch.setChecked(false);
+                                                return;
+                                            }else {
+                                                configDialogStartService(configSelectDialog);
+                                            }
+                                        }
+
+
+                                    }
+                                });
+
+
+                            }else {
+                                Toast.makeText(getContext(),getString(R.string.busy_is_doing_some_thing),Toast.LENGTH_SHORT).show();
+                            }
+
                         }
                     });
                     configSelectDialog.show();
@@ -292,10 +371,24 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
 
         }
     }
+
+    private void configDialogStartService(ConfigSelectDialog configSelectDialog){
+        service_Switch.setOnCheckedChangeListener(null);
+        getActivity().stopService(intentServer);
+        settingHelper.setIsStart(getContext(),true);
+        getActivity().startService(intentServer);
+
+        service_Switch.setChecked(true);
+        fllowServer(true);
+        configSelectDialog.dismiss();
+        service_Switch.setOnCheckedChangeListener(onCheckedChangeListener);
+    }
+
     @Override
     public void doingSomeThing(final IsProgressEnum isProgressEnum) {
         isStartOrStopDoing = true;
         service_Switch.setEnabled(false);
+
     }
     @Override
     public void finallyThat() {
@@ -342,6 +435,8 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
         return false;
     }
 
-
+    public Switch getService_Switch() {
+        return service_Switch;
+    }
 
 }

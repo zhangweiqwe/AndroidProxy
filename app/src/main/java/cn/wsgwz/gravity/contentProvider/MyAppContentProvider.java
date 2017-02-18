@@ -45,6 +45,9 @@ public final class MyAppContentProvider extends ContentProvider {;
     private static final int CODE_SETTING_IS_CAPTURE = 8;
     public static final String PATH_SETTING_IS_CAPTURE = "path_is_capture";
 
+    private static final int CODE_MAINACTIVITY_STYLE = 9;
+    public static final String PATH_MAINACTIVITY_STYLE = "path_mainactivity_style";
+
 
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -56,6 +59,7 @@ public final class MyAppContentProvider extends ContentProvider {;
         uriMatcher.addURI(CustomApplication.PACKAGE_NAME,PATH_SETTING_SEED_X_LOCATION,CODE_SETTING_SEED_X_LOCATION);
         uriMatcher.addURI(CustomApplication.PACKAGE_NAME,PATH_SETTING_SEED_Y_LOCATION,CODE_SETTING_SEED_Y_LOCATION);
         uriMatcher.addURI(CustomApplication.PACKAGE_NAME,PATH_SETTING_IS_CAPTURE,CODE_SETTING_IS_CAPTURE);
+        uriMatcher.addURI(CustomApplication.PACKAGE_NAME,PATH_MAINACTIVITY_STYLE,CODE_MAINACTIVITY_STYLE);
         //LogUtil.printSS("MyAppContentProvider static 块" );
     }
     private ContentResolver contentResolver;
@@ -80,6 +84,8 @@ public final class MyAppContentProvider extends ContentProvider {;
                 return PATH_SETTING_SEED_Y_LOCATION;
             case CODE_SETTING_IS_CAPTURE:
                 return PATH_SETTING_IS_CAPTURE;
+            case CODE_MAINACTIVITY_STYLE:
+                return PATH_MAINACTIVITY_STYLE;
         }
         return null;
     }
@@ -107,6 +113,7 @@ public final class MyAppContentProvider extends ContentProvider {;
             case PATH_SETTING_SEED_X_LOCATION:
             case PATH_SETTING_SEED_Y_LOCATION:
             case PATH_SETTING_IS_CAPTURE:
+            case PATH_MAINACTIVITY_STYLE:
                 SQLiteDatabase sqLiteDatabase = dbHelper.getReadableDatabase();
             /*table:表名，不能为null
             columns:要查询的列名，可以是多个，可以为null，表示查询所有列
@@ -135,6 +142,7 @@ public final class MyAppContentProvider extends ContentProvider {;
             case PATH_SETTING_SEED_X_LOCATION:
             case PATH_SETTING_SEED_Y_LOCATION:
             case PATH_SETTING_IS_CAPTURE:
+            case PATH_MAINACTIVITY_STYLE:
                 SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
                 long l = sqLiteDatabase.insert(DbHelper.TABLE_NAME,DbHelper._ID,contentValues);
                 uri1 = ContentUris.withAppendedId(uri,l);
@@ -154,6 +162,7 @@ public final class MyAppContentProvider extends ContentProvider {;
             case PATH_SETTING_SEED_X_LOCATION:
             case PATH_SETTING_SEED_Y_LOCATION:
             case PATH_SETTING_IS_CAPTURE:
+            case PATH_MAINACTIVITY_STYLE:
                 SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
                 id= sqLiteDatabase.delete(DbHelper.TABLE_NAME, s, strings);
                 contentResolver.notifyChange(uri,null);
@@ -173,6 +182,7 @@ public final class MyAppContentProvider extends ContentProvider {;
             case PATH_SETTING_SEED_X_LOCATION:
             case PATH_SETTING_SEED_Y_LOCATION:
             case PATH_SETTING_IS_CAPTURE:
+            case PATH_MAINACTIVITY_STYLE:
                 SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
                 id= sqLiteDatabase.update(DbHelper.TABLE_NAME, contentValues, s,strings);
                 contentResolver.notifyChange(uri,null);
@@ -201,6 +211,7 @@ public final class MyAppContentProvider extends ContentProvider {;
         public static final String _SPEED_VIEW_X_LOCATION = "_speed_view_x_location";
         public static final String _SPEED_VIEW_Y_LOCATION = "_speed_view_y_location";
         public static final String _IS_CAPTURE = "_is_capture";
+        public static final String _STYLE_MAINACTIVITY = "_style_mainActivity";
         public DbHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
             super(context, DB_NAME, factory,getVersionCode(context) );
         }
@@ -211,9 +222,9 @@ public final class MyAppContentProvider extends ContentProvider {;
 
         @Override
         public void onCreate(SQLiteDatabase sqLiteDatabase) {
-            String sql = "create table "+TABLE_NAME+"("+_ID+" integer primary key autoincrement,"+ _CONFIG_PATH+" varchar(16),"+_IS_START+" integer,"+_SUSPENSION_COLOR+" varchar(16),"
-                    +_SPEED_VIEW_X_LOCATION+" real,"+_SPEED_VIEW_Y_LOCATION+" real,"+_IS_CAPTURE+" integer"+");";
-            String sql2 = "insert into "+TABLE_NAME+"("+_CONFIG_PATH+","+_IS_START+","+_IS_CAPTURE+","+_SPEED_VIEW_X_LOCATION+","+_SPEED_VIEW_Y_LOCATION+") "+"values("+"'未选择',1,1,100,314"+")";
+            String sql = "create table "+TABLE_NAME+"("+_ID+" integer primary key autoincrement,"+ _CONFIG_PATH+" text,"+_IS_START+" integer,"+_SUSPENSION_COLOR+" varchar(16),"
+                    +_SPEED_VIEW_X_LOCATION+" real,"+_SPEED_VIEW_Y_LOCATION+" real,"+_IS_CAPTURE+" integer,"+_STYLE_MAINACTIVITY+" integer"+");";
+            String sql2 = "insert into "+TABLE_NAME+"("+_CONFIG_PATH+","+_IS_START+","+_IS_CAPTURE+","+_SPEED_VIEW_X_LOCATION+","+_SPEED_VIEW_Y_LOCATION+","+_STYLE_MAINACTIVITY+") "+"values("+"'未选择',1,1,100,314,1"+")";
             sqLiteDatabase.execSQL(sql);
             sqLiteDatabase.execSQL(sql2);
         }

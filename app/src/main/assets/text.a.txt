@@ -1,0 +1,16 @@
+#gravity 配置文件
+@名称 模板
+@作者 模板
+@说明 这是模板
+
+"version":"1.0",
+"apn": "cmwap",
+"dns": "129.29.29.29",
+
+"http_proxy":"10.0.0.172:80",
+"http_delate":"Host,X-Online-Host",
+"http_first":"[M] [U] [V]\r\nHost: [h]\r\n",
+
+"https_proxy":"10.0.0.172:80",
+"https_delate":"Host,X-Online-Host",
+"https_first":"[M] [U] [V]\r\nHost: [h]\r\n"
