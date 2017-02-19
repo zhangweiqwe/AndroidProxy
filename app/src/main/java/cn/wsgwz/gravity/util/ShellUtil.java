@@ -230,18 +230,18 @@ public class ShellUtil {
     }
     //public static boolean isStartOrStopDoing;
     //是否是脚本更随服务
-    public static final synchronized void  maybeExecShell(final boolean state, final MainActivity activity){
+    public static final synchronized void  maybeExecShell(final boolean state, final Context context){
         final ShellHelper shellHelper = ShellHelper.getInstance();
         String str = null;
         Config config;
         if(state){
             try {
-                config = getConfig(activity,false);
+                config = getConfig(context,false);
                 if(config==null){
-                    Toast.makeText(activity,activity.getString(R.string.config_not_fund),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,context.getString(R.string.config_not_fund),Toast.LENGTH_SHORT).show();
                     return;
                 }
-                configInitShell(shellHelper,config,activity);
+                configInitShell(shellHelper,config,context);
             } catch (IOException e) {
                 e.printStackTrace();
             }  catch (JSONException e) {
@@ -260,6 +260,27 @@ public class ShellUtil {
             }
         }
 
+
+        if(!( context instanceof MainActivity)){
+            ShellUtil.execShell(context, str, new OnExecResultListenner() {
+                @Override
+                public void onSuccess(StringBuffer sb) {
+                    if (state) {
+                        Toast.makeText(context, context.getString(R.string.exec_start_ok), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, context.getString(R.string.exec_stop_ok), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onError(StringBuffer sb) {
+
+                }
+            });
+            return;
+        }
+        if(context==null){return;}
+        final MainActivity activity = (MainActivity) context;
         Toolbar toolbar = activity.getToolbar();
 
 

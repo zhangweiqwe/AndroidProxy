@@ -1,0 +1,19 @@
+<RelativeLayout
+    android:id="@+id/switch_RL"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:background="@drawable/switch_widget_provider_view_background"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:id="@+id/switch_TV"
+        android:padding="3dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:background="#88ff0000"
+        android:layout_centerInParent="true"
+        android:textColor="#d716dedb"
+        android:textStyle="bold"
+        android:text="开启"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

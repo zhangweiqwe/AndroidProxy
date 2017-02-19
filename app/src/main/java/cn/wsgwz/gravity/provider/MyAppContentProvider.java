@@ -1,4 +1,4 @@
-package cn.wsgwz.gravity.contentProvider;
+package cn.wsgwz.gravity.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentResolver;
@@ -9,19 +9,12 @@ import android.content.UriMatcher;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.support.annotation.Nullable;
-import android.util.Log;
-
-import java.net.URL;
 
 import cn.wsgwz.gravity.CustomApplication;
-import cn.wsgwz.gravity.adapter.MyFragmentPagerAdapter;
-import cn.wsgwz.gravity.helper.SettingHelper;
-import cn.wsgwz.gravity.util.LogUtil;
 
 /**
  * Created by Jeremy Wang on 2017/1/9.

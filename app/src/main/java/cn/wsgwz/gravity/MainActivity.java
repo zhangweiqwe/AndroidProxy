@@ -1,11 +1,11 @@
 package cn.wsgwz.gravity;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -19,14 +19,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.ClickableSpan;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,33 +27,23 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
-import java.io.DataOutputStream;
 import java.io.File;
 
 import cn.wsgwz.gravity.activity.DefinedShellActivity;
 import cn.wsgwz.gravity.activity.HelperActivity;
 import cn.wsgwz.gravity.adapter.MyFragmentPagerAdapter;
-import cn.wsgwz.gravity.contentProvider.MyAppContentProvider;
-import cn.wsgwz.gravity.fragment.GraspDataFragment;
 import cn.wsgwz.gravity.fragment.MainFragment;
-import cn.wsgwz.gravity.fragment.ExplainFragment;
 import cn.wsgwz.gravity.fragment.log.LogContent;
 import cn.wsgwz.gravity.fragment.log.LogFragment;
 import cn.wsgwz.gravity.helper.MainActivityHelper;
-import cn.wsgwz.gravity.helper.PermissionHelper;
 import cn.wsgwz.gravity.helper.SettingHelper;
-import cn.wsgwz.gravity.helper.ShellHelper;
-import cn.wsgwz.gravity.receiver.SMSBroadcastReceiver;
-import cn.wsgwz.gravity.service.SpeedStatisticsService;
+import cn.wsgwz.gravity.provider.SwitchWidgetProvider;
 import cn.wsgwz.gravity.util.DensityUtil;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
-import cn.wsgwz.gravity.util.OnExecResultListenner;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
 
@@ -189,6 +172,7 @@ n. 装饰，布置
 
 
 
+
        /* IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
         intentFilter.setPriority(1000);
         //注册广播
@@ -301,6 +285,11 @@ n. 装饰，布置
                 });
 
         //overridePendingTransition(R.anim.main_start_animation, R.anim.main_exit_animation);
+
+
+
+
+
     }
 
     //清除栈顶activity，切换主题

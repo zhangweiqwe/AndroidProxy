@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Environment;
 
@@ -15,6 +16,7 @@ import java.util.TimerTask;
 
 import cn.wsgwz.gravity.helper.SettingHelper;
 import cn.wsgwz.gravity.helper.ShellHelper;
+import cn.wsgwz.gravity.provider.SwitchWidgetProvider;
 import cn.wsgwz.gravity.util.LogUtil;
 import cn.wsgwz.gravity.util.NativeUtils;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
@@ -58,6 +60,7 @@ public class CustomApplication extends Application {
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
     }
+
     private  ObjTemp getCurProcessName(Context context) {
         ObjTemp objTemp = new ObjTemp();
         //List<Object> list = new ArrayList<>();

@@ -33,6 +33,7 @@ import cn.wsgwz.gravity.dialog.ConfigSelectDialog;
 import cn.wsgwz.gravity.fragment.log.LogContent;
 import cn.wsgwz.gravity.helper.FirstUseInitHelper;
 import cn.wsgwz.gravity.helper.SettingHelper;
+import cn.wsgwz.gravity.provider.SwitchWidgetProvider;
 import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.$InterfaceTest;
 import cn.wsgwz.gravity.util.FileUtil;
@@ -313,6 +314,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
                 }
             },600);
         }
+        SwitchWidgetProvider.refreshState(MainFragment.this.getContext());
     }
 
 

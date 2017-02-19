@@ -7,9 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import cn.wsgwz.gravity.CustomApplication;
-import cn.wsgwz.gravity.contentProvider.MyAppContentProvider;
-import cn.wsgwz.gravity.util.FloatBytesConvertUtil;
-import cn.wsgwz.gravity.util.LogUtil;
+import cn.wsgwz.gravity.provider.MyAppContentProvider;
 
 /**
  * Created by Jeremy Wang on 2017/1/9.
