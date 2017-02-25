@@ -135,16 +135,14 @@
 
         <receiver android:name=".provider.SwitchWidgetProvider"
             android:label="widgetSwitch1">
-            <intent-filter android:priority="2147483647">
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="cn.wsgwz.gravity.startOrStopService"></action>
 
-                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
-                <action android:name="android.appwidget.action.APPWIDGET_DISENABLED" />
-            </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/switch_widget_provider" />
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
         </receiver>
 
 

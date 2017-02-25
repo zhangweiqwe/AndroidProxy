@@ -27,6 +27,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ClickableSpan;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -45,6 +46,7 @@ import cn.wsgwz.gravity.activity.ConfigEditActivity;
 import cn.wsgwz.gravity.service.SpeedStatisticsService;
 import cn.wsgwz.gravity.util.DensityUtil;
 import cn.wsgwz.gravity.util.FileUtil;
+import cn.wsgwz.gravity.util.LogUtil;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
 
 /**
@@ -217,8 +219,35 @@ public class MainActivityHelper {
         textView.setMovementMethod(LinkMovementMethod.getInstance());
         textView.setTextColor(Color.parseColor("#ffffff"));
         textView.setTextSize(16, TypedValue.COMPLEX_UNIT_SP);
+        textView.setId(R.id.about_uid);
         relativeLayout.addView(textView);
 
+
+        TextView wapmlTv = new TextView(mainActivity);
+        RelativeLayout.LayoutParams layoutParams2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        if(Build.VERSION.SDK_INT>21){
+            layoutParams2.setMargins(DensityUtil.dip2px(mainActivity,60),DensityUtil.dip2px(mainActivity,30),0,0);
+        }else {
+            layoutParams2.setMargins(DensityUtil.dip2px(mainActivity,60),DensityUtil.dip2px(mainActivity,30),0,DensityUtil.dip2px(mainActivity,30));
+        }
+        layoutParams2.addRule(RelativeLayout.BELOW,textView.getId());
+        layoutParams2.setMarginStart(DensityUtil.dip2px(mainActivity,30));
+        wapmlTv.setTextColor(mainActivity.getResources().getColor(R.color.colorAccent));
+        wapmlTv.setClickable(true);
+        wapmlTv.setText("名流网：www.wapml.cn\n");
+       // wapmlTv.setTextSize(,TypedValue.COMPLEX_UNIT_SP);// complex  n.英 ['kɒmpleks] 复合体；综合设施
+        wapmlTv.setLayoutParams(layoutParams2);
+        wapmlTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(Intent.ACTION_VIEW, Uri.parse("http://wapml.cn"));
+                it.setClassName("com.android.browser", "com.android.browser.BrowserActivity");
+                mainActivity.startActivity(it);
+            }
+        });
+
+
+        relativeLayout.addView(wapmlTv);
         builder.setView(relativeLayout);
         //builder.setMessage(spannable);
         builder.setNeutralButton("错误反馈", new DialogInterface.OnClickListener() {

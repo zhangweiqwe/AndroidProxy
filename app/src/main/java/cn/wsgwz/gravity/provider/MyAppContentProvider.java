@@ -217,7 +217,7 @@ public final class MyAppContentProvider extends ContentProvider {;
         public void onCreate(SQLiteDatabase sqLiteDatabase) {
             String sql = "create table "+TABLE_NAME+"("+_ID+" integer primary key autoincrement,"+ _CONFIG_PATH+" text,"+_IS_START+" integer,"+_SUSPENSION_COLOR+" varchar(16),"
                     +_SPEED_VIEW_X_LOCATION+" real,"+_SPEED_VIEW_Y_LOCATION+" real,"+_IS_CAPTURE+" integer,"+_STYLE_MAINACTIVITY+" integer"+");";
-            String sql2 = "insert into "+TABLE_NAME+"("+_CONFIG_PATH+","+_IS_START+","+_IS_CAPTURE+","+_SPEED_VIEW_X_LOCATION+","+_SPEED_VIEW_Y_LOCATION+","+_STYLE_MAINACTIVITY+") "+"values("+"'未选择',1,1,100,314,1"+")";
+            String sql2 = "insert into "+TABLE_NAME+"("+_CONFIG_PATH+","+_IS_START+","+_IS_CAPTURE+","+_SPEED_VIEW_X_LOCATION+","+_SPEED_VIEW_Y_LOCATION+","+_STYLE_MAINACTIVITY+") "+"values("+"'未选择',1,1,100,314,0"+")";
             sqLiteDatabase.execSQL(sql);
             sqLiteDatabase.execSQL(sql2);
         }

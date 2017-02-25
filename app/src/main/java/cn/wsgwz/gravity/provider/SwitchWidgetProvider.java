@@ -1,5 +1,7 @@
 package cn.wsgwz.gravity.provider;
 
+import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -10,6 +12,8 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.SystemClock;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -25,7 +29,7 @@ import cn.wsgwz.gravity.util.ShellUtil;
  */
 
 public class SwitchWidgetProvider extends AppWidgetProvider {
-
+    private static final String START_OR_STOP_SERVICE_ACTION = "cn.wsgwz.gravity.startOrStopServiceAction";
     private static SettingHelper settingHelper = SettingHelper.getInstance();
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
@@ -42,8 +46,7 @@ public class SwitchWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager , int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-        //LogUtil.printSS("onUpdate");
-        Intent intent = new Intent(context,SwitchWidgetProvider.class).setAction("cn.wsgwz.gravity.startOrStopService");
+        Intent intent = new Intent(context,SwitchWidgetProvider.class).setAction(START_OR_STOP_SERVICE_ACTION);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent , PendingIntent.FLAG_UPDATE_CURRENT);
 
 
@@ -54,6 +57,12 @@ public class SwitchWidgetProvider extends AppWidgetProvider {
         remoteViews.setOnClickPendingIntent(R.id.switch_RL, pendingIntent);
 
 
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        int anHour =  6 * 1000 ;  // 6秒
+        long triggerAtTime = SystemClock.elapsedRealtime() + anHour;
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pendingIntent);//开启提醒
+
+
         appWidgetManager.updateAppWidget(componentName, remoteViews);
     }
 
@@ -61,14 +70,13 @@ public class SwitchWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        //LogUtil.printSS("onReceive");
-       /* if(isFirstOnReceive){
-            isFirstOnReceive=false;
+        String action  = intent.getAction();
+        if ((action.equals(START_OR_STOP_SERVICE_ACTION))){
+            startServiceAndRefreshState(context);
         }else {
+        }
 
-        }*/
 
-        startServiceAndRefreshState(context);
     }
 
     @Override

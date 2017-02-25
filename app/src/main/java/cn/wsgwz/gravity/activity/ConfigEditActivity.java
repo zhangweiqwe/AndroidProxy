@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import cn.wsgwz.gravity.R;
 import cn.wsgwz.gravity.util.FileUtil;
 
 public class ConfigEditActivity extends Activity {
+
 
 
 
