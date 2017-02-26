@@ -247,24 +247,24 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
 
     private void initListView(){
 
-
+        final Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what){
+                    case 1000:
+                        configSelectAdapter.notifyDataSetChanged();
+                        //configSelectAdapter.notifyDataSetChanged();
+                        //setListViewHeight(list_view);
+                        break;
+                }
+            }
+        };
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Looper.prepare();
-                final Handler handler = new Handler(){
-                    @Override
-                    public void handleMessage(Message msg) {
-                        super.handleMessage(msg);
-                        switch (msg.what){
-                            case 1000:
-                                configSelectAdapter.notifyDataSetChanged();
-                                //configSelectAdapter.notifyDataSetChanged();
-                                //setListViewHeight(list_view);
-                                break;
-                        }
-                    }
-                };
+                //Looper.prepare();
+
 
                 File file = new File(FileUtil.SD_APTH_QQ);
                 if(file.exists()){
@@ -318,7 +318,7 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                     list.add(EnumAssetsConfig.SiChuan_YiDong_1);*/
 
                 handler.sendEmptyMessage(1000);
-                Looper.loop();
+                //Looper.loop();
 
             }
         }).start();

@@ -20,6 +20,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import cn.wsgwz.gravity.util.LogUtil;
+
 public final class RootShell {
     public static final int GET_ROOT = 0; // 获取到ROOT权限
     public static final int USER_DENIED = 1001; // 用户拒绝授予ROOT权限
@@ -165,7 +167,7 @@ public final class RootShell {
                     ArrayList<String> messageList = new ArrayList<>();
                     String line;
                     while ((line = mCommandReader.readLine()) != null) {
-                        Log.d(TAG, "Output: " + line);
+                            Log.d(TAG, "Output: " + line);
                         int tokenIndex = line.indexOf(Command.CMD_TOKEN);
                         if (tokenIndex >= 0) {
                             line = line.substring(tokenIndex);

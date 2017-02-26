@@ -145,6 +145,9 @@ public class ShellUtil {
                                 Message msg = new Message();
                                 msg.obj =  new StringBuffer().append("!0");
                                 if(sb!=null){
+                                    if(command.getErrorMsg()!=null){
+                                        sb.append(command.getErrorMsg());
+                                    }
                                     msg.obj = sb;
                                 }
                                 msg.what = 1001;
