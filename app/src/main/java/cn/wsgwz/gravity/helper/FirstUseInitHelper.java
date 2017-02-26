@@ -63,6 +63,7 @@ public class FirstUseInitHelper {
         dialog.show();
         String drectoryName = mainActivity.getResources().getString(R.string.app_name);
         final String str =
+                "#! /system/bin/sh\n"+
                 "mount -o remount ,rw /"+"\n"+
                       /*  "cp -r "+ FileUtil.APP_APTH_CONFIG+"/Gravity"+" "+"/system/xbin/"+drectoryName+"\n"+
                         "cd /system/xbin/"+drectoryName+"\n"+
@@ -79,13 +80,14 @@ public class FirstUseInitHelper {
                     @Override
                     public void onSuccess(StringBuffer sb) {
                         dialog.dismiss();
-                        Toast.makeText(mainActivity,mainActivity.getString(R.string.init_app_util_success),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mainActivity,mainActivity.getString(R.string.init_app_util_success)+sb.toString(),Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onError(StringBuffer sb) {
                         dialog.dismiss();
-                        Toast.makeText(mainActivity,mainActivity.getString(R.string.init_app_util_error),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mainActivity,mainActivity.getString(R.string.init_app_util_error)+"\n\n\n\n"+
+                                sb.toString(),Toast.LENGTH_SHORT).show();
                     }
                 });
 

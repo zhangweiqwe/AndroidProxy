@@ -21,6 +21,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import cn.wsgwz.gravity.MainActivity;
@@ -33,6 +36,7 @@ import cn.wsgwz.gravity.fragment.MainFragment;
 import cn.wsgwz.gravity.fragment.log.LogContent;
 import cn.wsgwz.gravity.helper.SettingHelper;
 import cn.wsgwz.gravity.helper.ShellHelper;
+import cn.wsgwz.gravity.util.aboutShell.Command;
 
 public class ShellUtil {
 
@@ -73,7 +77,7 @@ public class ShellUtil {
                         @Override
                         public void run() {
 
-                            StringBuffer sb = new StringBuffer();
+                          /*  StringBuffer sb = new StringBuffer();
                             String str1 = "#! /system/bin/sh\n" + shellStr + "\n";
                             Process process = null;
 
@@ -87,7 +91,7 @@ public class ShellUtil {
                                 localDataOutputStream.flush();
                                 process.waitFor();
 
-                    /*errorBr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                    *//*errorBr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
                     String line = null;
                     while ((line=errorBr.readLine())!=null){
                         if(line.equals("[-] Unallowed user")){
@@ -97,7 +101,7 @@ public class ShellUtil {
                             handler.sendMessage(msg);
                             return;
                         }
-                    }*/
+                    }*//*
 
                                 if (process.exitValue() == 0) {
                                     Message msg = new Message();
@@ -109,9 +113,47 @@ public class ShellUtil {
                                     msg.obj =  new StringBuffer().append("!0");
                                     msg.what = 1001;
                                     handler.sendMessage(msg);
-                                }
+                                }*/
 
-                            } catch (IOException e) {
+
+                            Command command = new Command(shellStr);
+                            command.execute();
+
+                           ArrayList<String> arrayList =  command.getMessageList();
+                            StringBuffer sb = null;
+                            if(arrayList!=null){
+                                sb = new StringBuffer();
+                                for (int i=0;i<arrayList.size();i++){
+                                    sb.append(arrayList.get(i)+"\n");
+                                }
+                            }
+                            if(sb!=null){
+                                LogUtil.printSS(sb.toString());
+                            }
+
+
+                            int result = command.getExitCode();
+                            if (result == 0) {
+                                Message msg = new Message();
+                                msg.obj = new StringBuffer().append("0");
+                                if(sb!=null){
+                                    msg.obj = sb;
+                                }
+                                msg.what = 1000;
+                                handler.sendMessage(msg);
+                            } else {
+                                Message msg = new Message();
+                                msg.obj =  new StringBuffer().append("!0");
+                                if(sb!=null){
+                                    msg.obj = sb;
+                                }
+                                msg.what = 1001;
+                                handler.sendMessage(msg);
+                            }
+
+
+
+                          /*  } catch (IOException e) {
                                 e.printStackTrace();
                                 Message msg = Message.obtain();
                                 msg.what = 1001;
@@ -139,7 +181,7 @@ public class ShellUtil {
                                         e.printStackTrace();
                                     }
                                 }
-                            }
+                            }*/
 
 
                         }
