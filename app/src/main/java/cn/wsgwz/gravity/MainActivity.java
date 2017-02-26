@@ -410,7 +410,7 @@ n. 装饰，布置
                             menu.findItem(R.id.about_Appme).setVisible(false);
                         }
                         menu.findItem(R.id.log_clear).setVisible(false);
-                        menu.findItem(R.id.log_share).setVisible(false);
+                        menu.findItem(R.id.log_share).setVisible(false);;
                         // }
                         break;
                 }

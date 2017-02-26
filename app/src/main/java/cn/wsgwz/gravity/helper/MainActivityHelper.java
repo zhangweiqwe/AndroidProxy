@@ -278,7 +278,7 @@ public class MainActivityHelper {
 
     public void setMarginStatusBar(){
      /*   *
-         * 获取状态栏高度——方法1
+         * 获取状态栏高度——方法
          **/
         int statusBarHeight1 = -1;
 //获取status_bar_height资源的ID
