@@ -279,6 +279,7 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                     });
                     if(files!=null){
                         Collections.addAll(list,files);
+                        handler.sendEmptyMessage(1000);
                     }
                 }
 
@@ -295,6 +296,7 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                     });
                     if(files!=null){
                         Collections.addAll(list,files);
+                        handler.sendEmptyMessage(1000);
                     }
                 }
 
@@ -310,6 +312,7 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                     Class clz = EnumAssetsConfig.class;
                     for (Object obj: clz.getEnumConstants()) {
                         list.add((EnumAssetsConfig)obj);
+                        handler.sendEmptyMessage(1000);
                     }
                   /*  list.add(EnumAssetsConfig.ChongQing_YiDong_1);
                     list.add(EnumAssetsConfig.ChongQing_YiDong_1_S);
