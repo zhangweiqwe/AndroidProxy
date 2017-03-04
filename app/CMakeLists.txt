@@ -14,14 +14,14 @@ add_library( # Sets the name of the library.
 
 
              # Sets the library as a shared library.
-             #SHARED
-             STATIC
+             SHARED
+             #STATIC
 
              # Provides a relative path to your source file(s).
              # Associated headers in the same location as their source
              # file are automatically included.
-             #src/main/cpp/native-lib.cpp
-             src/main/cpp/demo.cpp
+             src/main/cpp/native-lib.cpp
+             #src/main/cpp/demo.cpp
              #src/main/cpp/h.cpp
 
            )
