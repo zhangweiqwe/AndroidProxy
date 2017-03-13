@@ -35,6 +35,10 @@ import java.io.File;
 import cn.wsgwz.gravity.activity.DefinedShellActivity;
 import cn.wsgwz.gravity.activity.HelperActivity;
 import cn.wsgwz.gravity.adapter.MyFragmentPagerAdapter;
+import cn.wsgwz.gravity.demo.Main4Activity;
+import cn.wsgwz.gravity.demo.Main5Activity;
+import cn.wsgwz.gravity.demo.MathGLSurfaceView;
+import cn.wsgwz.gravity.demo.MathSurfaceView;
 import cn.wsgwz.gravity.fragment.MainFragment;
 import cn.wsgwz.gravity.fragment.log.LogContent;
 import cn.wsgwz.gravity.fragment.log.LogFragment;
@@ -129,6 +133,9 @@ n. 装饰，布置
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(MathSurfaceView.DEMO){
+            startActivity(new Intent(this, Main5Activity.class));
+        }
         switch (settingHelper.getMainActivityStyle(this)){
             case 0:
                 break;

@@ -39,6 +39,7 @@ public class FileUtil {
     public static final String SD_APTH_PCAP = Environment.getExternalStorageDirectory()+"/"+"gravity"+"/pcap";*/
     public static final String SD_APTH_QQ = Environment.getExternalStorageDirectory()+"/"+"Tencent"+"/QQfile_recv";
     public static final String APP_APTH_CONFIG = SD_OR_CACHE_PATH+"/"+"Gravity"+"/config";
+    public static final String TEMP_INSTALL = SD_OR_CACHE_PATH+"/"+"Gravity"+"/tempInstall";
     public static final String VERSION_NUMBER = "2.9203";
     public static final String CONFIG_END_NAME = ".g.txt";
     public static final String ASSETS_CONFIG_PATH = "config/";
@@ -94,6 +95,29 @@ public class FileUtil {
         byteArrayInputStream.close();
         fileOutputStream.close();
 
+    }
+    public static final boolean cpFile(File file,File toFile){
+        if(file==null||toFile==null){
+            return false;
+        }
+        try {
+            FileInputStream fileInputStream = new FileInputStream(file);
+            FileOutputStream fileOutputStream = new FileOutputStream(toFile);
+            byte[] buffer = new byte[10240];
+            int len = 0;
+            while ((len = fileInputStream.read(buffer))!=-1){
+                fileOutputStream.write(buffer,0,len);
+                fileOutputStream.flush();
+            }
+            fileInputStream.close();
+            fileOutputStream.close();
+            return true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 
