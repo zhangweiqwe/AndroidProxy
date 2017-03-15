@@ -19,4 +19,8 @@ public class NativeUtils {
 
     public static native final void fork();
     public static native final void testBackground();
+
+    public static native final void demoMutual(String s);
+
+    public static native String demoJni(String s);
 }

@@ -20,6 +20,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,6 +49,7 @@ import cn.wsgwz.gravity.provider.SwitchWidgetProvider;
 import cn.wsgwz.gravity.util.DensityUtil;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
+import cn.wsgwz.gravity.util.NativeUtils;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
 
@@ -334,7 +336,11 @@ n. 装饰，布置
         return super.onPrepareOptionsMenu(menu);
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LogUtil.printSS(NativeUtils.demoJni("22")+"<------");
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

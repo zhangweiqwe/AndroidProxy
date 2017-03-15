@@ -1,11 +1,34 @@
 #include <jni.h>
 #include <iostream>
 
+#include "demo.h"
 #include <android/log.h>
 #include <unistd.h>
 #define LOG_TAG "sssssssssssssNDK"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
+
+JNIEXPORT void JNICALL
+Java_cn_wsgwz_gravity_util_NativeUtils_demoMutual(JNIEnv *env, jclass type, jstring s_) {
+    const char *s = env->GetStringUTFChars(s_, 0);
+
+    // TODO
+
+    env->ReleaseStringUTFChars(s_, s);
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_cn_wsgwz_gravity_util_NativeUtils_demoJni(JNIEnv *env, jclass type, jstring s_) {
+    const char *s = env->GetStringUTFChars(s_, 0);
+
+    // TODO
+
+    env->ReleaseStringUTFChars(s_, s);
+
+    LOGD("-->%d",getIntNumber());
+    return env->NewStringUTF("dsgfd--kkk"+getIntNumber());
+}
 
 
 extern "C"
