@@ -36,10 +36,14 @@ import java.io.File;
 import cn.wsgwz.gravity.activity.DefinedShellActivity;
 import cn.wsgwz.gravity.activity.HelperActivity;
 import cn.wsgwz.gravity.adapter.MyFragmentPagerAdapter;
+import cn.wsgwz.gravity.demo.BmpDrow;
 import cn.wsgwz.gravity.demo.Main4Activity;
 import cn.wsgwz.gravity.demo.Main5Activity;
+import cn.wsgwz.gravity.demo.Main6Activity;
+import cn.wsgwz.gravity.demo.Main7Activity;
 import cn.wsgwz.gravity.demo.MathGLSurfaceView;
 import cn.wsgwz.gravity.demo.MathSurfaceView;
+import cn.wsgwz.gravity.demo.demoSinCos.SinCosActivity;
 import cn.wsgwz.gravity.fragment.MainFragment;
 import cn.wsgwz.gravity.fragment.log.LogContent;
 import cn.wsgwz.gravity.fragment.log.LogFragment;
@@ -137,6 +141,17 @@ n. 装饰，布置
         super.onCreate(savedInstanceState);
         if(MathSurfaceView.DEMO){
             startActivity(new Intent(this, Main5Activity.class));
+        }
+
+        if(Main6Activity.DEMO){
+            startActivity(new Intent(this,Main6Activity.class));
+        }
+
+        if(Main7Activity.IS_DEMO){
+            startActivity(new Intent(this, Main7Activity.class));
+        }
+        if(SinCosActivity.DMEO){
+            startActivity(new Intent(this,SinCosActivity.class));
         }
         switch (settingHelper.getMainActivityStyle(this)){
             case 0:
@@ -339,7 +354,6 @@ n. 装饰，布置
     @Override
     protected void onResume() {
         super.onResume();
-        LogUtil.printSS(NativeUtils.demoJni("22")+"<------");
     }
 
     @Override

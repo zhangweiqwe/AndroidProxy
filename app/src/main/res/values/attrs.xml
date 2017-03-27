@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="mySurfaceView">
+   <!-- <declare-styleable name="mySurfaceView">
         <attr name="key1" format="float"></attr>
         <attr name="key2" format="float"></attr>
+    </declare-styleable>-->
+    <declare-styleable name="SinCosSurfaceview">
+        <attr name="key1" format="integer"></attr>
+        <attr name="key2" format="integer"></attr>
     </declare-styleable>
 </resources>

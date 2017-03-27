@@ -39,8 +39,9 @@ public class SinCurveLine extends SurfaceView implements SurfaceHolder.Callback{
 
     public SinCurveLine(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.mySurfaceView);
+      /*  TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.mySurfaceView);
         typedArray.getFloat(R.styleable.mySurfaceView_key1,30);
+        typedArray.recycle();*/
     }
 
     public SinCurveLine(Context context, AttributeSet attrs, int defStyleAttr) {

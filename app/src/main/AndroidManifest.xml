@@ -149,7 +149,10 @@
         <activity
             android:name=".demo.Main4Activity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-        <activity android:name=".demo.Main5Activity"></activity>
+        <activity android:name=".demo.Main5Activity" />
+        <activity android:name=".demo.Main6Activity" />
+        <activity android:name=".demo.Main7Activity" />
+        <activity android:name=".demo.demoSinCos.SinCosActivity"></activity>
     </application>
 
 </manifest>
