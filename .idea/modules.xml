@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/me.iml" filepath="$PROJECT_DIR$/me.iml" />
       <module fileurl="file://$PROJECT_DIR$/photospreview/photospreview.iml" filepath="$PROJECT_DIR$/photospreview/photospreview.iml" />
       <module fileurl="file://$PROJECT_DIR$/pull/pull.iml" filepath="$PROJECT_DIR$/pull/pull.iml" />
+      <module fileurl="file://$PROJECT_DIR$/watchdog_localserversocket/watchdog_localserversocket.iml" filepath="$PROJECT_DIR$/watchdog_localserversocket/watchdog_localserversocket.iml" />
     </modules>
   </component>
 </project>

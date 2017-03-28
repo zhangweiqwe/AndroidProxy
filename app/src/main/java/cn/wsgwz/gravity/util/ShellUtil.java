@@ -13,23 +13,18 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import cn.wsgwz.gravity.MainActivity;
 import cn.wsgwz.gravity.R;
 import cn.wsgwz.gravity.config.Config;
-import cn.wsgwz.gravity.config.EnumMyConfig;
 import cn.wsgwz.gravity.config.ConfigJson;
 import cn.wsgwz.gravity.fragment.IsProgressEnum;
 import cn.wsgwz.gravity.fragment.MainFragment;
@@ -416,32 +411,9 @@ public class ShellUtil {
             File file = new File(currentConfigPath);
             if(file.getPath().startsWith("/"+FileUtil.ASSETS_CONFIG_PATH)){
                 config = ConfigJson.read(context.getAssets().open( file.getAbsolutePath().replaceFirst("/","")));
-            }else if(file.exists()){
+            }else if(file.exists()) {
                 FileInputStream fileInputStream = new FileInputStream(file);
                 config = ConfigJson.read(fileInputStream);
-            }else {
-                List<EnumMyConfig> listEnum = EnumMyConfig.getMeConfig();
-                boolean b = false;
-                if(listEnum!=null){
-                    for(int i=0;i<listEnum.size();i++){
-                        String pathName = file.getAbsolutePath();
-                        if(pathName.contains("/")){
-                            pathName = pathName.replace("/","");
-                        }
-                        if(listEnum.get(i).getName().equals(pathName)){
-                            String values = listEnum.get(i).getValues();
-                            config = ConfigJson.read(new ByteArrayInputStream(values.getBytes("utf-8")));
-                            b = true;
-                        };
-                    }
-
-                }
-
-                if(!b){
-                    Toast.makeText(context, context.getResources().getText(R.string.config_not_fund), Toast.LENGTH_SHORT).show();
-                    return null;
-                }
-
             }
         }else {
             InputStream in = context.getAssets().open("text.a.txt");

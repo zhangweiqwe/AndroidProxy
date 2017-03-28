@@ -18,7 +18,6 @@ import cn.wsgwz.gravity.helper.SettingHelper;
 import cn.wsgwz.gravity.helper.ShellHelper;
 import cn.wsgwz.gravity.provider.SwitchWidgetProvider;
 import cn.wsgwz.gravity.util.LogUtil;
-import cn.wsgwz.gravity.util.NativeUtils;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
 import android.app.ActivityManager;

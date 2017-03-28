@@ -9,7 +9,7 @@ import java.util.Map;
  */
 
 public class NativeUtils {
-    static {
+    /*static {
         System.loadLibrary("native");
     }
 
@@ -22,5 +22,6 @@ public class NativeUtils {
 
     public static native final void demoMutual(String s);
 
-    public static native String demoJni(String s);
+    public static native String demoJni(String s);*/
+   /* public static native final String getConfig(String typeStr);*/
 }

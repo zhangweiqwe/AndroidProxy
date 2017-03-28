@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/explain" />
             <option value="$PROJECT_DIR$/photospreview" />
             <option value="$PROJECT_DIR$/pull" />
+            <option value="$PROJECT_DIR$/watchdog_localserversocket" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
