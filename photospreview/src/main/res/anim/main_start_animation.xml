@@ -1,0 +1,12 @@
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:anim/decelerate_interpolator">
+    <scale android:fromXScale="2.0" android:toXScale="1.0"
+        android:fromYScale="2.0" android:toYScale="1.0"
+        android:pivotX="50%" android:pivotY="50%"
+        android:duration="300" />
+    <!-- 这里为了看到动画演示效果，把动画持续时间设为3秒 -->
+    <alpha
+        android:fromAlpha="0.1"
+        android:toAlpha="1.0"
+        android:duration="200" />
+</set>

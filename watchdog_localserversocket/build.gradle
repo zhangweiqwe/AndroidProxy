@@ -1,0 +1,39 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+
+    }
+    buildTypes {
+        release {
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path 'CMakeLists.txt'
+        }
+    }
+    defaultConfig {
+        externalNativeBuild {
+            cmake {
+                targets "watchdog_local_server_socket"
+                arguments "-DANDROID_TOOLCHAIN=clang", "-DANDROID_PLATFORM=android-21"
+                cFlags "-DTEST_C_FLAG1", "-DTEST_C_FLAG2"
+                cppFlags "-DTEST_CPP_FLAG2", "-DTEST_CPP_FLAG2"
+                abiFilters 'x86', 'x86_64', 'armeabi', 'armeabi-v7a'
+            }
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+}

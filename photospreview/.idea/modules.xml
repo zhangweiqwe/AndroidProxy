@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../121201.iml" filepath="$PROJECT_DIR$/../121201.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../IMKit/IMKit.iml" filepath="$PROJECT_DIR$/../IMKit/IMKit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../IMLib/IMLib.iml" filepath="$PROJECT_DIR$/../IMLib/IMLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../RedPacket/RedPacket.iml" filepath="$PROJECT_DIR$/../RedPacket/RedPacket.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../alipay/alipay.iml" filepath="$PROJECT_DIR$/../alipay/alipay.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../app/app.iml" filepath="$PROJECT_DIR$/../app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../imagepicker/imagepicker.iml" filepath="$PROJECT_DIR$/../imagepicker/imagepicker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/photospreview.iml" filepath="$PROJECT_DIR$/photospreview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../xrecycleview/xrecycleview.iml" filepath="$PROJECT_DIR$/../xrecycleview/xrecycleview.iml" />
+    </modules>
+  </component>
+</project>
