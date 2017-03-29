@@ -13,12 +13,17 @@ cmake_minimum_required(VERSION 3.4.1)
 set(CMAKE_VERBOSE_MAKEFILE on)
 
 set(EXECUTABLE_OUTPUT_PATH  "${CMAKE_CURRENT_SOURCE_DIR}/src/main/assets/${ANDROID_ABI}")
+#set(EXECUTABLE_OUTPUT_PATH  "${CMAKE_CURRENT_SOURCE_DIR}/libs/${ANDROID_ABI}")
+#set(EXECUTABLE_OUTPUT_PATH  "H:/AndroidStudioWorkSpaces/me/app/libs/${ANDROID_ABI}")
+
 
 add_executable( # Specifies the name of the library.
-             watchdog_local_server_socket
+             watchdog_local_server_socket.so
 
              # Provides a relative path to your source file(s).
-             src/main/cpp/watchdog.cpp )
+             src/main/cpp/watchdog.cpp
+             #src/main/cpp/proxy.c
+             )
 
 find_library(
              log-lib
@@ -26,7 +31,7 @@ find_library(
              log)
 
 target_link_libraries( # Specifies the target library.
-                       watchdog_local_server_socket
+                       watchdog_local_server_socket.so
 
                        # Links the target library to the log library
                        # included in the NDK.

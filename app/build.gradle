@@ -8,17 +8,18 @@ android {
         minSdkVersion 17
         targetSdkVersion 25
         versionCode 2017021318
-        versionName "gravity 2.93"
+        versionName "gravity 2.94"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
+                targets 'native'
                 cppFlags ""
             }
         }
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -33,7 +34,9 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }*/
-    sourceSets { main { jni.srcDirs = ['src/main/jni', 'src/main/jni/'] } }
+    sourceSets { main {
+        jniLibs.srcDirs = ['libs']
+    } }
 }
 
 dependencies {

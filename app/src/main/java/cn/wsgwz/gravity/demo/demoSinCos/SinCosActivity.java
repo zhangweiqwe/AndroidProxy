@@ -11,7 +11,7 @@ import cn.wsgwz.gravity.R;
 import cn.wsgwz.gravity.util.LogUtil;
 
 public class SinCosActivity extends Activity {
-    public static final boolean DMEO = true;
+    public static final boolean DMEO = false;
     private SinCosSurfaceview sinCosSurfaceview;
 
     @Override
@@ -19,7 +19,7 @@ public class SinCosActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sin_cos);
         sinCosSurfaceview = (SinCosSurfaceview) findViewById(R.id.sinCosSurfaceview);
-        LogUtil.printSS("-->"+getStatusBarHeight());
+        //LogUtil.printSS("-->"+getStatusBarHeight());
     }
 
     private int getStatusBarHeight() {

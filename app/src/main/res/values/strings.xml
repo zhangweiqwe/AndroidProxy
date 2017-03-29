@@ -8,7 +8,10 @@
 
     <string name="start_init_app_util">初始化App工具</string>
     <string name="init_app_util_success">初始化App工具成功</string>
-    <string name="init_app_util_error">初始化App工具失败</string>
+    <string name="init_app_util_error">初始化App工具失败!\n\n
+
+    如果您是supersu用户，请尝试关闭分离挂在空间，并重启手机\n
+    或者把授权管理换成KingRoot!</string>
     <string name="is_doing_install_apk_please_do_not_kill">正在安装apk请勿关闭进程</string>
     <string name="install_apk_ok">安装apk成功</string>
     <string name="install_apk_error">安装apk失败</string>

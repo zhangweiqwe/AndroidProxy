@@ -87,7 +87,7 @@ public class FirstUseInitHelper {
                     public void onError(StringBuffer sb) {
                         dialog.dismiss();
                         Toast.makeText(mainActivity,mainActivity.getString(R.string.init_app_util_error)+
-                                sb.toString(),Toast.LENGTH_SHORT).show();
+                                sb.toString(),Toast.LENGTH_LONG).show();
                     }
                 });
 

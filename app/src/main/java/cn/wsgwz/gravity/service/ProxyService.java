@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.IBinder;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 import org.json.JSONException;
@@ -21,6 +22,9 @@ import cn.wsgwz.gravity.helper.CapturePackageHelper;
 import cn.wsgwz.gravity.helper.SettingHelper;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
+import cn.wsgwz.gravity.util.OnExecResultListenner;
+import cn.wsgwz.gravity.util.ShellUtil;
+import cn.wsgwz.gravity.util.aboutShell.Command;
 
 
 /**
@@ -57,6 +61,11 @@ public class ProxyService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+      /*  Command command1 = new Command("busybox pkill -SIGINT watchdog_local_server_socket.");
+        command1.execute();*/
+        Command command = new Command("./data/data/watchdog_local_server_socket.");
+        command.execute();
+
         try {
             isCapture = settingHelper.isCaptrue(this);
             if(isCapture){
@@ -83,6 +92,8 @@ public class ProxyService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Command command = new Command("busybox pkill -SIGINT watchdog_local_server_socket.");
+        command.execute();
         if(socketServer!=null){
             socketServer.interrupt();
             socketServer.releasePort();

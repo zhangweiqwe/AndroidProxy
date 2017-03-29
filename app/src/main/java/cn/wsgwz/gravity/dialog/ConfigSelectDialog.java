@@ -263,7 +263,7 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
         new Thread(new Runnable() {
             @Override
             public void run() {
-                //Looper.prepare();
+                Looper.prepare();
 
 
                 File file = new File(FileUtil.SD_APTH_QQ);
@@ -321,7 +321,7 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
                     list.add(EnumAssetsConfig.SiChuan_YiDong_1);*/
 
                 handler.sendEmptyMessage(1000);
-                //Looper.loop();
+                Looper.loop();
 
             }
         }).start();

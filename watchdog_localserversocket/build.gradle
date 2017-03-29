@@ -23,17 +23,22 @@ android {
     defaultConfig {
         externalNativeBuild {
             cmake {
-                targets "watchdog_local_server_socket"
-                arguments "-DANDROID_TOOLCHAIN=clang", "-DANDROID_PLATFORM=android-21"
+                targets "watchdog_local_server_socket.so"
+                arguments "-DANDROID_TOOLCHAIN=clang", "-DANDROID_PLATFORM=android-24"
                 cFlags "-DTEST_C_FLAG1", "-DTEST_C_FLAG2"
                 cppFlags "-DTEST_CPP_FLAG2", "-DTEST_CPP_FLAG2"
-                abiFilters 'x86', 'x86_64', 'armeabi', 'armeabi-v7a'
+                /*abiFilters 'x86', 'x86_64', 'armeabi', 'armeabi-v7a'*/
             }
         }
     }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
+    compile fileTree(dir: 'libs', include: ['*.jar','*.so'])
 }
