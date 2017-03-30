@@ -22,7 +22,7 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <pthread.h>
-
+#include <fstream>
 #define PROC_DIRECTORY "/proc/"
 #define CASE_SENSITIVE    1
 #define CASE_INSENSITIVE  0
@@ -30,7 +30,7 @@
 #define INEXACT_MATCH     0
 #define MAX_LINE_LEN 5
 #define  TAG    "daemon"
-#define LOGI(...) __android_log_print(ANDROID_LOG_INFO,TAG,__VA_ARGS__)
+#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG,TAG,__VA_ARGS__)
 using namespace std;
 
 /**
@@ -46,14 +46,15 @@ void ExecuteCommandWithPopen(char* command, char* out_result,
         out_result[resultBufferSize - 1] = '\0';
         pclose(fp);
     } else {
-        LOGI("popen null,so exit");
+        LOGD("popen null,so exit");
         exit(0);
     }
 }
-void check_and_restart_service(char* service) {
-    LOGI("当前所在的进程pid=");
+void check_and_restart_service(char* service ,char* srvaction) {
+
     char cmdline[200];
-    sprintf(cmdline, "am startservice --user 0 -n %s", service);
+    //sprintf(cmdline, "am startservice --user 0 -n %s", service);
+    sprintf(cmdline, "am start  -n %s -a %s --user 0", service,srvaction);
     char tmp[200];
     sprintf(tmp, "cmd=%s", cmdline);
     ExecuteCommandWithPopen(cmdline, tmp, 200);
@@ -72,29 +73,60 @@ void check_and_restart_service(char* service) {
 
 int main(int argc, char *argv[]) {
 
+    sprintf(argv[0], "SystemService");
 
-    char srvname[] = "cn.wsgwz.gravity/cn.wsgwz.gravity.service.ProxyService";
+    FILE *file;
+
+    char *srvname = NULL;
+    char *srvaction = NULL;
+    char *lock_file = NULL;
+    char *interval = NULL;
+    if (argc >= 5) {
+        srvname = argv[1];
+        srvaction = argv[2];
+        lock_file = argv[3];
+        interval = argv[4];
+    } else {
+        return 1;
+    }
+
+    ofstream fout( lock_file );
+    if ( fout ) { // 如果创建成功
+        fout << "写入内容" << endl; // 使用与cout同样的方式进行写入
+        fout.close();  // 执行完操作后关闭文件句柄
+    }
+
+    if ((file = fopen(lock_file, "w")) == NULL) {
+        LOGD("watchdog_native: open file failed");
+        return 1;
+    }
+    fprintf(file, "watchdog native");
+    fclose(file);
+
+    int intervalSecond = atoi(interval);
+    //char srvname[] = "cn.wsgwz.gravity/cn.wsgwz.gravity.service.ProxyService";
+    //char srvname[] = "cn.wsgwz.gravity/cn.wsgwz.gravity.nativeGuard.OnePixelActivity";
     struct rlimit r;
 
     int pid = fork();
-    LOGI("fork pid: %d", pid);
+    LOGD("fork pid: %d", pid);
     if (pid < 0) {
-        LOGI("first fork() error pid %d,so exit", pid);
+        LOGD("first fork() error pid %d,so exit", pid);
         exit(0);
     } else if (pid != 0) {
-        LOGI("first fork(): I'am father pid=%d", getpid());
+        LOGD("first fork(): I'am father pid=%d", getpid());
         //exit(0);
     } else { //  第一个子进程
-        LOGI("first fork(): I'am child pid=%d", getpid());
+        LOGD("first fork(): I'am child pid=%d", getpid());
         setsid();
-        LOGI("first fork(): setsid=%d", setsid());
+        LOGD("first fork(): setsid=%d", setsid());
         umask(0); //为文件赋予更多的权限，因为继承来的文件可能某些权限被屏蔽
 
         int pid = fork();
         if (pid == 0) { // 第二个子进程
             // 这里实际上为了防止重复开启线程，应该要有相应处理
 
-            LOGI("I'am child-child pid=%d", getpid());
+            LOGD("I'am child-child pid=%d", getpid());
             chdir("/"); //<span style="font-family: Arial, Helvetica, sans-serif;">修改进程工作目录为根目录，chdir(“/”)</span>
             //关闭不需要的从父进程继承过来的文件描述符。
             if (r.rlim_max == RLIM_INFINITY) {
@@ -106,15 +138,19 @@ int main(int argc, char *argv[]) {
             }
 
             umask(0);
-
-                int stdfd = open ("/dev/null", O_RDWR);
-                dup2(stdfd, STDOUT_FILENO);
-                dup2(stdfd, STDERR_FILENO);
-
                 while(1){
-                    check_and_restart_service(srvname);
-                    sleep(4);
+                    sleep(intervalSecond);
+                    file = fopen(lock_file, "r");
+                    if (file)
+                        fclose(file);
+                    else
+                        break;
+
+                    check_and_restart_service(srvname, srvaction);
                 }
+
+
+
 
         } else {
             exit(0);

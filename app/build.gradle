@@ -51,5 +51,5 @@ dependencies {
     compile 'com.android.support:design:25.0.1'
     testCompile 'junit:junit:4.12'
     compile project(':photospreview')
-    compile project(':watchdog_localserversocket')
+    compile project(':NativeGuard')
 }

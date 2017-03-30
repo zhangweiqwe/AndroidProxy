@@ -13,6 +13,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -32,6 +33,7 @@ import android.widget.Toast;
 
 
 import java.io.File;
+import java.io.IOException;
 
 import cn.wsgwz.gravity.activity.DefinedShellActivity;
 import cn.wsgwz.gravity.activity.HelperActivity;
@@ -49,6 +51,8 @@ import cn.wsgwz.gravity.fragment.log.LogContent;
 import cn.wsgwz.gravity.fragment.log.LogFragment;
 import cn.wsgwz.gravity.helper.MainActivityHelper;
 import cn.wsgwz.gravity.helper.SettingHelper;
+import cn.wsgwz.gravity.nativeGuard.NativeStatusListenner;
+import cn.wsgwz.gravity.nativeGuard.OnePixelActivity;
 import cn.wsgwz.gravity.provider.SwitchWidgetProvider;
 import cn.wsgwz.gravity.util.DensityUtil;
 import cn.wsgwz.gravity.util.FileUtil;
@@ -56,6 +60,7 @@ import cn.wsgwz.gravity.util.LogUtil;
 import cn.wsgwz.gravity.util.NativeUtils;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
+import cn.wsgwz.gravity.util.aboutShell.Command;
 
 import static junit.framework.Assert.assertEquals;
 /*
@@ -139,9 +144,14 @@ n. 装饰，布置
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         if(MathSurfaceView.DEMO){
             startActivity(new Intent(this, Main5Activity.class));
         }
+
+
 
         if(Main6Activity.DEMO){
             startActivity(new Intent(this,Main6Activity.class));

@@ -44,7 +44,6 @@
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask"
-            android:excludeFromRecents="true"
             android:theme="@style/AppThemeMianAcivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -153,7 +152,12 @@
         <activity android:name=".demo.Main5Activity" />
         <activity android:name=".demo.Main6Activity" />
         <activity android:name=".demo.Main7Activity" />
-        <activity android:name=".demo.demoSinCos.SinCosActivity"></activity>
+        <activity android:name=".demo.demoSinCos.SinCosActivity" />
+        <activity android:name=".nativeGuard.OnePixelActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:theme="@style/OnePixelActivityTheme" ></activity>
     </application>
 
 </manifest>

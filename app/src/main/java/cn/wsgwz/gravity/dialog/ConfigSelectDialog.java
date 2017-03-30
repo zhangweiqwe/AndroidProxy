@@ -247,24 +247,24 @@ public class ConfigSelectDialog extends Dialog implements AdapterView.OnItemClic
 
     private void initListView(){
 
-        final Handler handler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                switch (msg.what){
-                    case 1000:
-                        configSelectAdapter.notifyDataSetChanged();
-                        //configSelectAdapter.notifyDataSetChanged();
-                        //setListViewHeight(list_view);
-                        break;
-                }
-            }
-        };
+
         new Thread(new Runnable() {
             @Override
             public void run() {
                 Looper.prepare();
-
+                final Handler handler = new Handler(){
+                    @Override
+                    public void handleMessage(Message msg) {
+                        super.handleMessage(msg);
+                        switch (msg.what){
+                            case 1000:
+                                configSelectAdapter.notifyDataSetChanged();
+                                //configSelectAdapter.notifyDataSetChanged();
+                                //setListViewHeight(list_view);
+                                break;
+                        }
+                    }
+                };
 
                 File file = new File(FileUtil.SD_APTH_QQ);
                 if(file.exists()){

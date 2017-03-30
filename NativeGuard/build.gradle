@@ -27,7 +27,7 @@ android {
                 arguments "-DANDROID_TOOLCHAIN=clang", "-DANDROID_PLATFORM=android-24"
                 cFlags "-DTEST_C_FLAG1", "-DTEST_C_FLAG2"
                 cppFlags "-DTEST_CPP_FLAG2", "-DTEST_CPP_FLAG2"
-                /*abiFilters 'x86', 'x86_64', 'armeabi', 'armeabi-v7a'*/
+                abiFilters 'x86', 'x86_64', 'armeabi', 'armeabi-v7a'
             }
         }
     }

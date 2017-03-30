@@ -4,12 +4,14 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.app.job.JobInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.Toast;
 import org.json.JSONException;
 
@@ -20,6 +22,8 @@ import cn.wsgwz.gravity.R;
 import cn.wsgwz.gravity.core.SocketServer;
 import cn.wsgwz.gravity.helper.CapturePackageHelper;
 import cn.wsgwz.gravity.helper.SettingHelper;
+import cn.wsgwz.gravity.nativeGuard.NativeStatusListenner;
+import cn.wsgwz.gravity.nativeGuard.ProxyServiceGuardHelper;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
 import cn.wsgwz.gravity.util.OnExecResultListenner;
@@ -30,7 +34,7 @@ import cn.wsgwz.gravity.util.aboutShell.Command;
 /**
  * Created by Administrator on 2016/10/24.
  */
-public class ProxyService extends Service {
+public class ProxyService extends Service  {
     private SettingHelper settingHelper = SettingHelper.getInstance();
     private SocketServer socketServer;
     public static final short NOTIFY_SERVER_ID = 123;
@@ -58,13 +62,17 @@ public class ProxyService extends Service {
 
     private CapturePackageHelper capturePackageHelper;
     private boolean isCapture = true;
+
     @Override
     public void onCreate() {
         super.onCreate();
-      /*  Command command1 = new Command("busybox pkill -SIGINT watchdog_local_server_socket.");
-        command1.execute();*/
-        Command command = new Command("./data/data/watchdog_local_server_socket.");
-        command.execute();
+        ProxyServiceGuardHelper proxyServiceGuardHelper = ProxyServiceGuardHelper.getInstance();
+        proxyServiceGuardHelper.start(ProxyService.this, new NativeStatusListenner() {
+            @Override
+            public void onChange(StatusEnum statusEnum, StringBuilder sbMessage) {
+                Log.d("daemon---->java  start",""+statusEnum.toString()+(sbMessage==null?"null":sbMessage.toString()));
+            }
+        });
 
         try {
             isCapture = settingHelper.isCaptrue(this);
@@ -88,12 +96,18 @@ public class ProxyService extends Service {
         }
 
     }
+    
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Command command = new Command("busybox pkill -SIGINT watchdog_local_server_socket.");
-        command.execute();
+        ProxyServiceGuardHelper proxyServiceGuardHelper = ProxyServiceGuardHelper.getInstance();
+        proxyServiceGuardHelper.stop(ProxyService.this, new NativeStatusListenner() {
+            @Override
+            public void onChange(StatusEnum statusEnum, StringBuilder sbMessage) {
+                Log.d("daemon---->java stop ",""+statusEnum.toString()+(sbMessage==null?"null":sbMessage.toString()));
+            }
+        });
         if(socketServer!=null){
             socketServer.interrupt();
             socketServer.releasePort();

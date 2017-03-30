@@ -23,6 +23,7 @@ add_executable( # Specifies the name of the library.
              # Provides a relative path to your source file(s).
              src/main/cpp/watchdog.cpp
              #src/main/cpp/proxy.c
+             #src/main/cpp/helper.c
              )
 
 find_library(

@@ -1,1 +1,1 @@
-include ':app', ':pull', ':explain', ':photospreview', ':watchdog_localserversocket'
+include ':app', ':pull', ':explain', ':photospreview', ':NativeGuard'

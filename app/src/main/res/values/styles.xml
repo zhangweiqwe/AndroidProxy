@@ -131,4 +131,26 @@
         <!-- 点击空白部分activity不消失 -->
         <item name="android:windowCloseOnTouchOutside">false</item>
     </style>
+
+    <style name="OnePixelActivityTheme" parent="android:Theme.Dialog">
+
+        <!--item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>-->
+        <!-- 去黑边 -->
+       <!-- <item name="android:windowFrame">@null</item>
+        &lt;!&ndash; 设置是否可滑动 &ndash;&gt;
+        <item name="android:windowIsFloating">true</item>
+        &lt;!&ndash; 设置是否透明 &ndash;&gt;
+        <item name="android:windowIsTranslucent">true</item>
+        &lt;!&ndash; 无标题 &ndash;&gt;
+        <item name="android:windowNoTitle">true</item>
+        &lt;!&ndash; 背景 &ndash;&gt;
+        <item name="android:background">@null</item>
+        &lt;!&ndash; 窗口背景 &ndash;&gt;
+        <item name="android:windowBackground">@android:color/transparent</item>
+        &lt;!&ndash; 是否变暗 &ndash;&gt;
+        <item name="android:backgroundDimEnabled">false</item>
+        &lt;!&ndash; 点击空白部分activity不消失 &ndash;&gt;
+        <item name="android:windowCloseOnTouchOutside">false</item>-->
+    </style>
 </resources>
