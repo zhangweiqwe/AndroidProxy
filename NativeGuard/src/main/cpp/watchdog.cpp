@@ -51,7 +51,7 @@ void ExecuteCommandWithPopen(char* command, char* out_result,
     }
 }
 void check_and_restart_service(char* service ,char* srvaction) {
-
+    __android_log_print(ANDROID_LOG_ERROR,TAG,"--------->ok");
     char cmdline[200];
     //sprintf(cmdline, "am startservice --user 0 -n %s", service);
     sprintf(cmdline, "am start  -n %s -a %s --user 0", service,srvaction);
@@ -73,7 +73,7 @@ void check_and_restart_service(char* service ,char* srvaction) {
 
 int main(int argc, char *argv[]) {
 
-    sprintf(argv[0], "SystemService");
+    sprintf(argv[0], "nativeGuard");
 
     FILE *file;
 
@@ -109,12 +109,13 @@ int main(int argc, char *argv[]) {
     struct rlimit r;
 
     int pid = fork();
+
     LOGD("fork pid: %d", pid);
     if (pid < 0) {
         LOGD("first fork() error pid %d,so exit", pid);
         exit(0);
     } else if (pid != 0) {
-        LOGD("first fork(): I'am father pid=%d", getpid());
+        LOGD("first fork(): I'am fatherss pid=%d", getpid());
         //exit(0);
     } else { //  第一个子进程
         LOGD("first fork(): I'am child pid=%d", getpid());

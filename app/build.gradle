@@ -12,7 +12,6 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
-                targets 'native'
                 cppFlags ""
             }
         }
@@ -23,20 +22,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    externalNativeBuild {
-        cmake {
-            path "CMakeLists.txt"
-        }
-    }
+
     /* sourceSets {
         main {
             assets.srcDirs = ['src/main/assets', 'src/main/assets/']
             jniLibs.srcDirs = ['libs']
         }
     }*/
-    sourceSets { main {
+   /* sourceSets { main {
         jniLibs.srcDirs = ['libs']
-    } }
+    } }*/
+    externalNativeBuild {
+        cmake {
+            path 'CMakeLists.txt'
+        }
+    }
 }
 
 dependencies {

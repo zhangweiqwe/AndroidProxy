@@ -1,11 +1,7 @@
 package cn.wsgwz.gravity;
 
 import android.Manifest;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -13,7 +9,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -21,7 +16,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,17 +27,13 @@ import android.widget.Toast;
 
 
 import java.io.File;
-import java.io.IOException;
 
 import cn.wsgwz.gravity.activity.DefinedShellActivity;
 import cn.wsgwz.gravity.activity.HelperActivity;
 import cn.wsgwz.gravity.adapter.MyFragmentPagerAdapter;
-import cn.wsgwz.gravity.demo.BmpDrow;
-import cn.wsgwz.gravity.demo.Main4Activity;
 import cn.wsgwz.gravity.demo.Main5Activity;
 import cn.wsgwz.gravity.demo.Main6Activity;
 import cn.wsgwz.gravity.demo.Main7Activity;
-import cn.wsgwz.gravity.demo.MathGLSurfaceView;
 import cn.wsgwz.gravity.demo.MathSurfaceView;
 import cn.wsgwz.gravity.demo.demoSinCos.SinCosActivity;
 import cn.wsgwz.gravity.fragment.MainFragment;
@@ -51,16 +41,11 @@ import cn.wsgwz.gravity.fragment.log.LogContent;
 import cn.wsgwz.gravity.fragment.log.LogFragment;
 import cn.wsgwz.gravity.helper.MainActivityHelper;
 import cn.wsgwz.gravity.helper.SettingHelper;
-import cn.wsgwz.gravity.nativeGuard.NativeStatusListenner;
-import cn.wsgwz.gravity.nativeGuard.OnePixelActivity;
-import cn.wsgwz.gravity.provider.SwitchWidgetProvider;
 import cn.wsgwz.gravity.util.DensityUtil;
 import cn.wsgwz.gravity.util.FileUtil;
 import cn.wsgwz.gravity.util.LogUtil;
-import cn.wsgwz.gravity.util.NativeUtils;
 import cn.wsgwz.gravity.util.SharedPreferenceMy;
 import cn.wsgwz.gravity.util.ShellUtil;
-import cn.wsgwz.gravity.util.aboutShell.Command;
 
 import static junit.framework.Assert.assertEquals;
 /*
@@ -140,11 +125,19 @@ n. 装饰，布置
 
 
     }
+    static {
+        System.loadLibrary("native-lib");
+    }
+
+    public native String getString();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+        LogUtil.printSS("-->"+getString()+"<---");;
+       // NativeUtils.execd("ps | grep -i \"cn.wsgwz.gravity:remoteProxy\"");
 
 
         if(MathSurfaceView.DEMO){
