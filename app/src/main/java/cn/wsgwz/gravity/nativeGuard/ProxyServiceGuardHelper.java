@@ -20,7 +20,9 @@ import cn.wsgwz.gravity.util.aboutShell.Command;
 public class ProxyServiceGuardHelper extends BaseGuardHelper {
 
 
-    private static final String START_GUARD = "./data/data/cn.wsgwz.gravity/watchdog_local_server_socket.so  cn.wsgwz.gravity/cn.wsgwz.gravity.nativeGuard.OnePixelActivity cn.wsgwz.gravity.native.ation.START /data/data/cn.wsgwz.gravity/nativeLockFile 4";
+    private static final String START_GUARD =
+            "./data/data/cn.wsgwz.gravity/watchdog_local_server_socket.so  cn.wsgwz.gravity/cn.wsgwz.gravity.nativeGuard.OnePixelActivity cn.wsgwz.gravity.native.ation.START /data/data/cn.wsgwz.gravity/nativeLockFile 8"
+            ;
 
     private static final ProxyServiceGuardHelper proxyServiceGuardHelper = new ProxyServiceGuardHelper();
     public static final ProxyServiceGuardHelper getInstance(){
@@ -40,7 +42,7 @@ public class ProxyServiceGuardHelper extends BaseGuardHelper {
         }
 
         File file = new File("/data/data/cn.wsgwz.gravity/"+"watchdog_local_server_socket.so");
-        if(!file.exists()||!LogUtil.IS_RELEASE){
+        if(!file.exists()){
             boolean b1 = cpAssetsToPath("/assets/"+getAbiFolder()+"/"+"watchdog_local_server_socket.so",
                     FileUtil.CACHE_DIR+"/"+"watchdog_local_server_socket.so");
             Log.d(TAG,b1 +""+appVersionCode);

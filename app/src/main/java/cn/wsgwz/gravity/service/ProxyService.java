@@ -66,14 +66,8 @@ public class ProxyService extends Service  {
     @Override
     public void onCreate() {
         super.onCreate();
-        ProxyServiceGuardHelper proxyServiceGuardHelper = ProxyServiceGuardHelper.getInstance();
-        proxyServiceGuardHelper.start(ProxyService.this, new NativeStatusListenner() {
-            @Override
-            public void onChange(StatusEnum statusEnum, StringBuilder sbMessage) {
-                Log.d("daemon---->java  start",""+statusEnum.toString()+(sbMessage==null?"null":sbMessage.toString()));
-            }
-        });
 
+        Log.d("daemon---->java server ","onCreate()");
         try {
             isCapture = settingHelper.isCaptrue(this);
             if(isCapture){
@@ -96,18 +90,17 @@ public class ProxyService extends Service  {
         }
 
     }
-    
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d("daemon---->java server ","onStartCommand action=");
+        return super.onStartCommand(intent, flags, startId);
+    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ProxyServiceGuardHelper proxyServiceGuardHelper = ProxyServiceGuardHelper.getInstance();
-        proxyServiceGuardHelper.stop(ProxyService.this, new NativeStatusListenner() {
-            @Override
-            public void onChange(StatusEnum statusEnum, StringBuilder sbMessage) {
-                Log.d("daemon---->java stop ",""+statusEnum.toString()+(sbMessage==null?"null":sbMessage.toString()));
-            }
-        });
+        Log.d("daemon---->java server ","onDestroy()");
         if(socketServer!=null){
             socketServer.interrupt();
             socketServer.releasePort();

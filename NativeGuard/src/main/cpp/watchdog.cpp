@@ -33,42 +33,32 @@
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG,TAG,__VA_ARGS__)
 using namespace std;
 
-/**
- * 执行命令
- */
-void ExecuteCommandWithPopen(char* command, char* out_result,
-                             int resultBufferSize) {
-    FILE * fp;
-    out_result[resultBufferSize - 1] = '\0';
-    fp = popen(command, "r");
-    if (fp) {
-        fgets(out_result, resultBufferSize - 1, fp);
-        out_result[resultBufferSize - 1] = '\0';
-        pclose(fp);
-    } else {
-        LOGD("popen null,so exit");
-        exit(0);
-    }
-}
+
 void check_and_restart_service(char* service ,char* srvaction) {
     __android_log_print(ANDROID_LOG_ERROR,TAG,"--------->ok");
     char cmdline[200];
     //sprintf(cmdline, "am startservice --user 0 -n %s", service);
     sprintf(cmdline, "am start  -n %s -a %s --user 0", service,srvaction);
-    char tmp[200];
-    sprintf(tmp, "cmd=%s", cmdline);
-    ExecuteCommandWithPopen(cmdline, tmp, 200);
 
-  /*  execlp("am", "am", "startservice", "--user", "0", "-n",
-           "cn.wsgwz.gravity/cn.wsgwz.gravity.service.ProxyService",
-           (char *) NULL);*/
-  /*  execlp("am", "am", "start", "--user", "0", "-a",
-           "android.intent.action.VIEW", "-d",
-           "https://sunnyxibei.github.io/", (char *) NULL);
-*/
-   /* execlp("am", "am", "startservice", "--user", "0", "-n",
-           "cn.wsgwz.gravity/cn.wsgwz.gravity.service.ProxyService",
-           (char *) NULL);*/
+    char buf[1024];
+    FILE *file = popen("ps | grep -i \"cn.wsgwz.gravity:remoteProxy\"","r");
+    if(!file==NULL){
+        if (fgets(buf, sizeof(buf), file) != NULL) {
+            LOGD("%s",buf);
+            pclose(popen("am startservice --user 0 -n cn.wsgwz.gravity/cn.wsgwz.gravity.service.ProxyService","r"));
+           /*  execlp("am", "am", "startservice", "--user", "0", "-n",
+            "cn.wsgwz.gravity/cn.wsgwz.gravity.service.ProxyService",
+            (char *) NULL);*/
+        } else{
+            pclose(popen(cmdline,"r"));
+        }
+
+    } else{
+        LOGD("file==NULL ");
+    }
+    pclose(file);
+
+
 }
 
 int main(int argc, char *argv[]) {
@@ -115,7 +105,7 @@ int main(int argc, char *argv[]) {
         LOGD("first fork() error pid %d,so exit", pid);
         exit(0);
     } else if (pid != 0) {
-        LOGD("first fork(): I'am fatherss pid=%d", getpid());
+        LOGD("first fork(): I'am fathers2 pid=%d", getpid());
         //exit(0);
     } else { //  第一个子进程
         LOGD("first fork(): I'am child pid=%d", getpid());

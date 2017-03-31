@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -33,6 +34,8 @@ import cn.wsgwz.gravity.dialog.ConfigSelectDialog;
 import cn.wsgwz.gravity.fragment.log.LogContent;
 import cn.wsgwz.gravity.helper.FirstUseInitHelper;
 import cn.wsgwz.gravity.helper.SettingHelper;
+import cn.wsgwz.gravity.nativeGuard.NativeStatusListenner;
+import cn.wsgwz.gravity.nativeGuard.ProxyServiceGuardHelper;
 import cn.wsgwz.gravity.provider.SwitchWidgetProvider;
 import cn.wsgwz.gravity.service.ProxyService;
 import cn.wsgwz.gravity.util.$InterfaceTest;
@@ -62,7 +65,7 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
     public static boolean isStartOrStopDoing;
     private Intent intentServer;
 
-
+    private ProxyServiceGuardHelper proxyServiceGuardHelper = ProxyServiceGuardHelper.getInstance();
 
     private  MainActivity mainActivity ;
     @$InterfaceTest("MainFragment")
@@ -295,10 +298,24 @@ public class MainFragment extends Fragment implements View.OnClickListener,Shell
             if(b1){
                 getActivity().startService(intentServer);
                 fllowServer(true);
+                proxyServiceGuardHelper.start(getContext(), new NativeStatusListenner() {
+                    @Override
+                    public void onChange(StatusEnum statusEnum, StringBuilder sbMessage) {
+                        Log.d("daemon---->  start",""+statusEnum.toString()+(sbMessage==null?"null":sbMessage.toString()));
+                    }
+                });
+
             } else {
                 getActivity().stopService(intentServer);
                 fllowServer(false);
                 flowStatistics();
+                proxyServiceGuardHelper.stop(getContext(), new NativeStatusListenner() {
+                    @Override
+                    public void onChange(StatusEnum statusEnum, StringBuilder sbMessage) {
+                        Log.d("daemon---->  stop",""+statusEnum.toString()+(sbMessage==null?"null":sbMessage.toString()));
+
+                    }
+                });
             }
         }else {
             Snackbar.make(service_Switch,getString(R.string.please_select_config), Snackbar.LENGTH_SHORT).show();
