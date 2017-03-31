@@ -10,11 +10,13 @@ import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 
+import cn.wsgwz.gravity.helper.SettingHelper;
 import cn.wsgwz.gravity.service.ProxyService;
 
 public class OnePixelActivity extends Activity {
 
     private static final String TAG  = OnePixelActivity.class.getSimpleName();
+    private SettingHelper settingHelper = SettingHelper.getInstance();
     //private ProxyServiceGuardHelper proxyServiceGuardHelper = ProxyServiceGuardHelper.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +40,10 @@ public class OnePixelActivity extends Activity {
             action = intent.getAction();
         }
 
-      /*  startService(new Intent(this, ProxyService.class));
-        finish();*/
+        startService(new Intent(this, ProxyService.class));
+        settingHelper.setIsStart(this,true);
+        finish();
+
 
       /*  proxyServiceGuardHelper.stop(this, new NativeStatusListenner() {
             @Override
