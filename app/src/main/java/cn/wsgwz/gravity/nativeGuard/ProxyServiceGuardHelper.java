@@ -21,8 +21,7 @@ public class ProxyServiceGuardHelper extends BaseGuardHelper {
 
 
     private static final String START_GUARD =
-            "./data/data/cn.wsgwz.gravity/watchdog_local_server_socket.so  cn.wsgwz.gravity/cn.wsgwz.gravity.nativeGuard.OnePixelActivity cn.wsgwz.gravity.native.ation.START /data/data/cn.wsgwz.gravity/nativeLockFile 8"
-            ;
+            "./data/data/cn.wsgwz.gravity/watchdog_local_server_socket.so  cn.wsgwz.gravity/cn.wsgwz.gravity.nativeGuard.OnePixelActivity cn.wsgwz.gravity.native.ation.START /data/data/cn.wsgwz.gravity/nativeLockFile 8";
 
     private static final ProxyServiceGuardHelper proxyServiceGuardHelper = new ProxyServiceGuardHelper();
     public static final ProxyServiceGuardHelper getInstance(){

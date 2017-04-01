@@ -7,7 +7,7 @@ android {
         applicationId "cn.wsgwz.gravity"
         minSdkVersion 17
         targetSdkVersion 25
-        versionCode 2017021318
+        versionCode 2017033121
         versionName "gravity 2.94"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
@@ -18,7 +18,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
