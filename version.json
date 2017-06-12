@@ -1,5 +1,6 @@
 {
     "versionCode":10000004,
+    "downloadPath":"",
     "description":"版本更新",
     "noUpdatedescription":"未检测到更新"
 }
