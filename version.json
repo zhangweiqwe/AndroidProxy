@@ -1,7 +1,7 @@
 {
     "versionCode":10000010,
     "apkName":"Fugue1.06(10000010).apk",
-    "downloadPath":"https://raw.githubusercontent.com/zhangweiqwe/AndroidProxy/master/fugue/Fugue-v1.06-all-release_106_jiagu_sign.apk",
-    "description":"恭喜！检测到更新 1.06\r\n\r\n(1)优化核心字符串处理性能，；\r\n(2)更改寻找host正则逻辑，默认使用url_host，避免某些网络无法访问；\r\n(2)解决腾讯视频，微信，QQ附近的人无网;\r\n(3)0.98-1.04之间的版本[Url]语法无效问题，已解决;\r\n(4)带颜色的模式编辑器;\r\n(5)配置文件长按分享功能;\r\n(6)降低了部分跳点;\r\n\r\n",
+    "downloadPath":"https://raw.githubusercontent.com/zhangweiqwe/AndroidProxy/master/fugue/Fugue-v1.06-10.apk",
+    "description":"恭喜！检测到更新 \r\n\r\n",
     "noUpdatedescription":"暂时木有更新哦，请默默期待吧！"
 }
