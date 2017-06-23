@@ -1,4 +1,3 @@
 {"config":[
-  {"name":"重庆移动已不能使用","explain":"作者：我思故我在","text":"\/\/注释写在最外层大括号外面，遵从 JSON 标准格式\n#version 配置文件版本\n#apn     您建议的APN设置\n#dns     DNS\n\n#support http或者https开关\n#direct  直接连接ip地址与端口,会忽略proxy设置\n#proxy   代理ip和端口\n#delete  删除的请求属性\n#first   请求首行\n#dispose 是否处理http或者https请求,不处理则直接发送原本请求\n\n{\n\n\"version\":\"1.0\",\n\"apn\": \"cmwap\",\n\"dns\": \"114.114.114.114\",\n\n\"http\":{\n\"support\":true,\n\"direct\":false,\n\"dispose\":true,\n\"proxy\":\"10.0.0.172:80\",\n\"delete\":\"Host\",\n\"first\":\"[M] [U] i\\r\\nAccept:  *\/*, application\/vnd.wap.mms-message, application\/vnd.wap.sic\\r\\n\\nHost :rd.go.10086.cn:80\\r\\n\\nHost :rd.go.10086.cn:80\\r\\nhost: [H]\\r\\nPOST http:\/\/rd.go.10086.cn:80\/ [V]\\r\\n\"\n},\n\n\"https\":{\n\"support\":true,\n\"direct\":false,\n\"dispose\":true,\n\"proxy\":\"10.0.0.172:80\",\n\"delete\":\"Host\",\n\"first\":\"CONNECT \\r\\t\\n[H]\/127.0.0.1 [V]\\r\\nConnection: Keep-Alive\\r\\nPOST http:\/\/iphone.cmvideo.cn:80\/ HTTP\/1.1\\r\\nAccept:  *\/*, application\/vnd.wap.mms-message, application\/vnd.wap.sic\\r\\nConnection: Close\\rX-Forward-For : 127.0.0.1\\nHost: iphone.cmvideo.cn:80\\r\\n\"\n}\n\n\n}"}
-  
+ 
 ]}
