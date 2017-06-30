@@ -1,0 +1,61 @@
+<!DOCTYPE HTML><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!--http://fugue.wsgwz.cn/fugue/config.html-->
+<html>
+
+    <head>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>欢迎使用Fugue后台！</title>
+    </head>
+    <body>
+
+
+
+
+
+    <a style=" color:#666; font-size:12px;" href="cn.wsgwz://cn.wsgwz.tun/qrconfig?name=%e6%b5%8b%e8%af%95%e6%a8%a1%e5%bc%8f&content=
+
+%7b%0d%0a+%22apn%22%3a+%22cmwap%22%2c%0d%0a+%22dns%22%3a+%22114.114.114.114%22%2c%0d%0a%0d%0a+%22http%22%3a%7b%0d%0a+%22proxy%22%3a%2210.0.0.172%3a80%22%2c%0d%0a+%22delete%22%3a%22Host%22%2c%0d%0a+%22first%22%3a%22%5bM%5d+%5bU%5d+%5bV%5d%5cr%5cnHost%3a+%5bH%5d%5cr%5cn%22%0d%0a+%7d%2c%0d%0a%0d%0a+%22https%22%3a%7b%0d%0a+%22proxy%22%3a%2210.0.0.172%3a80%22%2c%0d%0a+%22delete%22%3a%22Host%22%2c%0d%0a+%22first%22%3a%22CONNECT+%5bH%5d+%5bV%5d%5cr%5cnHost%3a+%5bH%5d%5cr%5cn%22%0d%0a+%7d%0d%0a%0d%0a+%7d
+
+
+    &descript=%e8%bf%99%e6%98%af%e6%b5%8b%e8%af%95%ef%bc%81">
+        点击导入到Fugue</a>
+
+
+        <br/>
+
+        <p></p>
+
+
+
+
+
+
+    </body>
+    <!--http://fugue.wsgwz.cn/config.html-->
+  <!--  <input type="button" value="调用"
+           onClick="openApp()"/>
+-->
+
+
+
+
+    <script type="text/javascript">
+window.onload = function(){
+    if(isWeiXin()){
+        var p = document.getElementsByTagName('p');
+        p[0].innerHTML = '微信不支持跳转..请用QQ或者手机浏览器打开！';
+       <!-- window.navigator.userAgent;-->
+    }
+}
+function isWeiXin(){
+    var ua = window.navigator.userAgent.toLowerCase();
+    if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+</script>
+</html>
