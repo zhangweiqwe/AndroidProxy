@@ -2,6 +2,6 @@
     "versionCode":10000027,
     "apkName":"Fugue1.22 (10000027).apk",
     "downloadPath":"https://raw.githubusercontent.com/zhangweiqwe/AndroidProxy/master/fugue/config/fugue-v1.22-all-release_122_jiagu_sign.apk",
-    "description":"检测到更新\n 优化核心效率\n更改CONNECT请求判断",
+    "description":"优化核心效率\n更改CONNECT请求判断",
     "noUpdatedescription":"没有更新！"
 }
